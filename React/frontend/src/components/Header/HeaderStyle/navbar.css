@@ -1,0 +1,94 @@
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  font-weight: 900;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  padding-top: 1.5%;
+  justify-content: space-between; /* Distribute items evenly */
+  align-items: center;
+  color: rgb(255, 255, 255);
+  position: fixed; /* Fix the navbar to the top */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  z-index: 1000; /* Ensure it stays above other content */
+  margin: auto;
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+  background-color: transparent; /* Initial background color */
+  padding-bottom: 1%;
+}
+
+.navbar.scrolled {
+  background-color: black; /* Background color when scrolled */
+}
+
+.logo {
+  font-family: 'Courier New', Courier, monospace; /* Adjust logo size */
+  font-size: x-large;
+  font-weight: 700;
+  margin-left: 10%;
+}
+
+.logo span {
+  padding: 0%;
+  margin: 0%;
+  color: #C147E9;
+  font-size: 30px;
+}
+
+.middle-text {
+  display: flex;
+  gap: 20px; /* Space between the words */
+  font-size: 14px;
+  flex-grow: 1; /* Allow middle text to grow and fill available space */
+  justify-content: center; /* Center the middle text */
+}
+
+.middle-text span {
+  cursor: pointer;
+  position: relative;
+}
+
+.middle-text span::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #C147E9;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.middle-text span:hover::after {
+  transform: scaleX(1);
+}
+
+.button {
+  margin-right: 5%;
+}
+
+.button button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
+}
+
+.button button:hover {
+  background-color: #333;
+}
+
+.button button.scrolled-button {
+  background-color: #C147E9;
+  color: white;
+}
