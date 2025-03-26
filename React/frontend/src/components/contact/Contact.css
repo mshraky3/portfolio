@@ -1,0 +1,142 @@
+.ContactMe {
+    background-color: rgba(0, 0, 0, 1);
+    color: white;
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.ContactDetai {
+    display: flex;
+    justify-content: space-around;;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    gap: 1%;
+}
+
+.ContactForm {
+    
+    padding: 3%;
+    border: 1px rgba(255, 253, 253, 0.2) solid;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.ContactFormHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ContactFormTitle {
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #aaa;
+}
+
+.ContactFormSubtitle {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.ContactFormText {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.ContactFormInputs {
+    margin-top: 20px;
+}
+
+.InputRow {
+    margin-bottom: 15px;
+}
+
+.InputRow label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #aaa;
+}
+
+.InputRow input,
+.InputRow textarea {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #222;
+    color: white;
+    font-size: 14px;
+}
+
+.SubmitButton {
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.ContactInfo {
+    border: 1px rgba(255, 253, 253, 0.2) solid;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ContactInfoItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ContactIcon {
+    background-color: #a09797;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    color: white;
+}
+
+.ContactInfoText strong {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+
+.Footer {
+    text-align: center;
+    font-size: 12px;
+    color: #aaa;
+    width: 100%;
+}
+
+.br {
+    width: 100%;
+    border: 1px rgba(255, 253, 253, 0.2) solid;
+}
