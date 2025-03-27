@@ -28,7 +28,7 @@ function Form() {
             setButtonColor("");
 
             // Send POST request to the backend
-            const response = await axios.post('http://localhost:3000/send-email', formData);
+            const response = await axios.post('https://portfolio-api-rose.vercel.app/send-email', formData);
 
             // Check if the response status is 200 (success)
             if (response.status === 200) {
