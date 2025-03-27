@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./HeaderStyle/iam.css"
 
 
-const roles = ["front end", "backend", "full stack", "React developer"];
+const roles = ["front end", "backend", "full stack", "React dev"];
 
 function IAM(){
       const [currentText, setCurrentText] = useState("");

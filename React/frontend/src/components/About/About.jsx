@@ -5,7 +5,7 @@ import img from "./me.png";
 function About() {
     const [state , set_state] = useState(true)
     return (
-        <div className="aboutSection">
+        <div className="aboutSection" id="aboutSection">
             <div className="aboutImageSection">
                 <div className="aboutCurcle">
                     <img src={img} alt="Profile" />

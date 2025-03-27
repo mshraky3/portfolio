@@ -1,3 +1,15 @@
+/* Solution 1: Prevent horizontal overflow */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Solution 2: Constrain all elements */
+* {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
 a {
   text-decoration: none;
   color: white;
@@ -7,50 +19,56 @@ a {
   display: flex;
   font-weight: 900;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  padding-top: 1.5%;
-  justify-content: space-between; /* Distribute items evenly */
+  padding: 1.5% 0;
+  justify-content: space-between;
   align-items: center;
   color: rgb(255, 255, 255);
-  position: fixed; /* Fix the navbar to the top */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%; /* Full width */
-  z-index: 1000; /* Ensure it stays above other content */
-  margin: auto;
-  transition: background-color 0.3s ease; /* Smooth transition for background color */
-  background-color: transparent; /* Initial background color */
-  padding-bottom: 1%;
+  width: 100%;
+  z-index: 1000;
+  transition: all 0.3s ease; /* Enhanced to transition all properties */
+  background-color: transparent;
+  box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 .navbar.scrolled {
-  background-color: black; /* Background color when scrolled */
+  background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent black */
+  padding: 1% 0; /* Slightly reduce padding when scrolled */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
 }
 
 .logo {
-  font-family: 'Courier New', Courier, monospace; /* Adjust logo size */
-  font-size: x-large;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(1.2rem, 3vw, 1.8rem); /* Responsive font size */
   font-weight: 700;
-  margin-left: 10%;
+  margin-left: 5%;
+  white-space: nowrap; /* Prevent logo text from wrapping */
 }
 
 .logo span {
-  padding: 0%;
-  margin: 0%;
   color: #C147E9;
-  font-size: 30px;
+  font-size: clamp(1.5rem, 4vw, 2rem); /* Responsive accent color size */
 }
 
 .middle-text {
   display: flex;
-  gap: 20px; /* Space between the words */
-  font-size: 14px;
-  flex-grow: 1; /* Allow middle text to grow and fill available space */
-  justify-content: center; /* Center the middle text */
+  gap: clamp(10px, 2vw, 20px); /* Responsive gap */
+  font-size: clamp(12px, 1.5vw, 14px);
+  flex-grow: 1;
+  justify-content: center;
 }
 
 .middle-text span {
   cursor: pointer;
   position: relative;
+  white-space: nowrap; /* Prevent nav items from wrapping */
+  transition: color 0.3s ease;
+}
+
+.middle-text span:hover {
+  color: #C147E9; /* Change text color on hover */
 }
 
 .middle-text span::after {
@@ -62,11 +80,13 @@ a {
   height: 2px;
   background-color: #C147E9;
   transform: scaleX(0);
+  transform-origin: right;
   transition: transform 0.3s ease;
 }
 
 .middle-text span:hover::after {
   transform: scaleX(1);
+  transform-origin: left;
 }
 
 .button {
@@ -77,18 +97,134 @@ a {
   background-color: black;
   color: white;
   border: none;
-  padding: 8px 15px;
-  font-size: 14px;
+  padding: clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 15px);
+  font-size: clamp(12px, 1.5vw, 14px);
   cursor: pointer;
   border-radius: 3px;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .button button:hover {
   background-color: #333;
+  transform: translateY(-1px); /* Slight lift effect */
 }
 
 .button button.scrolled-button {
   background-color: #C147E9;
+}
+
+/* Enhanced Dropdown Menu Styles */
+.menu-icon {
+  display: none;
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  cursor: pointer;
+  margin-right: 5%;
+  transition: transform 0.3s ease;
+}
+
+.menu-icon:hover {
+  color: #C147E9;
+}
+
+.menu-icon.active {
+  transform: rotate(90deg);
+}
+
+.dropdown-menu {
+  display: none;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.95);
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+}
+
+.dropdown-menu.open {
+  display: flex;
+  max-height: 500px; /* Adjust based on your content */
+  border-top: 1px solid #333;
+}
+
+.dropdown-menu a {
+  text-decoration: none;
   color: white;
+  padding: 15px 20px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid #333;
+}
+
+.dropdown-menu a:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu a:hover {
+  background-color: #C147E9;
+  padding-left: 25px;
+}
+
+/* Contact button in dropdown */
+.dropdown-menu .dropdown-contact {
+  background-color: #C147E9;
+  font-weight: bold;
+}
+
+.dropdown-menu .dropdown-contact:hover {
+  background-color: #a036c7;
+}
+
+/* Media Query for Tablets and Mobile */
+@media (max-width: 992px) {
+  .middle-text {
+    gap: 10px; /* Reduce gap on smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 2% 0; /* Slightly more padding for mobile */
+  }
+  
+  .middle-text {
+    display: none;
+  }
+
+  .button {
+    display: none;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+  
+  .logo {
+    margin-left: 5%;
+    font-size: 1.5rem; /* Fixed size for mobile */
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 3% 0;
+  }
+  
+  .logo {
+    font-size: 1.3rem;
+    margin-left: 3%;
+  }
+  
+  .dropdown-menu a {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
 }

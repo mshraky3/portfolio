@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 function Projects() {
      return (
           <>
-               <div className="projects">
+               <div className="projects" id="projects">
                     <div className="projectsTitle">
                          <h1>
                               some of my Projects

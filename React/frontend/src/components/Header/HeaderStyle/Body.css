@@ -52,7 +52,6 @@
 }
 
 .image{
-    
     display: flex;
     flex-direction: column-reverse;
     flex: 1;
@@ -62,6 +61,8 @@
 }
 .image img {
     margin-left: 30%;
+    height: 100%;
+    width: 100%;
 }
 
 
@@ -85,7 +86,7 @@
 }
 
 .r {
-
+    
     animation: rotate360 10s linear infinite; /* Rotate 360 degrees over 10 seconds */
 }
 
@@ -107,3 +108,82 @@
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: 900;
 }
+
+
+.icon img{
+    width: 50px;
+    height: 50px;
+}
+
+
+
+
+@media (max-width: 1025px) {
+    .contener {
+      flex-direction: column;
+      height: auto;
+    }
+    .black, .purple, .image {
+        padding-left: 0%;
+        width: 100%;
+    }
+    .black-content {
+      margin-left: 0;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0%;
+
+    }
+    .image img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0%;
+        width: 60%;
+    }
+
+    .name{
+        margin-top: 20%;
+        align-items: center;
+        justify-content: center;
+    }
+    .name h1{
+        font-size: 30px;
+    }
+    .btn a Button {
+        font-size: small;
+        padding: 0%;
+        margin: 1%;
+        margin-top: 20%;
+    }
+    .icons , .purple{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .icon img{
+        max-height: 40px;
+        max-width: 40px;
+    }
+    .icons {
+        margin-bottom: auto;
+    }
+    .r {
+        width: 40px; 
+        height: 40px;
+    }
+    .icon  p {
+        display: none;
+    }
+    .a {
+        display: none;
+    }
+
+  }

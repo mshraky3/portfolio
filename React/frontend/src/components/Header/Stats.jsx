@@ -12,11 +12,11 @@ function Stats(){
         </div>
         <div className="info">
           3+
-        <span>jobs done </span>
+        <span>jobs </span>
         </div>
         <div className="info">
            2+
-        <span> learning years </span>
+        <span> years </span>
         </div>
         </div>)
 }

@@ -25,3 +25,26 @@
     font-size: medium;
 }
 
+
+@media (max-width: 1050px) { 
+
+    .stats .info{
+        font-size: medium;
+        margin-left: 1%;
+    }
+    .stats {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin:0%;
+        padding: 0%;
+        margin-top: 10%;
+    }
+    .stats .info span {
+        font-size: 15px;
+    }
+
+    
+}
+
+

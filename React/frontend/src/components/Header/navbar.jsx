@@ -3,9 +3,9 @@ import "./HeaderStyle/navbar.css";
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to track menu visibility
 
   useEffect(() => {
-    // Define the scroll event handler
     const handleScroll = () => {
       if (window.scrollY > 0) {
         setIsScrolled(true);
@@ -23,21 +23,45 @@ function Navbar() {
     };
   }, []);
 
+  // Function to toggle the menu
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
-      {/* Logo on the left */}
-      <div className="logo">alshraky<span>.</span></div>
-      {/* Five words in the middle */}
-      <div className="middle-text">
-        <span>HOME</span>
-        <span><a href="#servicesContent">SERVICES</a></span>
-        <span>PROJECTS</span>
-        <span>ABOUT ME</span>
-        <span>CONTACT</span>
+      {/* Logo */}
+      <div className="logo" id="logo">
+        alshraky<span>.</span>
       </div>
-      {/* Button on the right */}
+
+      {/* Hamburger Menu Button for Small Screens */}
+      <div className="menu-icon" onClick={toggleMenu}>
+        <img width="40" height="40" src="https://img.icons8.com/ios-filled/40/C850F2/menu--v1.png" alt="menu--v1" />      </div>
+
+      {/* Dropdown Menu for Small Screens */}
+      <div className={`dropdown-menu ${isMenuOpen ? 'open' : ''}`}>
+        <a href="#HOME">HOME</a>
+        <a href="#SERVICES">SERVICES</a>
+        <a href="#projects">PROJECTS</a>
+        <a href="#aboutSection">ABOUT ME</a>
+        <a href="#ContactMe">CONTACT</a>
+      </div>
+
+      {/* Middle Text (Visible on Larger Screens) */}
+      <div className="middle-text">
+        <span><a href="#HOME">HOME</a></span>
+        <span><a href="#SERVICES">SERVICES</a></span>
+        <span><a href="#projects">PROJECTS</a></span>
+        <span><a href="#aboutSection">ABOUT ME</a></span>
+        <span><a href="#ContactMe">CONTACT</a></span>
+      </div>
+
+      {/* Button on the Right */}
       <div className="button">
-       <a href="https://wa.link/5zcep6"> <button className={isScrolled ? 'scrolled-button' : ''}>Let's Talk</button></a>
+        <a href="https://wa.link/5zcep6">
+          <button className={isScrolled ? 'scrolled-button' : ''}>Let's Talk</button>
+        </a>
       </div>
     </nav>
   );

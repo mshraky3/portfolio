@@ -9,7 +9,7 @@ function Contact() {
     const date = new Date().getFullYear();
     return (
         <>
-            <div className="ContactMe">
+            <div className="ContactMe" id="ContactMe">
                 <div className="ContactDetai">
                     <div className="ContactForm">
                         <div className="ContactFormHeader">
