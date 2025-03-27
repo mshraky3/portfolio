@@ -15,13 +15,13 @@ app.use(express.json());
 
 const Email = nodemailer.createTransport(
     {
-        host:"smtp.gmail.com",
-        port:587,
-        tls:true,
-        secure:false,
-        auth:{
-            user:"alshrakynodeapp@gmail.com",
-            pass:"ymfnqdsctolgcfzv",
+        host: "smtp.gmail.com",
+        port: 587,
+        tls: true,
+        secure: false,
+        auth: {
+            user: "alshrakynodeapp@gmail.com",
+            pass: "ymfnqdsctolgcfzv",
         }
     }
 )
@@ -36,7 +36,7 @@ app.post("/send-email", async (req, res) => {
     try {
         const result = await Email.sendMail({
             from: "alshrakynodeapp@gmail.com",
-            to: `muhmodalshraky3@gmail.com`, 
+            to: `muhmodalshraky3@gmail.com`,
             subject: data.subject || "No Subject Provided",
             text: `Message from ${data.firstName} (${data.email}):\n\n${data.message}`,
         });
@@ -49,14 +49,14 @@ app.post("/send-email", async (req, res) => {
     }
 });
 
-app.get("/api" , (req , res)=>{
-        res.send("app is working")
+app.get("/api", (req, res) => {
+    res.send("app is working")
 })
 
 
 
 
-app.listen(3000, ()=>{
+app.listen(3000, () => {
     console.log("app is working")
 })
 
