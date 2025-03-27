@@ -2,9 +2,9 @@
 html, body {
   max-width: 100%;
   overflow-x: hidden;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-/* Solution 2: Constrain all elements */
 * {
   box-sizing: border-box;
   max-width: 100%;
@@ -114,7 +114,7 @@ a {
   background-color: #C147E9;
 }
 
-/* Enhanced Dropdown Menu Styles */
+
 .menu-icon {
   display: none;
   font-size: clamp(1.5rem, 6vw, 2rem);
@@ -208,11 +208,10 @@ a {
   
   .logo {
     margin-left: 5%;
-    font-size: 1.5rem; /* Fixed size for mobile */
+    font-size: 1.5rem; /
   }
 }
 
-/* Small Mobile Devices */
 @media (max-width: 480px) {
   .navbar {
     padding: 3% 0;

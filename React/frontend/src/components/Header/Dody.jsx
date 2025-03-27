@@ -1,48 +1,83 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./HeaderStyle/Body.css";
 import Button from '@mui/material/Button';
 import logo from "./images/test-me.png";
 import IAM from "./iam";
 import Stats from "./Stats";
 
-function Body() {
+function Body({ language, setLanguage }) {
+
+
+
+  const translations = {
+    en: {
+      title: "I'm Mahmoud.",
+      buttonText: "GET IN TOUCH",
+      specialties: "Specialties"
+    },
+    ar: {
+      title: "أنا محمود.",
+      buttonText: "تواصل معي",
+      specialties: "تخصصاتي"
+    },
+    default: {
+      title: "I'm Mahmoud.",
+      buttonText: "GET IN TOUCH",
+      specialties: "Specialties"
+    }
+  };
+
+  const isArabic = language === 'ar';
+  const currentTranslation = translations[language] || translations.default;
+
   return (
-    <div className="contener" id="HOME">
+    <div className={`contener ${isArabic ? 'arabic' : ''}`} id="HOME">
       <div className="black">
         <div className="black-content">
           <div className="name">
-            <h1>I'm mahmoud.</h1>
+            <h1>{currentTranslation.title}</h1>
           </div>
-          <IAM />
+          <IAM isArabic={isArabic} />
           <div className="btn">
             <a href="https://wa.link/5zcep6">
               <Button>
-                GIT IN TOUCH
+                {currentTranslation.buttonText}
                 <img
                   src="https://img.icons8.com/?size=100&id=biaPj0fC1TKb&format=png&color=ffffff"
-                  alt="arrow"
-                  style={{ marginLeft: '10px' }}
+                  
+                  style={{ marginLeft: isArabic ? '0' : '10px', marginRight: isArabic ? '10px' : '0' }}
                 />
               </Button>
             </a>
           </div>
-          <Stats />
+          <Stats isArabic={isArabic} />
         </div>
       </div>
       <div className="image">
-        <img src={logo} alt="Profile Image" className="profile-img" />
+        <img src={logo} className="profile-img" alt="Profile" />
       </div>
       <div className="purple">
         <div className="icons">
-          <div className="icon r"><img  src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/96/external-react-a-javascript-library-for-building-user-interfaces-logo-color-tal-revivo.png" alt="react" /></div>
-          <div className="icon"><img  src="https://img.icons8.com/color-glass/96/bootstrap.png" alt="bootstrap" /></div>
-          <div className="icon"><img  src="https://img.icons8.com/fluency/96/node-js.png" alt="node-js" /></div>
-          <div className="icon"><img  src="https://img.icons8.com/color/96/postgreesql.png" alt="postgreesql" /></div>
-          <div className="icon a"><img  height="100" src="https://img.icons8.com/pastel-glyph/100/FFFFFF/down.png" alt="down" /></div>
-          <div className="icon"> <p>specialties</p> </div>
+          <div className="icon r">
+            <img src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/96/external-react-a-javascript-library-for-building-user-interfaces-logo-color-tal-revivo.png" alt="React" />
+          </div>
+          <div className="icon">
+            <img src="https://img.icons8.com/color-glass/96/bootstrap.png" alt="Bootstrap" />
+          </div>
+          <div className="icon">
+            <img src="https://img.icons8.com/fluency/96/node-js.png" alt="Node.js" />
+          </div>
+          <div className="icon">
+            <img src="https://img.icons8.com/color/96/postgreesql.png" alt="PostgreSQL" />
+          </div>
+          <div className="icon a">
+            <img height="100" src="https://img.icons8.com/pastel-glyph/100/FFFFFF/down.png" alt="Down Arrow" />
+          </div>
+          <div className="icon">
+            <p>{currentTranslation.specialties}</p>
+          </div>
         </div>
       </div>
-      
     </div>
   );
 }

@@ -27,6 +27,13 @@
     filter: grayscale(60%);
 }
 
+.two {
+    background-image: url("./projectsImgs/pro2.png");
+}
+
+.three {
+    background-image: url("./projectsImgs/wsm.png");
+}
 .project::before {
     content: '';
     position: absolute;
