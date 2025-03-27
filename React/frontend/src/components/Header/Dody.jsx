@@ -11,7 +11,7 @@ function Body() {
       <div className="black">
         <div className="black-content">
           <div className="name">
-            <h1>I'm mahmoud</h1>
+            <h1>I'm mahmoud.</h1>
           </div>
           <IAM />
           <div className="btn">

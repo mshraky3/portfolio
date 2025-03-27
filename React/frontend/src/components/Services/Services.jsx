@@ -10,7 +10,7 @@ function Services (){
         <h1 className='servicestitle'> Services</h1>
             <div className='cntent'>
                 <div className='text'> 
-                    <h1 className='title'>Services </h1>
+                    <h1 className='title'> </h1>
                     <p>
                     Get a powerful website that delivers results with all-in-one solution 
                     </p>
