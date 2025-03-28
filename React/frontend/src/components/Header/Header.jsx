@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from './navbar';
-import Body from "./Dody";
+import Body from "./Body";
 
 function Header({ setLanguage, language }) {
   return (

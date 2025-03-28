@@ -6,9 +6,7 @@ function Form() {
     // Initialize formData as an empty object
     const [formData, setFormData] = useState({});
     const [buttonText, setButtonText] = useState("Send Message");
-    const [buttonColor, setButtonColor] = useState(""); // Track button color
-
-    // Function to handle input changes and update formData
+    const [buttonColor, setButtonColor] = useState(""); 
     function addForm(e) {
         const { id: name, value } = e.target;
 
@@ -23,20 +21,16 @@ function Form() {
         e.preventDefault();
 
         try {
-            // Reset button text and color before sending the request
             setButtonText("Sending...");
             setButtonColor("");
 
-            // Send POST request to the backend
             const response = await axios.post('https://portfolio-api-rose.vercel.app/send-email', formData);
 
-            // Check if the response status is 200 (success)
             if (response.status === 200) {
                 setButtonText("Message Sent!");
                 setButtonColor("green"); // Change button color to green
             }
         } catch (error) {
-            // Handle errors (e.g., network issues, server errors)
             console.error("Error sending email:", error);
             setButtonText("Failed to Send");
             setButtonColor("red"); // Change button color to red
