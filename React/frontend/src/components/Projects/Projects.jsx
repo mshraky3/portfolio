@@ -16,13 +16,13 @@ const translations = {
     postgres: "Postgres",
   },
   ar: {
-    title: "بعض مشاريعي",
+    title: "بعض المشاريع",
     project1Title: "مشروع 1",
-    project1Text: "تطبيق ملاحظات منظم ملاحظات مع مساحة تخزين، مصمم للبساطة والكفاءة.",
+    project1Text: "تطبيق ملاحظات منظم للملاحظات مع مساحة تخزين، مصمم للبساطة والكفاءة.",
     project2Title: "مشروع 2",
-    project2Text: " 'داش'  هيا منصة رقمية تربط اصحاب المشاريع العقارية مباشرة معا المكتاب الهندسية و المقاولين من خلال عرض المنشورات و الدردشة الفورية",
+    project2Text: " 'داش'  هي منصة رقمية تربط اصحاب المشاريع العقارية مباشرة معا المكاتب الهندسية و المقاولين من خلال عرض المنشورات و الدردشة الفورية",
     project3Title: "مشروع 3",
-    project3Text: " وسم هيا منصة تسويق رقمي متخخصه في تحليل بيانات المستخدمين لاعطاء افضل استراتيجيات التسويق المناسبه لهم",
+    project3Text: " وسم هي منصة تسويق رقمي متخصصة في تحليل بيانات المستخدمين لاعطاء افضل استراتيجيات التسويق المناسبه لهم",
     view: "عرض",
     react: "React",
     postgres: "Postgres",
@@ -31,7 +31,7 @@ const translations = {
 
 function Projects({ language }) {
   const t = (key) => translations[language][key];
-     
+
   return (
     <>
       <div className="projects" id="projects">
@@ -58,7 +58,7 @@ function Projects({ language }) {
             <h1 className="projectCardTitle">{t('project2Title')}</h1>
             <div className="projectCardText">{t('project2Text')}</div>
             <div className="projectCardButton">
-            <a href="https://github.com/mshraky3/ShureArchitects">
+              <a href="https://github.com/mshraky3/ShureArchitects">
                 <Button>{t('view')}</Button>
               </a>
             </div>
@@ -73,9 +73,9 @@ function Projects({ language }) {
             <h1 className="projectCardTitle">{t('project3Title')}</h1>
             <div className="projectCardText">{t('project3Text')}</div>
             <div className="projectCardButton">
-               <a href="https://inland-andeee-muhmodalshraky-925f3577.koyeb.app/">
-                    <Button>{t('view')}</Button>
-               </a>
+              <a href="https://inland-andeee-muhmodalshraky-925f3577.koyeb.app/">
+                <Button>{t('view')}</Button>
+              </a>
             </div>
           </div>
           <div className="projectType">
