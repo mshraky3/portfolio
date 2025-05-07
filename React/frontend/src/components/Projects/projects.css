@@ -20,7 +20,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-image: url("./projectsImgs/image.png");
+    background-image: url("./projectsImgs/mockuper.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -34,6 +34,7 @@
 .three {
     background-image: url("./projectsImgs/wsm.png");
 }
+
 .project::before {
     content: '';
     position: absolute;
@@ -114,7 +115,7 @@
     .project {
         aspect-ratio: 16/9;
     }
-    
+
     .projectCard {
         max-width: 60%;
     }
@@ -126,12 +127,12 @@
         flex-direction: column;
         justify-content: flex-end;
     }
-    
+
     .projectCard {
         max-width: 90%;
         margin-bottom: 5%;
     }
-    
+
     .projectType {
         justify-content: center;
         height: auto;
@@ -143,17 +144,17 @@
     .project {
         aspect-ratio: 3/4;
     }
-    
+
     .projectCard {
         width: 95%;
         max-width: 95%;
         margin: 2%;
     }
-    
+
     .projectCardTitle {
         font-size: 1.5rem;
     }
-    
+
     .projectCardButton button,
     .projectType Button {
         padding: 5px 8px;
