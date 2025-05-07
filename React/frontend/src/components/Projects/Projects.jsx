@@ -6,7 +6,7 @@ const translations = {
   en: {
     title: "Some of My Projects",
     project1Title: "Project 1",
-    project1Text: "Keeper-App is a React front-end note organizer with Express API and PostgreSQL storage, designed for simplicity and efficiency.",
+    project1Text: "Harfa is a quick and simple platform that connects you with skilled workers whenever and wherever you need them, without registration or an account. Whether you need a plumber, electrician, cleaner, or any other service provider, Harfa helps you find the right worker near you with just a few clicks.",
     project2Title: "Project 2",
     project2Text: "Dash is a digital platform that connects real estate project owners directly with engineering offices and contractors through displaying publications and instant chat.",
     project3Title: "Project 3",
