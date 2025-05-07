@@ -43,7 +43,7 @@ function Projects({ language }) {
             <h1 className="projectCardTitle">{t('project1Title')}</h1>
             <div className="projectCardText">{t('project1Text')}</div>
             <div className="projectCardButton">
-              <a href="https://hirfa-react-frontend.vercel.app/">
+              <a href="https://hirfa-react.vercel.app">
                 <Button>{t('view')}</Button>
               </a>
             </div>
