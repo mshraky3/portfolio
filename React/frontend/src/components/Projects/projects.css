@@ -20,7 +20,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-image: url("./projectsImgs/mockuper.png");
+    background-image: url("./projectsImgs/pro2.png");
+    
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -28,13 +29,13 @@
 }
 
 .two {
-    background-image: url("./projectsImgs/pro2.png");
+    background-image: url("./projectsImgs/mockuper.png");
 }
 
 .three {
     background-image: url("./projectsImgs/wsm.png");
 }
-
+ 
 .project::before {
     content: '';
     position: absolute;
