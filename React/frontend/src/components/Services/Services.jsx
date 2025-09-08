@@ -40,21 +40,21 @@ function Services({ language }) {
         </div>
         <div className='Services'>
           <div className='serves'>
-            <img width="70" height="70" src="https://img.icons8.com/cotton/100/web-design--v1.png" alt="web-design--v1" />
+            <img width="70" height="70" src="https://img.icons8.com/cotton/100/web-design--v1.png" alt="Web Design Icon" />
             <div className='nameD'>
               <h1 className='servicesName'>{translate('webDesignTitle')}</h1>
               <p className='detil'>{translate('webDesignDetail')}</p>
             </div>
           </div>
           <div className='serves'>
-            <img width="70" height="70" src="https://img.icons8.com/external-tanah-basah-glyph-tanah-basah/70/external-ui-design-digital-nomad-tanah-basah-glyph-tanah-basah.png" alt="external-ui-design-digital-nomad-tanah-basah-glyph-tanah-basah" />
+            <img width="70" height="70" src="https://img.icons8.com/external-tanah-basah-glyph-tanah-basah/70/external-ui-design-digital-nomad-tanah-basah-glyph-tanah-basah.png" alt="Front-End Development Icon" />
             <div className='nameD'>
               <h1 className='servicesName'>{translate('frontEndDevelopmentTitle')}</h1>
               <p className='detil'>{translate('frontEndDevelopmentDetail')}</p>
             </div>
           </div>
           <div className='serves'>
-            <img width="70" height="70" src="https://img.icons8.com/ios/100/database--v1.png" alt="database--v1" />
+            <img width="70" height="70" src="https://img.icons8.com/ios/100/database--v1.png" alt="Database Icon" />
             <div className='nameD'>
               <h1 className='servicesName'>{translate('databaseTitle')}</h1>
               <p className='detil'>{translate('databaseDetail')}</p>

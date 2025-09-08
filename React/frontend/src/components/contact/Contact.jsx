@@ -45,7 +45,7 @@ function Contact({ language }) {
           <div className="ContactInfo">
             <div className="ContactInfoItem">
               <div className="ContactIcon">
-                <img width="40" height="40" src="https://img.icons8.com/ios/40/phone--v1.png" alt="phone--v1" />
+                <img width="40" height="40" src="https://img.icons8.com/ios/40/phone--v1.png" alt="Phone Icon" />
               </div>
               <div className="ContactInfoText">
                 <strong>{translate('phone')}</strong>
@@ -54,7 +54,7 @@ function Contact({ language }) {
             </div>
             <div className="ContactInfoItem">
               <div className="ContactIcon">
-                <img width="30" height="30" src="https://img.icons8.com/ios/40/new-post--v1.png" alt="new-post--v1" />
+                <img width="30" height="30" src="https://img.icons8.com/ios/40/new-post--v1.png" alt="Email Icon" />
               </div>
               <div className="ContactInfoText">
                 <strong>{translate('mail')}</strong>

@@ -64,10 +64,11 @@ function Navbar({ setLanguage }) {
       {/* Hamburger Menu Button */}
       <div className="menu-icon" onClick={toggleMenu}>
         <img
-          width="40"
-          height="40"
-          src="https://img.icons8.com/ios-filled/40/C850F2/menu--v1.png"
+          width="24"
+          height="24"
+          src="https://img.icons8.com/ios-filled/24/C850F2/menu--v1.png"
           alt={isArabic ? "قائمة" : "menu"}
+          loading="lazy"
         />
       </div>
 

@@ -26,7 +26,7 @@ function About({ language }) {
         <div className={`aboutSection ${isArabic ? 'arabic' : ''}`} id="aboutSection">
             <div className="aboutImageSection">
                 <div className="aboutCurcle">
-                    <img src={img} alt={isArabic ? "صورة الملف الشخصي" : "Profile"} loading="lazy" />
+                    <img src={img} alt={isArabic ? "صورة الملف الشخصي لمحمود الشراكي" : "Mahmoud Alshraky profile picture"} loading="lazy" />
                 </div>
             </div>
             <div className="aboutText">
@@ -35,13 +35,13 @@ function About({ language }) {
                 <div className="aboutTextDeilt"><p>{currentTranslation.bio}</p></div>
                 <div className="aboutTexticons">
                     <a href="https://www.instagram.com/m_alshraky/" target="_blank" rel="noopener noreferrer">
-                        <img width="40" height="40" src="https://img.icons8.com/material-two-tone/100/instagram-new.png" alt={isArabic ? "انستجرام" : "instagram"} loading="lazy" />
+                        <img width="40" height="40" src="https://img.icons8.com/material-two-tone/100/instagram-new.png" alt="Instagram logo" loading="lazy" />
                     </a>
                     <a href="https://github.com/mshraky3" target="_blank" rel="noopener noreferrer">
-                        <img width="40" height="40" src="https://img.icons8.com/fluency/40/github.png" alt={isArabic ? "جيت هاب" : "github"} loading="lazy" />
+                        <img width="40" height="40" src="https://img.icons8.com/fluency/40/github.png" alt="GitHub logo" loading="lazy" />
                     </a>
                     <a href="https://wa.link/5zcep6" target="_blank" rel="noopener noreferrer">
-                        <img width="40" height="40" src="https://img.icons8.com/ios-glyphs/40/whatsapp.png" alt={isArabic ? "واتساب" : "whatsapp"} loading="lazy" />
+                        <img width="40" height="40" src="https://img.icons8.com/ios-glyphs/40/whatsapp.png" alt="WhatsApp logo" loading="lazy" />
                     </a>
                 </div>
             </div>
