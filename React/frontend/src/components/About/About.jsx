@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./About.css";
 import img from "./me.png";
+import { motion } from "framer-motion";
 
 function About({ language }) {
 
@@ -23,29 +24,103 @@ function About({ language }) {
     const currentTranslation = translations[language] || translations.en;
 
     return (
-        <div className={`aboutSection ${isArabic ? 'arabic' : ''}`} id="aboutSection">
-            <div className="aboutImageSection">
-                <div className="aboutCurcle">
+        <motion.div 
+            className={`aboutSection ${isArabic ? 'arabic' : ''}`} 
+            id="aboutSection"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+        >
+            <motion.div 
+                className="aboutImageSection"
+                initial={{ x: -100, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+            >
+                <motion.div 
+                    className="aboutCurcle"
+                    whileHover={{ scale: 1.05, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                >
                     <img src={img} alt={isArabic ? "صورة الملف الشخصي لمحمود الشراكي" : "Mahmoud Alshraky profile picture"} loading="lazy" />
-                </div>
-            </div>
-            <div className="aboutText">
-                <div className="aboutTextTitle"><h4>{currentTranslation.aboutTitle}</h4></div>
-                <div className="aboutTextBody"><p>{currentTranslation.headline}</p></div>
-                <div className="aboutTextDeilt"><p>{currentTranslation.bio}</p></div>
-                <div className="aboutTexticons">
-                    <a href="https://www.instagram.com/m_alshraky/" target="_blank" rel="noopener noreferrer">
+                </motion.div>
+            </motion.div>
+            <motion.div 
+                className="aboutText"
+                initial={{ x: 100, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                viewport={{ once: true }}
+            >
+                <motion.div 
+                    className="aboutTextTitle"
+                    initial={{ y: 30, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    <h4>{currentTranslation.aboutTitle}</h4>
+                </motion.div>
+                <motion.div 
+                    className="aboutTextBody"
+                    initial={{ y: 30, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.8 }}
+                    viewport={{ once: true }}
+                >
+                    <p>{currentTranslation.headline}</p>
+                </motion.div>
+                <motion.div 
+                    className="aboutTextDeilt"
+                    initial={{ y: 30, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 1.0 }}
+                    viewport={{ once: true }}
+                >
+                    <p>{currentTranslation.bio}</p>
+                </motion.div>
+                <motion.div 
+                    className="aboutTexticons"
+                    initial={{ y: 30, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 1.2 }}
+                    viewport={{ once: true }}
+                >
+                    <motion.a 
+                        href="https://www.instagram.com/m_alshraky/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.2, rotate: 10 }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                    >
                         <img width="40" height="40" src="https://img.icons8.com/material-two-tone/100/instagram-new.png" alt="Instagram logo" loading="lazy" />
-                    </a>
-                    <a href="https://github.com/mshraky3" target="_blank" rel="noopener noreferrer">
+                    </motion.a>
+                    <motion.a 
+                        href="https://github.com/mshraky3" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.2, rotate: -10 }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                    >
                         <img width="40" height="40" src="https://img.icons8.com/fluency/40/github.png" alt="GitHub logo" loading="lazy" />
-                    </a>
-                    <a href="https://wa.link/5zcep6" target="_blank" rel="noopener noreferrer">
+                    </motion.a>
+                    <motion.a 
+                        href="https://wa.link/5zcep6" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.2, rotate: 10 }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                    >
                         <img width="40" height="40" src="https://img.icons8.com/ios-glyphs/40/whatsapp.png" alt="WhatsApp logo" loading="lazy" />
-                    </a>
-                </div>
-            </div>
-        </div>
+                    </motion.a>
+                </motion.div>
+            </motion.div>
+        </motion.div>
     );
 }
 

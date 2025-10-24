@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./HeaderStyle/navbar.css";
+import { motion } from "framer-motion";
 
 function Navbar({ setLanguage }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -55,14 +56,29 @@ function Navbar({ setLanguage }) {
   const t = (key) => translations[isArabic ? 'ar' : 'en'][key];
 
   return (
-    <nav className={`navbar ${isScrolled ? 'scrolled' : ''} ${isArabic ? 'arabic' : ''}`}>
+    <motion.nav 
+      className={`navbar ${isScrolled ? 'scrolled' : ''} ${isArabic ? 'arabic' : ''}`}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, delay: 0.2 }}
+    >
       {/* Logo - remains the same as it's a name */}
-      <div className="logo" id="logo">
+      <motion.div 
+        className="logo" 
+        id="logo"
+        whileHover={{ scale: 1.05 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
         alshraky<span>.</span>
-      </div>
+      </motion.div>
 
       {/* Hamburger Menu Button */}
-      <div className="menu-icon" onClick={toggleMenu}>
+      <motion.div 
+        className="menu-icon" 
+        onClick={toggleMenu}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
         <img
           width="24"
           height="24"
@@ -70,37 +86,119 @@ function Navbar({ setLanguage }) {
           alt={isArabic ? "قائمة" : "menu"}
           loading="lazy"
         />
-      </div>
+      </motion.div>
 
       {/* Dropdown Menu */}
-      <div className={`dropdown-menu ${isMenuOpen ? 'open' : ''}`}>
-        <a href="#HOME">{t('home')}</a>
-        <a href="#SERVICES">{t('services')}</a>
-        <a href="#projects">{t('projects')}</a>
-        <a href="#aboutSection">{t('about')}</a>
-        <a href="#ContactMe">{t('contact')}</a>
-        <a onClick={switchLanguage}>{t('switchLang')}</a> {/* Language switch button in dropdown */}
-      </div>
+      <motion.div 
+        className={`dropdown-menu ${isMenuOpen ? 'open' : ''}`}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ 
+          opacity: isMenuOpen ? 1 : 0, 
+          y: isMenuOpen ? 0 : -20 
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        <motion.a 
+          href="#HOME"
+          whileHover={{ x: 10 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {t('home')}
+        </motion.a>
+        <motion.a 
+          href="#SERVICES"
+          whileHover={{ x: 10 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {t('services')}
+        </motion.a>
+        <motion.a 
+          href="#projects"
+          whileHover={{ x: 10 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {t('projects')}
+        </motion.a>
+        <motion.a 
+          href="#aboutSection"
+          whileHover={{ x: 10 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {t('about')}
+        </motion.a>
+        <motion.a 
+          href="#ContactMe"
+          whileHover={{ x: 10 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {t('contact')}
+        </motion.a>
+        <motion.a 
+          onClick={switchLanguage}
+          whileHover={{ x: 10 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {t('switchLang')}
+        </motion.a>
+      </motion.div>
 
       {/* Middle Text */}
       <div className="middle-text">
-        <span><a href="#HOME">{t('home')}</a></span>
-        <span><a href="#SERVICES">{t('services')}</a></span>
-        <span><a href="#projects">{t('projects')}</a></span>
-        <span><a href="#aboutSection">{t('about')}</a></span>
-        <span><a href="#ContactMe">{t('contact')}</a></span>
-        <span className="language-switcher"><a onClick={switchLanguage}>{t('switchLang')}</a></span>
+        <motion.span
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <a href="#HOME">{t('home')}</a>
+        </motion.span>
+        <motion.span
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <a href="#SERVICES">{t('services')}</a>
+        </motion.span>
+        <motion.span
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <a href="#projects">{t('projects')}</a>
+        </motion.span>
+        <motion.span
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <a href="#aboutSection">{t('about')}</a>
+        </motion.span>
+        <motion.span
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <a href="#ContactMe">{t('contact')}</a>
+        </motion.span>
+        <motion.span 
+          className="language-switcher"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <a onClick={switchLanguage}>{t('switchLang')}</a>
+        </motion.span>
       </div>
 
       {/* Button */}
-      <div className="button">
+      <motion.div 
+        className="button"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
         <a href="https://wa.link/5zcep6">
           <button className={isScrolled ? 'scrolled-button' : ''}>
             {t('letsTalk')}
           </button>
         </a>
-      </div>
-    </nav>
+      </motion.div>
+    </motion.nav>
   );
 }
 

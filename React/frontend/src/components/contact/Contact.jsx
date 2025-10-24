@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./Contact.css";
 import Form from "./Form";
+import { motion } from "framer-motion";
 
 // Define translations
 const translations = {
@@ -30,44 +31,103 @@ function Contact({ language }) {
 
   return (
     <>
-      <div className="ContactMe" id="ContactMe">
+      <motion.div 
+        className="ContactMe" 
+        id="ContactMe"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
         <div className="ContactDetai">
-          <div className="ContactForm">
-            <div className="ContactFormHeader">
+          <motion.div 
+            className="ContactForm"
+            initial={{ x: -100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <motion.div 
+              className="ContactFormHeader"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
               <div className="ContactFormTitle">{translate('contactTitle')}</div>
               <div className="ContactFormSubtitle">{translate('contactSubtitle')}</div>
-            </div>
-            <div className="ContactFormText">
+            </motion.div>
+            <motion.div 
+              className="ContactFormText"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              viewport={{ once: true }}
+            >
               {translate('contactText')}
-            </div>
+            </motion.div>
             <Form />
-          </div>
-          <div className="ContactInfo">
-            <div className="ContactInfoItem">
-              <div className="ContactIcon">
+          </motion.div>
+          <motion.div 
+            className="ContactInfo"
+            initial={{ x: 100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <motion.div 
+              className="ContactInfoItem"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, x: 10 }}
+            >
+              <motion.div 
+                className="ContactIcon"
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.6 }}
+              >
                 <img width="40" height="40" src="https://img.icons8.com/ios/40/phone--v1.png" alt="Phone Icon" />
-              </div>
+              </motion.div>
               <div className="ContactInfoText">
                 <strong>{translate('phone')}</strong>
                 <p>+966 582 619 119</p>
               </div>
-            </div>
-            <div className="ContactInfoItem">
-              <div className="ContactIcon">
+            </motion.div>
+            <motion.div 
+              className="ContactInfoItem"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, x: 10 }}
+            >
+              <motion.div 
+                className="ContactIcon"
+                whileHover={{ rotate: -360 }}
+                transition={{ duration: 0.6 }}
+              >
                 <img width="30" height="30" src="https://img.icons8.com/ios/40/new-post--v1.png" alt="Email Icon" />
-              </div>
+              </motion.div>
               <div className="ContactInfoText">
                 <strong>{translate('mail')}</strong>
                 <p>muhmodalshraky3@gmail.com</p>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
-        <div className="Footer">
+        <motion.div 
+          className="Footer"
+          initial={{ y: 50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1.0 }}
+          viewport={{ once: true }}
+        >
           <hr className="br" />
           {translate('footer').replace('{date}', date)}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </>
   );
 }

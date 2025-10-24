@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import logo from "./images/test-me.png";
 import IAM from "./iam";
 import Stats from "./Stats";
+import { motion } from "framer-motion";
 
 function Body({ language, setLanguage }) {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -37,14 +38,32 @@ function Body({ language, setLanguage }) {
   const currentTranslation = translations[language] || translations.default;
 
   return (
-    <div className={`contener ${isArabic ? 'arabic' : ''}`} id="HOME">
+    <motion.div 
+      className={`contener ${isArabic ? 'arabic' : ''}`} 
+      id="HOME"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
       <div className="black">
         <div className="black-content">
-          <div className="name">
+          <motion.div 
+            className="name"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
             <h1>{currentTranslation.title}</h1>
-          </div>
+          </motion.div>
           <IAM isArabic={isArabic} />
-          <div className="btn">
+          <motion.div 
+            className="btn"
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <a href="https://wa.link/5zcep6">
               <Button>
                 {currentTranslation.buttonText}
@@ -56,11 +75,16 @@ function Body({ language, setLanguage }) {
                 />
               </Button>
             </a>
-          </div>
+          </motion.div>
           <Stats isArabic={isArabic} />
         </div>
       </div>
-      <div className="image">
+      <motion.div 
+        className="image"
+        initial={{ x: 100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1, delay: 0.4 }}
+      >
         {!imageLoaded && (
           <div className="image-placeholder" style={{
             width: '100%',
@@ -74,7 +98,7 @@ function Body({ language, setLanguage }) {
             Loading...
           </div>
         )}
-        <img 
+        <motion.img 
           src={logo} 
           className="profile-img" 
           alt="Mahmoud Alshraky profile picture" 
@@ -86,11 +110,22 @@ function Body({ language, setLanguage }) {
             transition: 'opacity 0.3s ease-in-out'
           }}
           onLoad={() => setImageLoaded(true)}
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300 }}
         />
-      </div>
-      <div className="purple">
+      </motion.div>
+      <motion.div 
+        className="purple"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.8 }}
+      >
         <div className="icons">
-          <div className="icon r">
+          <motion.div 
+            className="icon r"
+            whileHover={{ scale: 1.2, rotate: 5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <img 
               src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/48/external-react-a-javascript-library-for-building-user-interfaces-logo-color-tal-revivo.png" 
               alt="React logo" 
@@ -98,8 +133,12 @@ function Body({ language, setLanguage }) {
               height="48"
               loading="lazy"
             />
-          </div>
-          <div className="icon">
+          </motion.div>
+          <motion.div 
+            className="icon"
+            whileHover={{ scale: 1.2, rotate: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <img 
               src="https://img.icons8.com/color-glass/48/bootstrap.png" 
               alt="Bootstrap logo" 
@@ -107,8 +146,12 @@ function Body({ language, setLanguage }) {
               height="48"
               loading="lazy" 
             />
-          </div>
-          <div className="icon">
+          </motion.div>
+          <motion.div 
+            className="icon"
+            whileHover={{ scale: 1.2, rotate: 5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <img 
               src="https://img.icons8.com/fluency/48/node-js.png" 
               alt="Node.js logo" 
@@ -116,8 +159,12 @@ function Body({ language, setLanguage }) {
               height="48"
               loading="lazy" 
             />
-          </div>
-          <div className="icon">
+          </motion.div>
+          <motion.div 
+            className="icon"
+            whileHover={{ scale: 1.2, rotate: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <img 
               src="https://img.icons8.com/color/48/postgreesql.png" 
               alt="PostgreSQL logo" 
@@ -125,8 +172,16 @@ function Body({ language, setLanguage }) {
               height="48"
               loading="lazy"
             />
-          </div>
-          <div className="icon a">
+          </motion.div>
+          <motion.div 
+            className="icon a"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ 
+              duration: 2, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          >
             <img 
               height="50" 
               width="50"
@@ -134,13 +189,18 @@ function Body({ language, setLanguage }) {
               alt="Down arrow icon" 
               loading="lazy" 
             />
-          </div>
-          <div className="icon">
+          </motion.div>
+          <motion.div 
+            className="icon"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
+          >
             <p>{currentTranslation.specialties}</p>
-          </div>
+          </motion.div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
