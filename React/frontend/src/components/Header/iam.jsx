@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./HeaderStyle/iam.css"
 
-
 const roles = ["front end", "backend", "full stack", "React developer"];
 
 function IAM(){
@@ -16,15 +15,15 @@ function IAM(){
           if (isTyping) {
             if (currentText.length < currentRole.length) {
               setCurrentText((prev) => prev + currentRole[prev.length]);
-              timeoutRef.current = setTimeout(cycleText, 20); // 200ms for typing
+              timeoutRef.current = setTimeout(cycleText, 20);
             } else {
               setIsTyping(false);
-              timeoutRef.current = setTimeout(cycleText, 180); // 1.8 seconds delay before erasing
+              timeoutRef.current = setTimeout(cycleText, 180);
             }
           } else {
             if (currentText.length > 0) {
               setCurrentText((prev) => prev.slice(0, -1));
-              timeoutRef.current = setTimeout(cycleText, 100); // 100ms for erasing
+              timeoutRef.current = setTimeout(cycleText, 100);
             } else {
               setIsTyping(true);
               setCurrentRoleIndex((prevIndex) => (prevIndex + 1) % roles.length);
@@ -33,10 +32,10 @@ function IAM(){
         };
     
         if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current); // Clear previous timeout if any
+          clearTimeout(timeoutRef.current);
         }
     
-        timeoutRef.current = setTimeout(cycleText, isTyping ? 200 : 180); // Initial start
+        timeoutRef.current = setTimeout(cycleText, isTyping ? 200 : 180);
     
         return () => {
           if (timeoutRef.current) {

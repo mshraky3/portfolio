@@ -15,7 +15,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    order: 1; /* Image will come first on mobile */
+    order: 1;
 }
 
 .aboutCurcle {
@@ -44,7 +44,7 @@
     justify-content: center;
     align-items: flex-start;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    order: 2; /* Text will come after image on mobile */
+    order: 2;
     text-align: left;
 }
 
@@ -98,7 +98,6 @@
     height: 30px;
 }
 
-/* Media Queries for Larger Screens */
 @media (min-width: 768px) {
     .aboutSection {
         flex-direction: row;

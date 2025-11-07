@@ -6,7 +6,10 @@ import IAM from "./iam";
 import Stats from "./Stats";
 import { motion } from "framer-motion";
 
-function Body({ language, setLanguage }) {
+const CTA_LABEL = "GET IN TOUCH";
+const SPECIALTIES_LABEL = "Specialties";
+
+function Body() {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
@@ -16,30 +19,9 @@ function Body({ language, setLanguage }) {
     img.src = logo;
   }, []);
 
-  const translations = {
-    en: {
-      title: "I'm Mahmoud.",
-      buttonText: "GET IN TOUCH",
-      specialties: "Specialties"
-    },
-    ar: {
-      title: "أنا محمود.",
-      buttonText: "تواصل معي",
-      specialties: "تخصصاتي"
-    },
-    default: {
-      title: "I'm Mahmoud.",
-      buttonText: "GET IN TOUCH",
-      specialties: "Specialties"
-    }
-  };
-
-  const isArabic = language === 'ar';
-  const currentTranslation = translations[language] || translations.default;
-
   return (
     <motion.div 
-      className={`contener ${isArabic ? 'arabic' : ''}`} 
+      className="contener"
       id="HOME"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -53,9 +35,9 @@ function Body({ language, setLanguage }) {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <h1>{currentTranslation.title}</h1>
+            {/* brand logo removed from hero per request */}
           </motion.div>
-          <IAM isArabic={isArabic} />
+          <IAM />
           <motion.div 
             className="btn"
             initial={{ y: 30, opacity: 0 }}
@@ -66,17 +48,17 @@ function Body({ language, setLanguage }) {
           >
             <a href="https://wa.link/5zcep6">
               <Button>
-                {currentTranslation.buttonText}
+                {CTA_LABEL}
                 <img
                   src="https://img.icons8.com/?size=50&id=biaPj0fC1TKb&format=png&color=ffffff"
                   alt="arrow icon"
                   loading="lazy"
-                  style={{ marginLeft: isArabic ? '0' : '10px', marginRight: isArabic ? '10px' : '0' }}
+                  style={{ marginLeft: 10 }}
                 />
               </Button>
             </a>
           </motion.div>
-          <Stats isArabic={isArabic} />
+          <Stats />
         </div>
       </div>
       <motion.div 
@@ -196,7 +178,7 @@ function Body({ language, setLanguage }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.8 }}
           >
-            <p>{currentTranslation.specialties}</p>
+            <p>{SPECIALTIES_LABEL}</p>
           </motion.div>
         </div>
       </motion.div>

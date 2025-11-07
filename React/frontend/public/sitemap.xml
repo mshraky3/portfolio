@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://your-website-url.com/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://your-website-url.com/?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://your-website-url.com/?lang=en"/>
-    <lastmod>2025-08-10</lastmod>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://your-website-url.com/?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://your-website-url.com/?lang=en" />
+    <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://your-website-url.com/?lang=ar</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://your-website-url.com/?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://your-website-url.com/?lang=ar"/>
-    <lastmod>2025-08-10</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://your-website-url.com/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://your-website-url.com/?lang=ar" />
+    <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+  <!-- Anchor sections (SPA) are not indexed as separate URLs, but we list key sections for completeness if you later enable routed pages. -->
 </urlset>

@@ -173,7 +173,6 @@
     margin-bottom: 20px;
 }
 
-/* Media Queries for Larger Screens */
 @media (min-width: 768px) {
     .ContactDetai {
         flex-direction: row;

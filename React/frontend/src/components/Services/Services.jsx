@@ -1,36 +1,8 @@
-import { useEffect } from 'react';
 import "./Services.css";
+import Button from '@mui/material/Button';
 import { motion } from "framer-motion";
 
-const translations = {
-  en: {
-    servicesTitle: "Services",
-    mainTitle: "Get a powerful website that delivers results with all-in-one solution",
-    webDesignTitle: "Web Design",
-    webDesignDetail: "Say goodbye to the hassle of managing multiple providers and get an all-in-one website solution that covers design, development, and content creation",
-    frontEndDevelopmentTitle: "Front-End Development",
-    frontEndDevelopmentDetail: "Say goodbye to complex front-end challenges and get a seamless, user-friendly web experience built with modern technologies and best practices",
-    databaseTitle: "Database",
-    databaseDetail: "Effortlessly manage data with robust databases, ensuring seamless integration, security, and scalability for your web applications"
-  },
-  ar: {
-    servicesTitle: "الخدمات",
-    mainTitle: "احصل على موقع إلكتروني قوي يحقق النتائج مع حل شامل",
-    webDesignTitle: "تصميم المواقع الإلكترونية",
-    webDesignDetail: "ودع متاعب إدارة مزودي الخدمة المتعددين واستمتع بحل شامل للموقع الإلكتروني يغطي التصميم والتطوير وإنشاء المحتوى",
-    frontEndDevelopmentTitle: "تطوير الواجهة الأمامية",
-    frontEndDevelopmentDetail: "ودع التحديات المعقدة للواجهة الأمامية واستمتع بتجربة ويب سلسة ومريحة للمستخدم تم بناؤها باستخدام التقنيات الحديثة وأفضل الممارسات",
-    databaseTitle: "قاعدة البيانات",
-    databaseDetail: "ادارة البيانات بسهولة مع قواعد بيانات قوية، مما يضمن تكاملًا سلسًا وأمانًا وقابلية للتوسع لتطبيقات الويب الخاصة بك"
-  }
-};
-
-function Services({ language }) {
-
-  const translate = (key) => {
-    return translations[language]?.[key] || translations.en[key];
-  };
-
+function Services() {
   return (
     <motion.div 
       className='servicesContenr' 
@@ -47,7 +19,7 @@ function Services({ language }) {
         transition={{ duration: 0.8, delay: 0.2 }}
         viewport={{ once: true }}
       >
-        {translate('servicesTitle')}
+        Services
       </motion.h1>
       <div className='cntent'>
         <motion.div 
@@ -58,7 +30,7 @@ function Services({ language }) {
           viewport={{ once: true }}
         >
           <h1 className='title'></h1>
-          <p>{translate('mainTitle')}</p>
+          <p>Get a powerful website that delivers results with an all-in-one solution</p>
         </motion.div>
         <div className='Services'>
           <motion.div 
@@ -78,8 +50,8 @@ function Services({ language }) {
               transition={{ duration: 0.6 }}
             />
             <div className='nameD'>
-              <h1 className='servicesName'>{translate('webDesignTitle')}</h1>
-              <p className='detil'>{translate('webDesignDetail')}</p>
+              <h1 className='servicesName'>Web Design</h1>
+              <p className='detil'>Say goodbye to the hassle of managing multiple providers and get an all-in-one website solution that covers design, development, and content creation.</p>
             </div>
           </motion.div>
           <motion.div 
@@ -99,8 +71,8 @@ function Services({ language }) {
               transition={{ duration: 0.6 }}
             />
             <div className='nameD'>
-              <h1 className='servicesName'>{translate('frontEndDevelopmentTitle')}</h1>
-              <p className='detil'>{translate('frontEndDevelopmentDetail')}</p>
+              <h1 className='servicesName'>Front-End Development</h1>
+              <p className='detil'>Say goodbye to complex front-end challenges and get a seamless, user-friendly web experience built with modern technologies and best practices.</p>
             </div>
           </motion.div>
           <motion.div 
@@ -120,8 +92,8 @@ function Services({ language }) {
               transition={{ duration: 0.6 }}
             />
             <div className='nameD'>
-              <h1 className='servicesName'>{translate('databaseTitle')}</h1>
-              <p className='detil'>{translate('databaseDetail')}</p>
+              <h1 className='servicesName'>Database</h1>
+              <p className='detil'>Effortlessly manage data with robust databases, ensuring seamless integration, security, and scalability for your web applications.</p>
             </div>
           </motion.div>
         </div>

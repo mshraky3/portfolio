@@ -28,33 +28,33 @@ a {
   left: 0;
   width: 100%;
   z-index: 1000;
-  transition: all 0.3s ease; /* Enhanced to transition all properties */
+  transition: all 0.3s ease;
   background-color: transparent;
-  box-sizing: border-box; /* Ensure padding is included in width */
+  box-sizing: border-box;
 }
 
 .navbar.scrolled {
-  background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent black */
-  padding: 1% 0; /* Slightly reduce padding when scrolled */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 1% 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .logo {
   font-family: 'Courier New', Courier, monospace;
-  font-size: clamp(1.2rem, 3vw, 1.8rem); /* Responsive font size */
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
   font-weight: 700;
   margin-left: 5%;
-  white-space: nowrap; /* Prevent logo text from wrapping */
+  white-space: nowrap;
 }
 
 .logo span {
   color: #C147E9;
-  font-size: clamp(1.5rem, 4vw, 2rem); /* Responsive accent color size */
+  font-size: clamp(1.9rem, 4.8vw, 2.8rem);
 }
 
 .middle-text {
   display: flex;
-  gap: clamp(10px, 2vw, 20px); /* Responsive gap */
+  gap: clamp(10px, 2vw, 20px);
   font-size: clamp(12px, 1.5vw, 14px);
   flex-grow: 1;
   justify-content: center;
@@ -63,12 +63,12 @@ a {
 .middle-text span {
   cursor: pointer;
   position: relative;
-  white-space: nowrap; /* Prevent nav items from wrapping */
+  white-space: nowrap;
   transition: color 0.3s ease;
 }
 
 .middle-text span:hover {
-  color: #C147E9; /* Change text color on hover */
+  color: #C147E9;
 }
 
 .middle-text span::after {
@@ -107,13 +107,12 @@ a {
 
 .button button:hover {
   background-color: #333;
-  transform: translateY(-1px); /* Slight lift effect */
+  transform: translateY(-1px);
 }
 
 .button button.scrolled-button {
   background-color: #C147E9;
 }
-
 
 .menu-icon {
   display: none;
@@ -148,7 +147,7 @@ a {
 
 .dropdown-menu.open {
   display: flex;
-  max-height: 500px; /* Adjust based on your content */
+  max-height: 500px;
   border-top: 1px solid #333;
 }
 
@@ -172,7 +171,6 @@ a {
   padding-left: 25px;
 }
 
-/* Contact button in dropdown */
 .dropdown-menu .dropdown-contact {
   background-color: #C147E9;
   font-weight: bold;
@@ -182,18 +180,17 @@ a {
   background-color: #a036c7;
 }
 
-/* Media Query for Tablets and Mobile */
 @media (max-width: 992px) {
   .middle-text {
-    gap: 10px; /* Reduce gap on smaller screens */
+    gap: 10px;
   }
 }
 
 @media (max-width: 768px) {
   .navbar {
-    padding: 2% 0; /* Slightly more padding for mobile */
+    padding: 2% 0;
   }
-  
+
   .middle-text {
     display: none;
   }
@@ -205,10 +202,10 @@ a {
   .menu-icon {
     display: block;
   }
-  
+
   .logo {
     margin-left: 5%;
-    font-size: 1.5rem; /
+    font-size: 1.8rem;
   }
 }
 
@@ -216,12 +213,12 @@ a {
   .navbar {
     padding: 3% 0;
   }
-  
+
   .logo {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     margin-left: 3%;
   }
-  
+
   .dropdown-menu a {
     padding: 12px 15px;
     font-size: 0.9rem;

@@ -2,11 +2,11 @@ import React from 'react';
 import Navbar from './navbar';
 import Body from "./Body";
 
-function Header({ setLanguage, language }) {
+function Header() {
   return (
     <>
-      <Navbar setLanguage={setLanguage} />
-      <Body language={language} setLanguage={setLanguage} />
+      <Navbar />
+      <Body />
     </>
   );
 }

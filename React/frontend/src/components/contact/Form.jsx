@@ -3,7 +3,6 @@ import axios from "axios";
 import "./Contact.css";
 
 function Form() {
-    // Initialize formData as an empty object
     const [formData, setFormData] = useState({});
     const [buttonText, setButtonText] = useState("Send Message");
     const [buttonColor, setButtonColor] = useState(""); 
@@ -16,7 +15,6 @@ function Form() {
         }));
     }
 
-    // Function to handle form submission
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -28,12 +26,12 @@ function Form() {
 
             if (response.status === 200) {
                 setButtonText("Message Sent!");
-                setButtonColor("green"); // Change button color to green
+                setButtonColor("green");
             }
         } catch (error) {
             console.error("Error sending email:", error);
             setButtonText("Failed to Send");
-            setButtonColor("red"); // Change button color to red
+            setButtonColor("red");
         }
     }
 
@@ -82,7 +80,7 @@ function Form() {
                 <button
                     type="submit"
                     className="SubmitButton"
-                    style={{ backgroundColor: buttonColor }} // Dynamically set button color
+                    style={{ backgroundColor: buttonColor }}
                 >
                     {buttonText}
                 </button>
