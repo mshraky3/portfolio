@@ -1,7 +1,23 @@
 import React from "react";
 import img from "./me.png";
-import "./about.css";
+import "./About.css";
 import { motion } from "framer-motion";
+
+const ABOUT_TITLE = "Bold design. Performance-first development.";
+const ABOUT_BODY = "alshraky is a web design & development studio crafting conversion-focused websites with modern stacks (React, Express, PostgreSQL). We blend brand aesthetics with speed, accessibility, and SEO to grow your business.";
+const ABOUT_DETAIL = "Every project is built with performance budgets, core web vital targets, and scalable architecture. From concept to launch (and beyond), we handle design, development, deployment, and optimization.";
+const SOCIAL_LINKS = [
+  {
+    href: "https://github.com/mshraky3",
+    img: "https://img.icons8.com/fluency/40/github.png",
+    alt: "GitHub logo"
+  },
+  {
+    href: "https://wa.link/5zcep6",
+    img: "https://img.icons8.com/ios-glyphs/40/whatsapp.png",
+    alt: "WhatsApp logo"
+  }
+];
 
 function About() {
     return (
@@ -42,7 +58,7 @@ function About() {
                     transition={{ duration: 0.6, delay: 0.6 }}
                     viewport={{ once: true }}
                 >
-                    Bold design. Performance-first development.
+                    {ABOUT_TITLE}
                 </motion.div>
                 <motion.div 
                     className="aboutTextBody"
@@ -51,7 +67,7 @@ function About() {
                     transition={{ duration: 0.6, delay: 0.8 }}
                     viewport={{ once: true }}
                 >
-                    alshraky is a web design & development studio crafting conversion-focused websites with modern stacks (React, Express, PostgreSQL). We blend brand aesthetics with speed, accessibility, and SEO to grow your business.
+                    {ABOUT_BODY}
                 </motion.div>
                 <motion.div 
                     className="aboutTextDeilt"
@@ -60,7 +76,7 @@ function About() {
                     transition={{ duration: 0.6, delay: 1 }}
                     viewport={{ once: true }}
                 >
-                    Every project is built with performance budgets, core web vital targets, and scalable architecture. From concept to launch (and beyond), we handle design, development, deployment, and optimization.
+                    {ABOUT_DETAIL}
                 </motion.div>
                 <motion.div 
                     className="aboutTexticons"
@@ -69,12 +85,11 @@ function About() {
                     transition={{ duration: 0.6, delay: 1.2 }}
                     viewport={{ once: true }}
                 >
-                    <a href="https://github.com/mshraky3" target="_blank" rel="noreferrer">
-                        <img width="40" height="40" src="https://img.icons8.com/fluency/40/github.png" alt="GitHub logo" loading="lazy" />
-                    </a>
-                    <a href="https://wa.link/5zcep6" target="_blank" rel="noreferrer">
-                        <img width="40" height="40" src="https://img.icons8.com/ios-glyphs/40/whatsapp.png" alt="WhatsApp logo" loading="lazy" />
-                    </a>
+                    {SOCIAL_LINKS.map(({ href, img: src, alt }) => (
+                      <a key={href} href={href} target="_blank" rel="noreferrer">
+                        <img width="40" height="40" src={src} alt={alt} loading="lazy" />
+                      </a>
+                    ))}
                 </motion.div>
             </motion.div>
         </motion.div>
