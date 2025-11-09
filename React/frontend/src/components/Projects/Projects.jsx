@@ -8,9 +8,9 @@ const PROJECTS = [
     wrapperClass: "project",
     initialX: -100,
     delay: 0.4,
-    title: "Project 1",
+    title: "منصة بنك أسئلة SMLE",
     description:
-      "SQB is a digital learning platform that directly connects medical candidates preparing for the Saudi Medical Licensing Examination (SMLE) and Prometric exams with a vast question bank — featuring over 5,000 meticulously curated multiple-choice questions and detailed performance analytics.",
+      "منصة SQB التعليمية تربط المرشحين لاختبار الترخيص المهني السعودي وامتحانات برومترك ببنك أسئلة يضم أكثر من 5000 سؤال متعدد الاختيارات مع تحليلات أداء تفصيلية تساعدهم على تتبع التقدم بثقة.",
     href: "https://www.smle-question-bank.com",
     technologies: ["React", "Postgres"]
   },
@@ -18,9 +18,9 @@ const PROJECTS = [
     wrapperClass: "project two",
     initialX: 100,
     delay: 0.6,
-    title: "Project 2",
+    title: "منصة حِرفة للخدمات",
     description:
-      "Herfa is a quick and simple platform that connects you with skilled workers whenever and wherever you need them, without registration or an account. Whether you need a plumber, electrician, cleaner, or any other service provider, Herfa helps you find the right worker near you with just a few clicks.",
+      "حِرفة هي منصة سريعة وسهلة تربطك مباشرة بالعمالة الماهرة دون الحاجة لإنشاء حساب. بضغطة واحدة يمكنك العثور على السباك أو الكهربائي أو عامل الصيانة الأقرب إليك في أي وقت.",
     href: "https://hirfa-react.vercel.app",
     technologies: ["React", "Postgres"]
   },
@@ -28,9 +28,9 @@ const PROJECTS = [
     wrapperClass: "project three",
     initialX: -100,
     delay: 0.8,
-    title: "Earth Footprint",
+    title: "منصة الأثر البيئي",
     description:
-      "Earth Footprint is a comprehensive environmental consulting platform that directly connects clients with specialized services through a modern React/Vite frontend with bilingual support and Framer Motion animations. The Express.js backend features intelligent email management with Nodemailer, automated Google Maps review scraping via Apify integration with 24-hour caching and rate limiting, and optimized performance through advanced compression, minification, and code splitting. The platform serves as a complete digital ecosystem for environmental consulting services across Saudi Arabia, combining automated data management, intelligent communication systems, and modern web technologies for seamless client experiences.",
+      "منصة الأثر البيئي توفر تجربة متكاملة للاستشارات البيئية بواجهة React/Vite ثنائية اللغة ورسوميات متحركة، مع خادم Express.js يدير المراسلات، ويجمع تقييمات خرائط Google تلقائيًا، ويطبق أفضل ممارسات الأداء لتقديم تجربة سلسة للعملاء في جميع أنحاء السعودية.",
     href: "https://erthfc.com/",
     technologies: ["React", "Express.js", "Apify"]
   }
@@ -53,7 +53,7 @@ function Projects() {
         transition={{ duration: 0.8, delay: 0.2 }}
         viewport={{ once: true }}
       >
-        <h1>Some of Our Projects</h1>
+        <h1>نماذج من مشاريعنا</h1>
       </motion.div>
 
       {PROJECTS.map(({ wrapperClass, initialX, delay, title, description, href, technologies }) => (
@@ -71,7 +71,7 @@ function Projects() {
             <div className="projectCardText">{description}</div>
             <div className="projectCardButton">
               <a href={href}>
-                <Button>View</Button>
+                <Button>عرض المشروع</Button>
               </a>
             </div>
           </div>

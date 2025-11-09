@@ -5,16 +5,16 @@ function Stats() {
   return (
     <div className="stats">
       <div className="info">
-        20+
-        <span>projects</span>
+        25+
+        <span>مشروع برمجي </span>
       </div>
       <div className="info">
         3+
-        <span>jobs</span>
+        <span>عمل حر </span>
       </div>
       <div className="info">
         2+
-        <span>years</span>
+        <span>سنوات برمجة </span>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import "./Contact.css";
 
 function Form() {
     const [formData, setFormData] = useState({});
-    const [buttonText, setButtonText] = useState("Send Message");
+    const [buttonText, setButtonText] = useState("إرسال الرسالة");
     const [buttonColor, setButtonColor] = useState(""); 
     function addForm(e) {
         const { id: name, value } = e.target;
@@ -19,18 +19,18 @@ function Form() {
         e.preventDefault();
 
         try {
-            setButtonText("Sending...");
+            setButtonText("جاري الإرسال...");
             setButtonColor("");
 
             const response = await axios.post('https://portfolio-api-rose.vercel.app/send-email', formData);
 
             if (response.status === 200) {
-                setButtonText("Message Sent!");
+                setButtonText("تم الإرسال!");
                 setButtonColor("green");
             }
         } catch (error) {
             console.error("Error sending email:", error);
-            setButtonText("Failed to Send");
+            setButtonText("فشل الإرسال");
             setButtonColor("red");
         }
     }
@@ -39,41 +39,41 @@ function Form() {
         <>
             <form className="ContactFormInputs" onSubmit={handleSubmit}>
                 <div className="InputRow">
-                    <label htmlFor="firstName">First Name</label>
+                    <label htmlFor="firstName">الاسم</label>
                     <input
                         type="text"
                         id="firstName"
                         onChange={addForm}
-                        placeholder="Name *"
+                        placeholder="الاسم *"
                         required
                     />
                 </div>
                 <div className="InputRow">
-                    <label htmlFor="email">Your Email</label>
+                    <label htmlFor="email">البريد الإلكتروني</label>
                     <input
                         type="email"
                         id="email"
                         onChange={addForm}
-                        placeholder="Email *"
+                        placeholder="البريد الإلكتروني *"
                         required
                     />
                 </div>
                 <div className="InputRow">
-                    <label htmlFor="subject">Subject</label>
+                    <label htmlFor="subject">الموضوع</label>
                     <input
                         type="text"
                         id="subject"
                         onChange={addForm}
-                        placeholder="Subject *"
+                        placeholder="الموضوع *"
                         required
                     />
                 </div>
                 <div className="InputRow">
-                    <label htmlFor="message">Your Message</label>
+                    <label htmlFor="message">الرسالة</label>
                     <textarea
                         id="message"
                         onChange={addForm}
-                        placeholder="Your message *"
+                        placeholder="نص الرسالة *"
                         required
                     ></textarea>
                 </div>

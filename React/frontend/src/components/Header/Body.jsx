@@ -1,23 +1,88 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useRef, useState } from "react"; 
 import "./HeaderStyle/Body.css";
 import Button from '@mui/material/Button';
-import logo from "./images/test-me.png";
+import stage0 from "./images/stage_0.png";
+import stage1 from "./images/stage_1.png";
+import stage2 from "./images/stage_2.png";
+import stage3 from "./images/stage_3.png";
+import stage4 from "./images/stage_4.png";
+import stage5 from "./images/stage_5.png";
+import stage6 from "./images/stage_6.png";
 import IAM from "./iam";
 import Stats from "./Stats";
 import { motion } from "framer-motion";
 
-const CTA_LABEL = "GET IN TOUCH";
-const SPECIALTIES_LABEL = "Specialties";
+const CTA_LABEL = "تواصل معنا";
+const SPECIALTIES_LABEL = "مجالات التخصص";
+
+const STAGE_FRAMES = [stage0, stage1, stage2, stage3, stage4, stage5, stage6];
 
 function Body() {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [currentStage, setCurrentStage] = useState(0);
+  const animationTimeout = useRef(null);
+  const stageRef = useRef(0);
 
   useEffect(() => {
-    // Preload the main profile image
-    const img = new Image();
-    img.onload = () => setImageLoaded(true);
-    img.src = logo;
+    let isMounted = true;
+    const preloaders = STAGE_FRAMES.map((src, idx) => {
+      const img = new Image();
+      img.src = src;
+      if (idx === 0) {
+        img.onload = () => {
+          if (isMounted) setImageLoaded(true);
+        };
+      }
+      return img;
+    });
+
+    return () => {
+      isMounted = false;
+      if (animationTimeout.current) {
+        clearTimeout(animationTimeout.current);
+      }
+      preloaders.forEach(img => {
+        img.onload = null;
+      });
+    };
   }, []);
+
+  useEffect(() => {
+    stageRef.current = currentStage;
+  }, [currentStage]);
+
+  const animateToStage = (direction) => {
+    const targetIndex = direction === "forward" ? STAGE_FRAMES.length - 1 : 0;
+    const step = direction === "forward" ? 1 : -1;
+
+    if (
+      (direction === "forward" && stageRef.current >= targetIndex) ||
+      (direction === "reverse" && stageRef.current <= targetIndex)
+    ) {
+      return;
+    }
+
+    if (animationTimeout.current) {
+      clearTimeout(animationTimeout.current);
+    }
+
+    const tick = () => {
+      stageRef.current = Math.min(
+        STAGE_FRAMES.length - 1,
+        Math.max(0, stageRef.current + step)
+      );
+      setCurrentStage(stageRef.current);
+
+      if (stageRef.current === targetIndex) {
+        animationTimeout.current = null;
+        return;
+      }
+
+      animationTimeout.current = setTimeout(tick, 120);
+    };
+
+    animationTimeout.current = setTimeout(tick, 120);
+  };
 
   return (
     <motion.div 
@@ -48,13 +113,15 @@ function Body() {
           >
             <a href="https://wa.link/5zcep6">
               <Button>
-                {CTA_LABEL}
+                
                 <img
                   src="https://img.icons8.com/?size=50&id=biaPj0fC1TKb&format=png&color=ffffff"
-                  alt="arrow icon"
+                  alt="أيقونة سهم"
                   loading="lazy"
-                  style={{ marginLeft: 10 }}
+                  style={{ marginRight: 10, transform: 'scaleX(-1)' }}
                 />
+                
+                {CTA_LABEL}
               </Button>
             </a>
           </motion.div>
@@ -77,13 +144,13 @@ function Body() {
             justifyContent: 'center',
             borderRadius: '50%'
           }}>
-            Loading...
+            جارٍ التحميل...
           </div>
         )}
         <motion.img 
-          src={logo} 
+          src={STAGE_FRAMES[currentStage]} 
           className="profile-img" 
-          alt="Mahmoud Alshraky profile picture" 
+          alt="صورة محمود الشراكي" 
           loading="eager"
           fetchPriority="high"
           decoding="async"
@@ -92,8 +159,8 @@ function Body() {
             transition: 'opacity 0.3s ease-in-out'
           }}
           onLoad={() => setImageLoaded(true)}
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 300 }}
+          onHoverStart={() => animateToStage("forward")}
+          onHoverEnd={() => animateToStage("reverse")}
         />
       </motion.div>
       <motion.div 

@@ -3,12 +3,12 @@ import "./HeaderStyle/navbar.css";
 import { motion } from "framer-motion";
 
 const NAV_LINKS = [
-  { href: "#HOME", label: "HOME" },
-  { href: "#SERVICES", label: "SERVICES" },
-  { href: "#benefits", label: "BENEFITS" },
-  { href: "#projects", label: "PROJECTS" },
-  { href: "#aboutSection", label: "ABOUT US" },
-  { href: "#ContactMe", label: "CONTACT" }
+  { href: "#HOME", label: "الرئيسية" },
+  { href: "#SERVICES", label: "الخدمات" },
+  { href: "#benefits", label: "الفوائد" },
+  { href: "#projects", label: "المشاريع" },
+  { href: "#aboutSection", label: "من نحن" },
+  { href: "#ContactMe", label: "تواصل معنا" }
 ];
 
 function Navbar() {
@@ -39,7 +39,7 @@ function Navbar() {
       >
         <img
           src="/logo.png"
-          alt="alshraky logo"
+          alt="شعار الشراكي"
           height="40"
           loading="eager"
           fetchPriority="high"
@@ -58,7 +58,7 @@ function Navbar() {
           width="24"
           height="24"
           src="https://img.icons8.com/ios-filled/24/C850F2/menu--v1.png"
-          alt="menu"
+          alt="أيقونة القائمة"
           loading="lazy"
         />
       </motion.div>
@@ -74,7 +74,7 @@ function Navbar() {
             key={href}
             href={href}
             onClick={closeMenu}
-            whileHover={{ x: 10 }}
+            whileHover={{ x: -10 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
             {label}
@@ -102,7 +102,7 @@ function Navbar() {
       >
         <a href="https://wa.link/5zcep6">
           <button className={isScrolled ? 'scrolled-button' : ''}>
-            Let's Talk
+            تحدث معنا
           </button>
         </a>
       </motion.div>

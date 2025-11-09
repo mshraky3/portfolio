@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./HeaderStyle/iam.css"
 
-const roles = ["front end", "backend", "full stack", "React developer"];
+const roles = ["تصميم تجربة المستخدم ", "تطوير الاستضافات ", "بناء موقع متكامل", "تحسين ظهور المواقع"];
 
 function IAM(){
       const [currentText, setCurrentText] = useState("");
@@ -47,7 +47,7 @@ function IAM(){
     return (
         <div className="im">
         <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>
-          I am {currentText}
+          {currentText}
         </span>
       </div>
     )

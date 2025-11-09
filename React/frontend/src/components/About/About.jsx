@@ -3,19 +3,19 @@ import img from "./me.png";
 import "./About.css";
 import { motion } from "framer-motion";
 
-const ABOUT_TITLE = "Bold design. Performance-first development.";
-const ABOUT_BODY = "alshraky is a web design & development studio crafting conversion-focused websites with modern stacks (React, Express, PostgreSQL). We blend brand aesthetics with speed, accessibility, and SEO to grow your business.";
-const ABOUT_DETAIL = "Every project is built with performance budgets, core web vital targets, and scalable architecture. From concept to launch (and beyond), we handle design, development, deployment, and optimization.";
+const ABOUT_TITLE = "من نحن";
+const ABOUT_BODY = "نصنع تجارب ويب عالية الأداء.";
+const ABOUT_DETAIL = "نرافق مشاريعك من الفكرة حتى الإطلاق، مع تجربة مستخدم مدروسة وبنية React وExpress وPostgreSQL موثوقة وسهلة التوسع والتحسين.";
 const SOCIAL_LINKS = [
   {
     href: "https://github.com/mshraky3",
     img: "https://img.icons8.com/fluency/40/github.png",
-    alt: "GitHub logo"
+    alt: "شعار GitHub"
   },
   {
     href: "https://wa.link/5zcep6",
     img: "https://img.icons8.com/ios-glyphs/40/whatsapp.png",
-    alt: "WhatsApp logo"
+    alt: "شعار واتساب"
   }
 ];
 
@@ -41,7 +41,7 @@ function About() {
                     whileHover={{ scale: 1.05, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 300 }}
                 >
-                    <img src={img} alt="Mahmoud Alshraky profile picture" loading="lazy" />
+                    <img src={img} alt="صورة محمود الشراكي" loading="lazy" />
                 </motion.div>
             </motion.div>
             <motion.div 

@@ -4,47 +4,47 @@ import './Benefits.css';
 
 const BENEFIT_ITEMS = [
   {
-    title: 'Be found on Google',
+    title: 'كن ظاهرًا في نتائج البحث',
     text:
-      'SEO-friendly web design and fast web development help your site rank for keywords like web design, web development, and your local services.'
+      'بنية محسّنة لمحركات البحث وسرعة تحميل عالية ترفع ترتيبك للكلمات المفتاحية الأهم لنشاطك.'
   },
   {
-    title: 'Build trust and credibility',
+    title: 'ابنِ الثقة بسرعة',
     text:
-      'A clean design, clear messaging, and real case studies increase conversions and make your brand memorable.'
+      'كل صفحة مصممة بتجربة مستخدم واضحة، وشواهد اجتماعية، وهوية بصرية متسقة تعزز المصداقية.'
   },
   {
-    title: 'Get more leads and sales',
+    title: 'حوّل الزوار إلى عملاء',
     text:
-      'Optimized contact forms, WhatsApp CTAs, and performance-focused development convert visitors into customers.'
+      'دعوات تفاعل محسّنة وتدفقات سهلة تقلل الاحتكاك وتحوّل الاهتمام إلى فرص حقيقية على كل الأجهزة.'
   },
   {
-    title: 'Work on every device',
+    title: 'استجب لكل الأجهزة',
     text:
-      'Responsive web design ensures your website looks great on phones, tablets, and desktops.'
+      'تصاميم مرنة تتكيف مع الجوال والأجهزة اللوحية وسطح المكتب دون التأثير على الأداء.'
   },
   {
-    title: 'Scale as you grow',
+    title: 'توسع بثقة',
     text:
-      'Robust front-end and database choices keep your site fast, secure, and ready for more traffic.'
+      'بنية React وExpress القابلة للصيانة تضمن إطلاق ميزات جديدة بسرعة وبدون توقف.'
   }
 ];
 
 const BENEFIT_HIGHLIGHTS = [
   {
-    value: '7-day',
-    label: 'Launch window',
-    caption: 'Average project kickoff'
+    value: '٧ أيام',
+    label: 'إطلاق أولي',
+    caption: 'متوسط بدء المشاريع'
   },
   {
-    value: '3×',
-    label: 'Conversion lift',
-    caption: 'After redesign roll-out'
+    value: '٣×',
+    label: 'زيادة التحويل',
+    caption: 'بعد تحسين التجربة'
   },
   {
-    value: '99%',
-    label: 'Lighthouse score',
-    caption: 'Core Web Vitals focus'
+    value: '٩٩٪',
+    label: 'تقييم الأداء',
+    caption: 'تركيز على مؤشرات الويب الحيوية'
   }
 ];
 
@@ -66,11 +66,10 @@ function Benefits() {
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <span className="benefits-eyebrow">Web Design · UX Strategy</span>
-          <h2>Benefits of a Website for Your Business</h2>
-          <p className="subtitle">Why web design and web development matter</p>
+          <span className="benefits-eyebrow">لماذا يهم الأمر</span>
+          <h2>فوائد تحسين تصميم موقعك</h2>
           <p className="lead">
-            A modern website builds trust, brings new customers, and drives revenue. Here is how professional web design and development help your business grow:
+            الموقع المركز يجذب جمهورك ويقنعه ويحوّله. إليك ما تحققه عندما يعمل التصميم والهندسة بتناغم:
           </p>
         </motion.div>
 
@@ -81,7 +80,7 @@ function Benefits() {
           transition={{ duration: 0.6, delay: 0.25 }}
           viewport={{ once: true }}
         >
-          <span className="highlight-title">What you gain</span>
+          <span className="highlight-title">أرقام سريعة</span>
           <div className="highlight-grid">
             {BENEFIT_HIGHLIGHTS.map((item, idx) => (
               <div className="highlight-item" key={idx}>
@@ -122,13 +121,14 @@ function Benefits() {
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <h4>Ready to start?</h4>
+          <h4>جاهز للانطلاق؟</h4>
           <p>
-            Let’s build a high-converting website with professional web design and web development.
+            دعنا نبني موقعًا عالي التحويل بتصميم وتطوير احترافيين يعكسان قوة علامتك.
           </p>
           <div className="cta-actions">
-            <a href="#SERVICES" className="btn primary">See Services</a>
-            <a href="#ContactMe" className="btn secondary">Contact Us</a>
+          <a href="#ContactMe" className="btn secondary">تواصل معنا</a>
+            <a href="#SERVICES" className="btn primary">استعرض الخدمات</a>
+
           </div>
         </motion.div>
       </div>
