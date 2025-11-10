@@ -84,6 +84,11 @@ function Body() {
     animationTimeout.current = setTimeout(tick, 120);
   };
 
+  const handleImageClick = () => {
+    const direction = stageRef.current === 0 ? "forward" : "reverse";
+    animateToStage(direction);
+  };
+
   return (
     <motion.div 
       className="contener"
@@ -161,6 +166,7 @@ function Body() {
           onLoad={() => setImageLoaded(true)}
           onHoverStart={() => animateToStage("forward")}
           onHoverEnd={() => animateToStage("reverse")}
+          onClick={handleImageClick}
         />
       </motion.div>
       <motion.div 
