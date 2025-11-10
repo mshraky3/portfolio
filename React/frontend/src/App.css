@@ -1,9 +1,48 @@
 @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap");
 
+:root {
+    --surface-gradient: linear-gradient(135deg, rgba(10, 10, 12, 0.98) 0%, rgba(6, 6, 10, 0.99) 52%, rgba(8, 8, 12, 1) 100%);
+    --surface-glow-primary: radial-gradient(circle at 1% 200%, rgba(193, 71, 233, 0.15), transparent 55%);
+    --surface-glow-secondary: radial-gradient(circle at 82% 4%, rgba(193, 71, 233, 0.08), transparent 35%);
+    --surface-glow-tertiary: radial-gradient(circle at 50% 1%, rgba(120, 40, 160, 0.08), transparent 65%);
+}
+
 body {
     padding: 0;
     margin: 0;
     font-family: "Cairo", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     direction: rtl;
     text-align: right;
+    min-height: 100vh;
+    background: var(--surface-gradient);
+    color: #f5f5f5;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: auto;
+    width: 60vw;
+    height: 60vw;
+    max-width: 760px;
+    max-height: 760px;
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(140px);
+    opacity: 0.55;
+}
+
+body::before {
+    top: -18vw;
+    left: clamp(-220px, -12vw, -80px);
+    background: var(--surface-glow-primary);
+}
+
+body::after {
+    bottom: -22vw;
+    right: clamp(-200px, -10vw, -60px);
+    background: var(--surface-glow-secondary);
 }

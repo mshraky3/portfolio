@@ -4,10 +4,11 @@
   position: relative;
   width: 100%;
   padding: clamp(56px, 8vw, 88px) clamp(18px, 5vw, 48px);
-  background: rgba(0, 0, 0);
+  background: transparent;
+  color: inherit;
   direction: rtl;
-  margin-top: 10%;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .benefits-section::before,
@@ -18,23 +19,25 @@
   filter: blur(90px);
   opacity: 0.45;
   pointer-events: none;
-  background: radial-gradient(circle at center, rgba(200, 80, 242, 0.65), transparent 65%);
+  background: radial-gradient(circle at center, rgba(193, 71, 233, 0.65), transparent 65%);
   animation: benefitsGlowDrift 18s ease-in-out infinite;
+  mix-blend-mode: screen;
 }
 
 .benefits-section::before {
   width: clamp(240px, 38vw, 460px);
   height: clamp(240px, 38vw, 460px);
-  top: clamp(-180px, -8vw, -80px);
-  left: clamp(-160px, -6vw, -40px);
+  top: clamp(-220px, -12vw, -120px);
+  left: clamp(-220px, -10vw, -120px);
 }
 
 .benefits-section::after {
-  width: clamp(200px, 28vw, 340px);
-  height: clamp(200px, 28vw, 340px);
-  bottom: clamp(-160px, -6vw, -60px);
-  right: clamp(-120px, -4vw, -30px);
+  width: clamp(260px, 38vw, 440px);
+  height: clamp(260px, 38vw, 440px);
+  bottom: clamp(-220px, -12vw, -120px);
+  right: clamp(-200px, -9vw, -110px);
   animation-delay: 4s;
+  mix-blend-mode: screen;
 }
 
 .benefits-inner {

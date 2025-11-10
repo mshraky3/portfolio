@@ -6,14 +6,32 @@
     width: 100%;
     margin: 0;
     padding: 0;
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+    color: inherit;
+}
+
+.contener::after {
+    content: "";
+    position: absolute;
+    inset: -45vh -35vw;
+    background: var(--surface-glow-primary),
+                var(--surface-glow-secondary),
+                var(--surface-glow-tertiary);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 0;
 }
 
 .black {
     flex: 2;
-    background-color: black;
+    background-color: transparent;
     color: white;
     padding-right: 5%;
     padding-left: 5%;
+    position: relative;
+    z-index: 1;
 }
 
 .black-content{
@@ -66,24 +84,29 @@
     display: flex;
     flex-direction: column-reverse;
     flex: 1;
-    background-color: black;
-    z-index: 100;
+    background-color: transparent;
+    z-index: 3;
     height: 100%;
+    position: relative;
 }
 .image img {
     margin-right: 50%;
     height: 70%;
     width: 100%;
     transition: opacity 0.1s ease;
+    position: relative;
+    z-index: 3;
 }
 
 .purple{
     flex: 1.5;
-    background-color: #C147E9;
+    background: rgba(193, 71, 233, 0.05);
     display: flex;
     height: 100%;
     justify-content: flex-end;
     padding-left: 1%;
+    position: relative;
+    z-index: 1;
 }
 
 .icons {

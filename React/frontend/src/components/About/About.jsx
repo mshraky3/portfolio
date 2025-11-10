@@ -38,8 +38,8 @@ function About() {
             >
                 <motion.div 
                     className="aboutCurcle"
-                    whileHover={{ scale: 1.05, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
+                    whileHover={{ scale: 1.5 }}
+                    transition={{ type: "spring", stiffness: 10 }}
                 >
                     <img src={img} alt="صورة محمود الشراكي" loading="lazy" />
                 </motion.div>

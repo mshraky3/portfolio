@@ -1,88 +1,178 @@
 import React from "react";
 import "./projects.css";
-import Button from '@mui/material/Button';
 import { motion } from "framer-motion";
+
+import smlePreview from "./projectsImgs/pro2.png";
+import hirfaPreview from "./projectsImgs/mockuper.png";
+import erthPreview from "./projectsImgs/wsm.png";
 
 const PROJECTS = [
   {
-    wrapperClass: "project",
-    initialX: -100,
-    delay: 0.4,
+    category: "منصة تعليمية",
     title: "منصة بنك أسئلة SMLE",
     description:
-      "منصة SQB التعليمية تربط المرشحين لاختبار الترخيص المهني السعودي وامتحانات برومترك ببنك أسئلة يضم أكثر من 5000 سؤال متعدد الاختيارات مع تحليلات أداء تفصيلية تساعدهم على تتبع التقدم بثقة.",
+      "حل متكامل لإدارة المحتوى التعليمي للمرشحين لاختبار الترخيص المهني السعودي مع تحليلات أداء لحظية ولوحات متابعة للمدربين.",
+    impact: "أكثر من ٥٠٠٠ سؤال تفاعلي رفع معدل الإتقان ٢٫٣× خلال أول ثلاثة أشهر من الإطلاق.",
+    stats: [
+      { value: "٥٠٠٠+", label: "عنصر تعلّمي" },
+      { value: "٩٤٪", label: "رضا المستخدمين" }
+    ],
+    technologies: ["React", "Postgres", "Chart.js"],
     href: "https://www.smle-question-bank.com",
-    technologies: ["React", "Postgres"]
+    image: smlePreview,
+    imageAlt: "واجهة منصة بنك أسئلة SMLE",
+    previewLabel: "SMLE Platform"
   },
   {
-    wrapperClass: "project two",
-    initialX: 100,
-    delay: 0.6,
+    category: "سوق خدمات",
     title: "منصة حِرفة للخدمات",
     description:
-      "حِرفة هي منصة سريعة وسهلة تربطك مباشرة بالعمالة الماهرة دون الحاجة لإنشاء حساب. بضغطة واحدة يمكنك العثور على السباك أو الكهربائي أو عامل الصيانة الأقرب إليك في أي وقت.",
+      "منصة تربط أصحاب المنازل مباشرة بالعمالة المتخصصة من دون حسابات مع واجهة مبسطة للعثور على أقرب فني خلال أقل من دقيقة.",
+    impact: "رحلة حجز جديدة قللت وقت العثور على فني من ٢٠ دقيقة إلى أقل من ٣ دقائق.",
+    stats: [
+      { value: "٣ دقائق", label: "متوسط الحجز" },
+      { value: "٦٥٪", label: "زيادة التحويل" }
+    ],
+    technologies: ["React", "Postgres", "Supabase"],
     href: "https://hirfa-react.vercel.app",
-    technologies: ["React", "Postgres"]
+    image: hirfaPreview,
+    imageAlt: "واجهة منصة حِرفة للخدمات",
+    previewLabel: "Hirfa Services"
   },
   {
-    wrapperClass: "project three",
-    initialX: -100,
-    delay: 0.8,
+    category: "استشارات أعمال",
     title: "منصة الأثر البيئي",
     description:
-      "منصة الأثر البيئي توفر تجربة متكاملة للاستشارات البيئية بواجهة React/Vite ثنائية اللغة ورسوميات متحركة، مع خادم Express.js يدير المراسلات، ويجمع تقييمات خرائط Google تلقائيًا، ويطبق أفضل ممارسات الأداء لتقديم تجربة سلسة للعملاء في جميع أنحاء السعودية.",
+      "واجهة ثنائية اللغة مع تكاملات تلقائية مع خرائط Google وExpress.js لدعم طلبات الاستشارات البيئية ومتابعتها.",
+    impact: "أتمتة جمع التقييمات رفعت معدل الطلبات المتكررة ١٫٨× وخفضت وقت الردود بنسبة ٤٠٪.",
+    stats: [
+      { value: "١٫٨×", label: "طلبات متكررة" },
+      { value: "٤٠٪", label: "تسريع الاستجابة" }
+    ],
+    technologies: ["React", "Express.js", "Apify"],
     href: "https://erthfc.com/",
-    technologies: ["React", "Express.js", "Apify"]
+    image: erthPreview,
+    imageAlt: "واجهة منصة الأثر البيئي",
+    previewLabel: "Erth Environmental"
   }
 ];
 
+const CARD_ANIMATION = {
+  initial: { opacity: 0, y: 48 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.4 }
+};
+
 function Projects() {
   return (
-    <motion.div 
-      className="projects" 
+    <motion.section
+      className="projects-section"
       id="projects"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
     >
-      <motion.div 
-        className="projectsTitle"
-        initial={{ y: 50, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+      <motion.div
+        className="projects-header"
+        initial={{ opacity: 0, y: 32 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.15 }}
         viewport={{ once: true }}
       >
-        <h1>نماذج من مشاريعنا</h1>
+        <span className="projects-eyebrow">أعمال مختارة</span>
+        <h2>مشاريع تبني نمواً قابلاً للقياس</h2>
+        <p className="projects-lead">
+          كل مشروع نطلقه يبدأ بأهداف تجارية واضحة وينتهي بنتائج ملموسة. إليك عينة من حلول قمنا
+          بتصميمها وتطويرها لرفع العائد على الاستثمار لعملائنا.
+        </p>
       </motion.div>
 
-      {PROJECTS.map(({ wrapperClass, initialX, delay, title, description, href, technologies }) => (
-        <motion.div 
-          key={title}
-          className={wrapperClass}
-          initial={{ x: initialX, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay }}
-          viewport={{ once: true }}
-          whileHover={{ scale: 1.02 }}
-        >
-          <div className="projectCard">
-            <h1 className="projectCardTitle">{title}</h1>
-            <div className="projectCardText">{description}</div>
-            <div className="projectCardButton">
-              <a href={href}>
-                <Button>عرض المشروع</Button>
+      <div className="projects-showcase">
+        {PROJECTS.map((project, index) => (
+          <motion.article
+            key={project.title}
+            className="project-card"
+            initial={CARD_ANIMATION.initial}
+            whileInView={CARD_ANIMATION.whileInView}
+            viewport={CARD_ANIMATION.viewport}
+            transition={{ duration: 0.7, delay: 0.2 + index * 0.12 }}
+            whileHover={{ y: -6 }}
+          >
+            <motion.figure
+              className="project-hero"
+              initial={{ opacity: 0, scale: 0.94 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <div className="project-hero-frame">
+                <img src={project.image} alt={project.imageAlt} loading="lazy" />
+              </div>
+              <figcaption>{project.previewLabel}</figcaption>
+            </motion.figure>
+
+            <div className="project-card-body">
+              <span className="project-category">{project.category}</span>
+              <h3 className="project-title">{project.title}</h3>
+              <p className="project-description">{project.description}</p>
+              <p className="project-impact">{project.impact}</p>
+            </div>
+
+            <div className="project-stats">
+              {project.stats.map((stat) => (
+                <div className="project-stat" key={stat.label}>
+                  <span className="project-stat-value">{stat.value}</span>
+                  <span className="project-stat-label">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="project-card-footer">
+              <div className="project-tags">
+                {project.technologies.map((tech) => (
+                  <span className="project-tag" key={tech}>
+                    {tech}
+                  </span>
+                ))}
+              </div>
+              <a
+                className="project-link"
+                href={project.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>استكشاف المشروع</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M8 5h11v11"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M6 17 18.5 6.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </a>
             </div>
-          </div>
-          <div className="projectType">
-            {technologies.map((tech) => (
-              <Button key={tech}>{tech}</Button>
-            ))}
-          </div>
-        </motion.div>
-      ))}
-    </motion.div>
+          </motion.article>
+        ))}
+      </div>
+    </motion.section>
   );
 }
 

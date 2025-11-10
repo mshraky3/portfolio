@@ -1,7 +1,8 @@
 .ContactMe {
-    background-color: rgba(0, 0, 0, 1);
-    color: white;
+    position: relative;
     min-height: 70vh;
+    background: transparent;
+    color: inherit;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -10,6 +11,20 @@
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     box-sizing: border-box;
     text-align: right;
+    overflow: hidden;
+}
+
+.ContactMe::after {
+    content: "";
+    position: absolute;
+    inset: -40vh -30vw;
+    background:
+        var(--surface-glow-primary),
+        var(--surface-glow-secondary),
+        var(--surface-glow-tertiary);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 0;
 }
 
 .ContactDetai {
@@ -20,6 +35,8 @@
     width: 100%;
     max-width: 1200px;
     gap: 40px;
+    position: relative;
+    z-index: 1;
 }
 
 .ContactForm {
@@ -176,6 +193,8 @@
     max-width: 1200px;
     margin-top: 40px;
     padding-top: 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .br {
