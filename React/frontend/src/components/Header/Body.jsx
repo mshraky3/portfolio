@@ -1,94 +1,15 @@
-import React, { useEffect, useRef, useState } from "react"; 
+import React from "react"; 
 import "./HeaderStyle/Body.css";
 import Button from '@mui/material/Button';
-import stage0 from "./images/stage_0.png";
-import stage1 from "./images/stage_1.png";
-import stage2 from "./images/stage_2.png";
-import stage3 from "./images/stage_3.png";
-import stage4 from "./images/stage_4.png";
-import stage5 from "./images/stage_5.png";
-import stage6 from "./images/stage_6.png";
 import IAM from "./iam";
 import Stats from "./Stats";
 import { motion } from "framer-motion";
+import ProfileModel from "./ProfileModel";
 
 const CTA_LABEL = "تواصل معنا";
 const SPECIALTIES_LABEL = "مجالات التخصص";
 
-const STAGE_FRAMES = [stage0, stage1, stage2, stage3, stage4, stage5, stage6];
-
 function Body() {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [currentStage, setCurrentStage] = useState(0);
-  const animationTimeout = useRef(null);
-  const stageRef = useRef(0);
-
-  useEffect(() => {
-    let isMounted = true;
-    const preloaders = STAGE_FRAMES.map((src, idx) => {
-      const img = new Image();
-      img.src = src;
-      if (idx === 0) {
-        img.onload = () => {
-          if (isMounted) setImageLoaded(true);
-        };
-      }
-      return img;
-    });
-
-    return () => {
-      isMounted = false;
-      if (animationTimeout.current) {
-        clearTimeout(animationTimeout.current);
-      }
-      preloaders.forEach(img => {
-        img.onload = null;
-      });
-    };
-  }, []);
-
-  useEffect(() => {
-    stageRef.current = currentStage;
-  }, [currentStage]);
-
-  const animateToStage = (direction) => {
-    const targetIndex = direction === "forward" ? STAGE_FRAMES.length - 1 : 0;
-    const step = direction === "forward" ? 1 : -1;
-
-    if (
-      (direction === "forward" && stageRef.current >= targetIndex) ||
-      (direction === "reverse" && stageRef.current <= targetIndex)
-    ) {
-      return;
-    }
-
-    if (animationTimeout.current) {
-      clearTimeout(animationTimeout.current);
-    }
-
-    const tick = () => {
-      stageRef.current = Math.min(
-        STAGE_FRAMES.length - 1,
-        Math.max(0, stageRef.current + step)
-      );
-      setCurrentStage(stageRef.current);
-
-      if (stageRef.current === targetIndex) {
-        animationTimeout.current = null;
-        return;
-      }
-
-      animationTimeout.current = setTimeout(tick, 120);
-    };
-
-    animationTimeout.current = setTimeout(tick, 120);
-  };
-
-  const handleImageClick = () => {
-    const direction = stageRef.current === 0 ? "forward" : "reverse";
-    animateToStage(direction);
-  };
-
   return (
     <motion.div 
       className="contener"
@@ -139,35 +60,9 @@ function Body() {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 1, delay: 0.4 }}
       >
-        {!imageLoaded && (
-          <div className="image-placeholder" style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#f0f0f0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '50%'
-          }}>
-            جارٍ التحميل...
-          </div>
-        )}
-        <motion.img 
-          src={STAGE_FRAMES[currentStage]} 
-          className="profile-img" 
-          alt="صورة محمود الشراكي" 
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-          style={{ 
-            opacity: imageLoaded ? 1 : 0,
-            transition: 'opacity 0.3s ease-in-out'
-          }}
-          onLoad={() => setImageLoaded(true)}
-          onHoverStart={() => animateToStage("forward")}
-          onHoverEnd={() => animateToStage("reverse")}
-          onClick={handleImageClick}
-        />
+        <div className="profile-img">
+          <ProfileModel />
+        </div>
       </motion.div>
       <motion.div 
         className="purple"
