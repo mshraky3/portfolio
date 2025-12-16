@@ -169,6 +169,12 @@
         padding-right: 0%;
         width: 100%;
     }
+    .image {
+        min-width: auto;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
     .black-content {
       margin-right: 0;
       align-items: center;
@@ -176,19 +182,16 @@
       text-align: center;
     }
 
-    .image {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0%;
-
-    }
     .image .profile-img {
         display: flex;
         justify-content: center;
         align-items: center;
         margin: 0%;
-        width: 60%;
+        width: 100%;
+        max-width: 420px;
+    }
+    .profile-3d {
+        width: 100%;
     }
 
     .name{

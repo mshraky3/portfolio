@@ -40,7 +40,10 @@ function ProfileModel() {
         </Suspense>
         <OrbitControls
           enablePan={false}
-          enableZoom={false}
+          enableZoom
+          zoomSpeed={0.7}
+          minDistance={4}
+          maxDistance={30}
           autoRotate
           autoRotateSpeed={0.8}
           minPolarAngle={Math.PI / 3}
