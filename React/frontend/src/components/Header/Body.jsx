@@ -62,7 +62,7 @@ function Body() {
       >
         <div className="profile-img">
           <ProfileModel />
-        </div>
+          </div>
       </motion.div>
       <motion.div 
         className="purple"
