@@ -1,7 +1,7 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import Header from "./components/Header/Header";
 import Services from "./components/Services/Services";
-import Projects from "./components/Projects/Projects";
+import ProjectShowcase from "./components/Projects/ProjectShowcase";
 import About from "./components/About/About";
 import Contact from "./components/contact/Contact";
 import Benefits from "./components/Benefits/Benefits";
@@ -12,7 +12,7 @@ const DESCRIPTION =
   "محمود الشراكي يبني مواقع ويب احترافية وسريعة الاستجابة تمنح عملك حضورًا رقميًا مقنعًا يركز على الأداء والتحويل.";
 const KEYWORDS =
   "محمود الشراكي, تصميم مواقع, تطوير مواقع, واجهة المستخدم, مواقع سريعة, تجربة مستخدم, تحسين محركات البحث";
-const SITE_URL = "https://your-website-url.com"; // Placeholder
+const SITE_URL = "https://alshraky.com"; // TODO: update to your actual domain
 
 const PERSON_STRUCTURED_DATA = {
   "@context": "https://schema.org",
@@ -115,7 +115,7 @@ function App() {
         </script>
       </Helmet>
       <Header />
-      <Projects />
+      <ProjectShowcase />
       <About />
       <Benefits />
       <Services />

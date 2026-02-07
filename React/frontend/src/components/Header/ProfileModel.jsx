@@ -34,7 +34,12 @@ function ProfileModel() {
           intensity={1.1}
           castShadow
         />
-        <Suspense fallback={null}>
+        <Suspense fallback={
+          <mesh>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color="#C147E9" wireframe />
+          </mesh>
+        }>
           <DesktopModel />
           <Environment preset="city" />
         </Suspense>
