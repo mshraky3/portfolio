@@ -4,15 +4,17 @@ import nodemailer from "nodemailer"
 
 const app = express()
 
+// SECURITY: Restrict CORS to your actual domain
 const corsOptions = {
-    origin: '*',
-    methods: '*',
-    allowedHeaders: '*',
+    origin: process.env.ALLOWED_ORIGIN || 'https://alshraky.com',
+    methods: ['POST', 'GET'],
+    allowedHeaders: ['Content-Type'],
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// SECURITY: Credentials loaded from environment variables (set in Vercel dashboard)
 const Email = nodemailer.createTransport(
     {
         host: "smtp.gmail.com",
@@ -20,8 +22,8 @@ const Email = nodemailer.createTransport(
         tls: true,
         secure: false,
         auth: {
-            user: "alshrakynodeapp@gmail.com",
-            pass: "ymfnqdsctolgcfzv",
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
         }
     }
 )
