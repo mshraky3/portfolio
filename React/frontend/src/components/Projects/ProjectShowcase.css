@@ -581,6 +581,66 @@
     color: #fff;
 }
 
+/* ─── Image Gallery ────────────────────────────────────────── */
+.gallery-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.gallery-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.gallery-arrow {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.2s ease;
+}
+
+.gallery-arrow:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+.gallery-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.gallery-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.25s ease;
+}
+
+.gallery-dot.active {
+    background: var(--project-accent);
+    border-color: var(--project-accent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--project-accent) 50%, transparent);
+    transform: scale(1.2);
+}
+
+.gallery-dot:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.25);
+}
+
 /* Actions */
 .case-study-actions {
     display: flex;

@@ -3,8 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./ProjectShowcase.css";
 
 import smlePreview from "./projectsImgs/pro2.png";
-import hirfaPreview from "./projectsImgs/mockuper.png";
 import erthPreview from "./projectsImgs/wsm.png";
+
+// HR System screenshots (served from /public)
+const hrPreview1 = "/hr/Screenshot 2026-02-07 163928.jpg";
+const hrPreview2 = "/hr/Screenshot 2026-02-07 163952.jpg";
+const hrPreview3 = "/hr/Screenshot 2026-02-07 164015.jpg";
 
 // ─── Project Data ───────────────────────────────────────────────
 // You can expand each project with more screenshots, problem/solution, etc.
@@ -35,27 +39,27 @@ const PROJECTS = [
         featured: true,
     },
     {
-        id: "hirfa",
-        category: "سوق خدمات",
-        categoryEn: "Marketplace",
-        title: "منصة حِرفة للخدمات",
-        subtitle: "Hirfa Services",
+        id: "hr-system",
+        category: "نظام مؤسسي",
+        categoryEn: "Enterprise",
+        title: "نظام إدارة الموارد البشرية",
+        subtitle: "Enterprise HR System",
         problem:
-            "أصحاب المنازل يضيعون وقتًا كبيرًا في البحث عن فنيين موثوقين عبر منصات متعددة ومعقدة.",
+            "مؤسسات تعليمية وصحية تدير أكثر من ٢٥ فرعًا تعاني من تتبع يدوي لبيانات الموظفين، وثائق مبعثرة بدون تتبع انتهاء، ورواتب وغياب ورقي عرضة للأخطاء.",
         solution:
-            "صممنا واجهة مبسطة تربط صاحب المنزل مباشرة بأقرب فني متخصص دون الحاجة لإنشاء حساب، مع نظام تقييم وحجز فوري.",
+            "بنينا نظام HR متكامل يشمل إدارة موظفين متعددة الفروع، تتبع وثائق آلي مع تنبيهات انتهاء (٣٠/٦٠/٩٠ يوم)، نظام رواتب وغياب، إدارة نقل بالحافلات، وتقارير PDF/Excel بدعم كامل للعربية والتقويم الهجري.",
         impact:
-            "رحلة حجز جديدة قللت وقت العثور على فني من ٢٠ دقيقة إلى أقل من ٣ دقائق.",
+            "توحيد بيانات ٢٥+ فرع في نظام واحد، إلغاء التقارير اليدوية بالكامل، وتقليل حوادث انتهاء الوثائق عبر التنبيهات الآلية.",
         stats: [
-            { value: 3, suffix: " دقائق", label: "متوسط الحجز" },
-            { value: 65, suffix: "٪", label: "زيادة التحويل" },
-            { value: 20, suffix: "+", label: "تخصص متوفر" },
+            { value: 25, suffix: "+", label: "فرع موحّد" },
+            { value: 50, suffix: "+", label: "صفحة تفاعلية" },
+            { value: 25, suffix: "", label: "جدول علائقي" },
         ],
-        technologies: ["React", "PostgreSQL", "Supabase", "Tailwind"],
-        href: "https://hirfa-react.vercel.app",
+        technologies: ["React", "Node.js", "Express.js", "PostgreSQL", "JWT", "Vercel"],
+        href: "",
         github: "",
-        images: [hirfaPreview],
-        imageAlt: "واجهة منصة حِرفة للخدمات",
+        images: [hrPreview1, hrPreview2, hrPreview3],
+        imageAlt: "واجهة نظام إدارة الموارد البشرية",
         color: "#06B6D4",
         featured: false,
     },
@@ -89,7 +93,7 @@ const PROJECTS = [
 const CATEGORIES = [
     { key: "all", label: "الكل" },
     { key: "EdTech", label: "تعليمية" },
-    { key: "Marketplace", label: "سوق خدمات" },
+    { key: "Enterprise", label: "أنظمة مؤسسية" },
     { key: "Business", label: "أعمال" },
 ];
 
@@ -156,6 +160,62 @@ function BrowserMockup({ children, url, color }) {
     );
 }
 
+// ─── Image Gallery (for projects with multiple screenshots) ─────
+function ImageGallery({ images, alt, href, color }) {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const urlText = href ? href.replace("https://", "") : "private-system";
+
+    return (
+        <div className="gallery-wrapper">
+            <BrowserMockup url={urlText} color={color}>
+                <AnimatePresence mode="wait">
+                    <motion.img
+                        key={activeIndex}
+                        src={images[activeIndex]}
+                        alt={`${alt} - ${activeIndex + 1}`}
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -30 }}
+                        transition={{ duration: 0.3 }}
+                    />
+                </AnimatePresence>
+            </BrowserMockup>
+            {images.length > 1 && (
+                <div className="gallery-controls">
+                    <button
+                        className="gallery-arrow"
+                        onClick={() => setActiveIndex((i) => (i - 1 + images.length) % images.length)}
+                        aria-label="الصورة السابقة"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                    <div className="gallery-dots">
+                        {images.map((_, i) => (
+                            <button
+                                key={i}
+                                className={`gallery-dot ${i === activeIndex ? "active" : ""}`}
+                                onClick={() => setActiveIndex(i)}
+                                aria-label={`صورة ${i + 1}`}
+                            />
+                        ))}
+                    </div>
+                    <button
+                        className="gallery-arrow"
+                        onClick={() => setActiveIndex((i) => (i + 1) % images.length)}
+                        aria-label="الصورة التالية"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+}
+
 // ─── Case Study Modal ───────────────────────────────────────────
 function CaseStudyModal({ project, onClose }) {
     const modalRef = useRef(null);
@@ -207,10 +267,8 @@ function CaseStudyModal({ project, onClose }) {
                     <p className="case-study-subtitle">{project.subtitle}</p>
                 </div>
 
-                {/* Browser Preview */}
-                <BrowserMockup url={project.href.replace("https://", "")} color={project.color}>
-                    <img src={project.images[0]} alt={project.imageAlt} />
-                </BrowserMockup>
+                {/* Browser Preview with Gallery */}
+                <ImageGallery images={project.images} alt={project.imageAlt} href={project.href} color={project.color} />
 
                 {/* Problem → Solution */}
                 <div className="case-study-story">
@@ -276,17 +334,19 @@ function CaseStudyModal({ project, onClose }) {
 
                 {/* Actions */}
                 <div className="case-study-actions">
-                    <a
-                        className="case-btn primary"
-                        href={project.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <span>زيارة المشروع</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
-                        </svg>
-                    </a>
+                    {project.href && (
+                        <a
+                            className="case-btn primary"
+                            href={project.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <span>زيارة المشروع</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                            </svg>
+                        </a>
+                    )}
                     {project.github && (
                         <a
                             className="case-btn secondary"
