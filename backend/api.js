@@ -4,9 +4,13 @@ import nodemailer from "nodemailer"
 
 const app = express()
 
-// SECURITY: Restrict CORS to your actual domain
+// SECURITY: Restrict CORS to your actual domains
 const corsOptions = {
-    origin: process.env.ALLOWED_ORIGIN || 'https://alshraky.com',
+    origin: [
+        'https://web-dev-seven-iota.vercel.app',
+        'https://alshraky.com',
+        process.env.ALLOWED_ORIGIN,
+    ].filter(Boolean),
     methods: ['POST', 'GET'],
     allowedHeaders: ['Content-Type'],
 };
@@ -37,7 +41,7 @@ app.post("/send-email", async (req, res) => {
 
     try {
         const result = await Email.sendMail({
-            from: "alshrakynodeapp@gmail.com",
+            from: process.env.EMAIL_USER || "alshrakynodeapp@gmail.com",
             to: `muhmodalshraky3@gmail.com`,
             subject: data.subject || "No Subject Provided",
             text: `Message from ${data.firstName} (${data.email}):\n\n${data.message}`,
