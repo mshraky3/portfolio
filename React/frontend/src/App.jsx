@@ -9,9 +9,9 @@ import "./App.css";
 
 const TITLE = "محمود الشراكي | تصميم وتطوير مواقع";
 const DESCRIPTION =
-  "محمود الشراكي يبني مواقع ويب احترافية وسريعة الاستجابة تمنح عملك حضورًا رقميًا مقنعًا يركز على الأداء والتحويل.";
+  "مطور ويب Full-Stack متخصص في بناء مواقع احترافية وأنظمة مؤسسية بتقنيات React وNode.js وPostgreSQL. أداء عالٍ وتجربة مستخدم مدروسة.";
 const KEYWORDS =
-  "محمود الشراكي, تصميم مواقع, تطوير مواقع, واجهة المستخدم, مواقع سريعة, تجربة مستخدم, تحسين محركات البحث";
+  "محمود الشراكي, مطور ويب, Full-Stack Developer, تصميم مواقع, تطوير مواقع, React, Node.js, PostgreSQL, أنظمة مؤسسية, تجربة مستخدم";
 const SITE_URL = "https://alshraky.com"; // TODO: update to your actual domain
 
 const PERSON_STRUCTURED_DATA = {

@@ -6,15 +6,15 @@ function Stats() {
     <div className="stats">
       <div className="info">
         25+
-        <span>مشروع برمجي </span>
+        <span>مشروع برمجي</span>
       </div>
       <div className="info">
         3+
-        <span>عمل حر </span>
+        <span>عمل حر</span>
       </div>
       <div className="info">
         2+
-        <span>سنوات برمجة </span>
+        <span>سنوات خبرة</span>
       </div>
     </div>
   );

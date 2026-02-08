@@ -5,7 +5,7 @@ const SERVICES = [
   {
     title: "تطوير Full-Stack",
     description:
-      "أبني تطبيقات ويب متكاملة من الواجهة حتى السيرفر — React في الأمام وNode.js + Express في الخلف، مع قواعد بيانات PostgreSQL مصممة للتوسع.",
+      "أبني تطبيقات ويب متكاملة من الواجهة حتى السيرفر. React في الأمام وNode.js + Express في الخلف، مع قواعد بيانات PostgreSQL مصممة للتوسع.",
     highlights: ["React 19 + Vite", "REST API مع Express", "PostgreSQL + Neon Serverless"],
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -18,7 +18,7 @@ const SERVICES = [
   {
     title: "أنظمة مؤسسية",
     description:
-      "أصمم أنظمة إدارة متقدمة بصلاحيات متعددة المستويات، لوحات تحكم تفاعلية، تقارير PDF/Excel عربية، وإشعارات آلية — مجهزة لبيئات العمل الحقيقية.",
+      "أصمم أنظمة إدارة متقدمة بصلاحيات متعددة المستويات، لوحات تحكم تفاعلية، تقارير PDF/Excel عربية، وإشعارات آلية مجهزة لبيئات العمل الحقيقية.",
     highlights: ["RBAC متعدد الفروع", "تقارير PDF عربية", "لوحات تحكم + إشعارات"],
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -46,7 +46,7 @@ const SERVICES = [
   {
     title: "تكاملات وأتمتة",
     description:
-      "أربط تطبيقك مع خدمات خارجية: بوابات دفع، Google Maps، أنظمة بريد، تخزين سحابي، وخدمات سكرابنق — كل شيء يعمل تلقائيًا بدون تدخل.",
+      "أربط تطبيقك مع خدمات خارجية مثل بوابات الدفع، Google Maps، أنظمة البريد، التخزين السحابي، وWeb Scraping. كل شيء يعمل تلقائيًا بدون تدخل.",
     highlights: ["Google Maps API", "Nodemailer + Blob Storage", "Apify Web Scraping"],
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -88,7 +88,7 @@ function Services() {
         <span className="services-eyebrow">ماذا أقدّم</span>
         <h2>خدمات تطوير متكاملة</h2>
         <p>
-          أتعامل مع المشروع من كل الزوايا — التصميم، البرمجة، قاعدة البيانات، والنشر.
+          أتعامل مع المشروع من كل الزوايا: التصميم، البرمجة، قاعدة البيانات، والنشر.
           التركيز دائمًا على حل المشكلة الفعلية بأبسط وأقوى طريقة ممكنة.
         </p>
       </motion.div>

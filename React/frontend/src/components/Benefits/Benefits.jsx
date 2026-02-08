@@ -127,7 +127,7 @@ function Benefits() {
             دعنا نضع موقعًا واضحًا وجذابًا يعرّف بعملك ويحوّل الزيارات إلى طلبات وخدمات فعلية.
           </p>
           <div className="cta-actions">
-          <a href="#ContactMe" className="btn secondary">تواصل معنا</a>
+            <a href="#ContactMe" className="btn secondary">تواصل معي</a>
             <a href="#SERVICES" className="btn primary">استعرض الخدمات</a>
 
           </div>

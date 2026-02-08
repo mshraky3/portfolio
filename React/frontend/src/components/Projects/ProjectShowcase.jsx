@@ -62,6 +62,7 @@ const PROJECTS = [
         imageAlt: "واجهة نظام إدارة الموارد البشرية",
         color: "#06B6D4",
         featured: false,
+        privateNotice: "هذا النظام يحتوي على بيانات خاصة لذلك لا يمكن توفير رابط عام. إذا أحببت الاطلاع على التفاصيل يمكننا التواصل.",
     },
     {
         id: "erth",
@@ -163,7 +164,7 @@ function BrowserMockup({ children, url, color }) {
 // ─── Image Gallery (for projects with multiple screenshots) ─────
 function ImageGallery({ images, alt, href, color }) {
     const [activeIndex, setActiveIndex] = useState(0);
-    const urlText = href ? href.replace("https://", "") : "private-system";
+    const urlText = href ? href.replace("https://", "") : "نظام خاص";
 
     return (
         <div className="gallery-wrapper">
@@ -332,6 +333,17 @@ function CaseStudyModal({ project, onClose }) {
                     </div>
                 </div>
 
+                {/* Private Notice */}
+                {project.privateNotice && (
+                    <div className="case-study-private-notice">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <span>{project.privateNotice}</span>
+                    </div>
+                )}
+
                 {/* Actions */}
                 <div className="case-study-actions">
                     {project.href && (
@@ -344,6 +356,17 @@ function CaseStudyModal({ project, onClose }) {
                             <span>زيارة المشروع</span>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                            </svg>
+                        </a>
+                    )}
+                    {!project.href && project.privateNotice && (
+                        <a
+                            className="case-btn primary"
+                            href="#ContactMe"
+                        >
+                            <span>تواصل للاطلاع</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                             </svg>
                         </a>
                     )}
