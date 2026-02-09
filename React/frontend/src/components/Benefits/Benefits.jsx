@@ -32,17 +32,17 @@ const BENEFIT_ITEMS = [
 
 const BENEFIT_HIGHLIGHTS = [
   {
-    value: '٨٨٪',
+    value: '88%',
     label: 'يحكمون على المصداقية',
     caption: 'انطباعهم الأول يأتي من موقعك'
   },
   {
-    value: '٢٤/٧',
+    value: '24/7',
     label: 'خدمة العملاء',
     caption: 'قناة مفتوحة دائمًا دون تكلفة إضافية'
   },
   {
-    value: '٧٠٪',
+    value: '70%',
     label: 'يفضلون الشركات المتصلة',
     caption: 'وجود رقمي يسبق المنافسين'
   }
