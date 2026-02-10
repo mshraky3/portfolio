@@ -1,5 +1,4 @@
-
-.contener{
+.contener {
     display: flex;
     justify-content: center;
     height: 90vh;
@@ -17,8 +16,8 @@
     position: absolute;
     inset: -45vh -35vw;
     background: var(--surface-glow-primary),
-                var(--surface-glow-secondary),
-                var(--surface-glow-tertiary);
+        var(--surface-glow-secondary),
+        var(--surface-glow-tertiary);
     mix-blend-mode: screen;
     pointer-events: none;
     z-index: 0;
@@ -34,7 +33,7 @@
     z-index: 1;
 }
 
-.black-content{
+.black-content {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100%;
     display: flex;
@@ -45,7 +44,7 @@
     align-items: flex-start;
 }
 
-.black-content .stats { 
+.black-content .stats {
     text-align: right;
     justify-content: flex-start;
 }
@@ -56,36 +55,39 @@
     flex-direction: column-reverse;
     align-items: center;
 }
+
 .name h1 {
     font-size: 60px;
 }
 
-.btn Button{
-    border:1px solid #ffffff;
-    display:inline-flex;
+.btn Button {
+    border: 1px solid #ffffff;
+    display: inline-flex;
     align-items: center;
     gap: 10px;
-    cursor:pointer;
-    color:#ffffff;
-    font-family:Arial;
-    font-size:17px;
-    padding:10px 12px;
-    text-decoration:none;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 17px;
+    padding: 10px 12px;
+    text-decoration: none;
     flex-direction: row-reverse;
     white-space: nowrap;
 }
+
 .btn Button img {
     width: 16px;
     height: 16px;
     margin-left: 10px;
 }
 
-.image{
+.image {
     display: flex;
     flex-direction: column-reverse;
-    flex: 2;
-    min-width: 500px;
-    width: 800px;
+    /* make the 3D column visually smaller to reduce its footprint */
+    flex: 1;
+    min-width: 360px;
+    width: 520px;
     background-color: transparent;
     z-index: 3;
     height: 100%;
@@ -95,6 +97,7 @@
     margin: 0;
     padding: 0;
 }
+
 .image .profile-img {
     display: flex;
     width: 100%;
@@ -104,6 +107,7 @@
     margin: 0;
     padding: 0;
 }
+
 .profile-3d {
     display: block;
     width: 100%;
@@ -112,12 +116,14 @@
     margin: 0;
     padding: 0;
 }
-.profile-3d > div {
+
+.profile-3d>div {
     width: 100% !important;
     height: 100% !important;
     position: relative !important;
     display: block !important;
 }
+
 .profile-3d canvas {
     width: 100% !important;
     height: 100% !important;
@@ -125,7 +131,21 @@
     position: relative !important;
 }
 
-.purple{
+/* Visual differentiation + UX hint */
+.profile-3d {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.profile-3d>div {
+    background: linear-gradient(180deg, #0b2440 0%, #071427 100%);
+}
+
+/* profile-scroll-hint removed per user request */
+
+.purple {
     flex: 0.8;
     background: rgba(193, 71, 233, 0.05);
     display: flex;
@@ -153,6 +173,7 @@
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
@@ -167,16 +188,16 @@
     text-align: center;
 }
 
-.icon img{
+.icon img {
     width: 50px;
     height: 50px;
 }
 
 @media (max-width: 1025px) {
     .contener {
-      flex-direction: column;
-      height: auto;
-      padding: 20px 0;
+        flex-direction: column;
+        height: auto;
+        padding: 20px 0;
     }
 
     .black {
@@ -185,10 +206,13 @@
         width: 100%;
         margin-bottom: 20px;
     }
-    .purple, .image {
+
+    .purple,
+    .image {
         padding-right: 0%;
         width: 100%;
     }
+
     .image {
         min-width: auto;
         width: 100%;
@@ -197,14 +221,15 @@
         padding: 0;
         margin: 20px 0;
         height: 60vh;
-        min-height: 400px;
+        min-height: 360px;
     }
+
     .black-content {
-      margin-right: 0;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: clamp(20px, 4vh, 36px);
+        margin-right: 0;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: clamp(20px, 4vh, 36px);
     }
 
     .image .profile-img {
@@ -214,6 +239,7 @@
         margin: 0;
         padding: 0;
     }
+
     .profile-3d {
         width: 100%;
         height: 100%;
@@ -222,12 +248,14 @@
         padding: 0;
         position: relative;
     }
-    .profile-3d > div {
+
+    .profile-3d>div {
         width: 100% !important;
         height: 100% !important;
         position: relative !important;
         display: block !important;
     }
+
     .profile-3d canvas {
         width: 100% !important;
         height: 100% !important;
@@ -235,12 +263,13 @@
         position: relative !important;
     }
 
-    .name{
+    .name {
         margin-top: 10%;
         align-items: center;
         justify-content: center;
     }
-    .name h1{
+
+    .name h1 {
         font-size: 30px;
     }
 
@@ -252,30 +281,37 @@
         gap: 8px;
         white-space: nowrap;
     }
-    .icons , .purple{
+
+    .icons,
+    .purple {
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
         padding: 15px 5%;
     }
-    .icon img{
+
+    .icon img {
         max-height: 40px;
         max-width: 40px;
     }
+
     .icons {
         margin-bottom: auto;
         gap: 15px;
     }
+
     .r {
-        width: 40px; 
+        width: 40px;
         height: 40px;
     }
-    .icon  p {
+
+    .icon p {
         display: none;
     }
+
     .a {
         display: none;
     }
 
-  }
+}

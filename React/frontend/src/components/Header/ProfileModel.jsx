@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 
 const MODEL_URL = new URL("./3D/dpglb.glb", import.meta.url).href;
-const MODEL_SCALE = 0.1;
+const MODEL_SCALE = 0.07;
 
 function DesktopModel() {
   const { scene } = useGLTF(MODEL_URL);
@@ -26,8 +26,16 @@ useGLTF.preload(MODEL_URL);
 
 function ProfileModel() {
   return (
-    <div className="profile-3d">
-      <Canvas camera={{ position: [20, 10.5, 3.5], fov: 45 }} shadows>
+    <div className="profile-3d profile-3d--compact">
+      <Canvas
+        // move camera closer and use tighter FOV so the model appears larger
+        camera={{ position: [8, 4, 2], fov: 38 }}
+        shadows
+        onCreated={({ gl }) => {
+          // set a clear color so the canvas area is visually distinct during testing
+          gl.setClearColor('#0b2440');
+        }}
+      >
         <ambientLight intensity={0.5} />
         <directionalLight
           position={[4, 6, 4]}
@@ -45,7 +53,8 @@ function ProfileModel() {
         </Suspense>
         <OrbitControls
           enablePan={false}
-          enableZoom
+          // disable scroll-to-zoom to prevent page scrolling confusion
+          enableZoom={false}
           zoomSpeed={0.7}
           minDistance={4}
           maxDistance={30}
