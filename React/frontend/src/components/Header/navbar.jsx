@@ -7,8 +7,8 @@ const NAV_LINKS = [
   { href: "#SERVICES", label: "الخدمات" },
   { href: "#benefits", label: "الفوائد" },
   { href: "#projects", label: "المشاريع" },
-  { href: "#aboutSection", label: "من نحن" },
-  { href: "#ContactMe", label: "تواصل معنا" }
+  { href: "#aboutSection", label: "من أنا" },
+  { href: "#ContactMe", label: "تواصل الآن" }
 ];
 
 function Navbar() {
@@ -25,14 +25,14 @@ function Navbar() {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <motion.nav 
+    <motion.nav
       className={`navbar ${isScrolled ? 'scrolled' : ''}`}
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.2 }}
     >
-      <motion.div 
-        className="logo" 
+      <motion.div
+        className="logo"
         id="logo"
         whileHover={{ scale: 1.05 }}
         transition={{ type: "spring", stiffness: 300 }}
@@ -48,8 +48,8 @@ function Navbar() {
         />
       </motion.div>
 
-      <motion.div 
-        className="menu-icon" 
+      <motion.div
+        className="menu-icon"
         onClick={toggleMenu}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -63,14 +63,14 @@ function Navbar() {
         />
       </motion.div>
 
-      <motion.div 
+      <motion.div
         className={`dropdown-menu ${isMenuOpen ? 'open' : ''}`}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: isMenuOpen ? 1 : 0, y: isMenuOpen ? 0 : -20 }}
         transition={{ duration: 0.3 }}
       >
         {NAV_LINKS.map(({ href, label }) => (
-          <motion.a 
+          <motion.a
             key={href}
             href={href}
             onClick={closeMenu}
@@ -94,7 +94,7 @@ function Navbar() {
         ))}
       </div>
 
-      <motion.div 
+      <motion.div
         className="button"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -102,7 +102,7 @@ function Navbar() {
       >
         <a href="https://wa.link/5zcep6">
           <button className={isScrolled ? 'scrolled-button' : ''}>
-            تحدث معنا
+            تحدث معي
           </button>
         </a>
       </motion.div>

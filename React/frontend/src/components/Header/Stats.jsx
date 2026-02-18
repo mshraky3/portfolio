@@ -13,7 +13,7 @@ function Stats() {
         <span>عمل حر</span>
       </div>
       <div className="info">
-        2+
+        1+
         <span>سنوات خبرة</span>
       </div>
     </div>

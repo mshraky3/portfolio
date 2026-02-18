@@ -122,13 +122,14 @@ function Benefits() {
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <h4>جاهز للانطلاق؟</h4>
+          <h4>هل تريد عملاء أكثر الآن؟</h4>
           <p>
             دعنا نضع موقعًا واضحًا وجذابًا يعرّف بعملك ويحوّل الزيارات إلى طلبات وخدمات فعلية.
           </p>
+          <p className="loss-microcopy">التأخير قد يعني فقدان فرص مهتمة.</p>
           <div className="cta-actions">
-            <a href="#ContactMe" className="btn secondary">تواصل معي</a>
-            <a href="#SERVICES" className="btn primary">استعرض الخدمات</a>
+            <a href="#ContactMe" className="btn secondary">تواصل الآن</a>
+            <a href="#SERVICES" className="btn primary">اطّلع على الخدمات الآن</a>
 
           </div>
         </motion.div>

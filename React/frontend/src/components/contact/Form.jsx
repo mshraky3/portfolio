@@ -4,8 +4,8 @@ import "./Contact.css";
 
 function Form() {
     const [formData, setFormData] = useState({});
-    const [buttonText, setButtonText] = useState("إرسال الرسالة");
-    const [buttonColor, setButtonColor] = useState(""); 
+    const [buttonText, setButtonText] = useState("أرسل الآن");
+    const [buttonColor, setButtonColor] = useState("");
     function addForm(e) {
         const { id: name, value } = e.target;
 
@@ -19,18 +19,18 @@ function Form() {
         e.preventDefault();
 
         try {
-            setButtonText("جاري الإرسال...");
+            setButtonText("جاري الإرسال — أستجيب قريبًا...");
             setButtonColor("");
 
             const response = await axios.post('https://portfolio-api-rose.vercel.app/send-email', formData);
 
             if (response.status === 200) {
-                setButtonText("تم الإرسال!");
+                setButtonText("تم الإرسال! سأتواصل قريبًا");
                 setButtonColor("green");
             }
         } catch (error) {
             console.error("Error sending email:", error);
-            setButtonText("فشل الإرسال");
+            setButtonText("فشل الإرسال — حاول مرة أخرى");
             setButtonColor("red");
         }
     }

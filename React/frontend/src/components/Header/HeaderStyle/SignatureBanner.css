@@ -1,0 +1,86 @@
+.signature-contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    margin-top: 0.5rem;
+    padding: 0.4em 1em;
+    background: linear-gradient(90deg, #6a1b9a 60%, #8e24aa 100%);
+    color: #fff;
+    border-radius: 2em;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(106, 27, 154, 0.08);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    will-change: transform;
+}
+
+.signature-contact-btn:hover,
+.signature-contact-btn:focus {
+    background: linear-gradient(90deg, #8e24aa 60%, #6a1b9a 100%);
+    transform: scale(1.06) translateY(-2px);
+    box-shadow: 0 4px 16px rgba(106, 27, 154, 0.13);
+}
+
+.signature-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    margin-top: 0.7rem;
+    padding: 0.45em 1.1em;
+    background: linear-gradient(90deg, #222 60%, #444 100%);
+    color: #fff;
+    border-radius: 2em;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(34, 34, 34, 0.08);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    will-change: transform;
+}
+
+.signature-badge:hover,
+.signature-badge:focus {
+    background: linear-gradient(90deg, #444 60%, #222 100%);
+    transform: scale(1.06) translateY(-2px);
+    box-shadow: 0 4px 16px rgba(34, 34, 34, 0.13);
+}
+
+.signature-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.signature-svg {
+    width: 200px;
+    height: 60px;
+    margin-bottom: 0.5rem;
+}
+
+.signature-path {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: signature-draw 2s ease forwards;
+}
+
+@keyframes signature-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.signature-tagline {
+    font-size: 1.1rem;
+    color: #444;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 0.2rem;
+    text-align: center;
+}

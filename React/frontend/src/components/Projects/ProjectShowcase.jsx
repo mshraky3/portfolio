@@ -4,6 +4,7 @@ import "./ProjectShowcase.css";
 
 import smlePreview from "./projectsImgs/pro2.png";
 import erthPreview from "./projectsImgs/wsm.png";
+import lawPreview from "./projectsImgs/law.png";
 
 // HR System screenshots (served from /public)
 const hrPreview1 = "/hr/Screenshot 2026-02-07 163928.jpg";
@@ -24,9 +25,9 @@ const PROJECTS = [
         solution:
             "بنينا منصة متكاملة بنظام اختبارات ذكي يتكيف مع مستوى الطالب، مع لوحة تحليلات أداء لحظية ولوحات متابعة للمدربين.",
         impact:
-            "أكثر من 5000 سؤال تفاعلي رفع معدل الإتقان 2.3× خلال أول ثلاثة أشهر من الإطلاق.",
+            "أكثر من 8000 سؤال تفاعلي رفع معدل الإتقان 2.3× خلال أول ثلاثة أشهر من الإطلاق.",
         stats: [
-            { value: 5000, suffix: "+", label: "عنصر تعلّمي" },
+            { value: 8000, suffix: "+", label: "عنصر تعلّمي" },
             { value: 94, suffix: "٪", label: "رضا المستخدمين" },
             { value: 2.3, suffix: "×", label: "تحسّن الأداء" },
         ],
@@ -89,6 +90,31 @@ const PROJECTS = [
         color: "#10B981",
         featured: false,
     },
+    {
+        id: "law",
+        category: "موقع قانوني",
+        categoryEn: "Legal",
+        title: "موقع مكتب المحامي صالح الحيسوني",
+        subtitle: "Alhisony Law Firm",
+        problem:
+            "مكتب محاماة يحتاج حضورًا رقميًا احترافيًا يعكس هوية المكتب ويسهّل تواصل العملاء المحتملين.",
+        solution:
+            "موقع تفاعلي بتقنيات حديثة يضم نموذج 3D، نظام تواصل عبر البريد، تحسين SEO شامل مع Schema.org، وتصميم متجاوب بالكامل.",
+        impact:
+            "موقع متكامل بتقنيات حديثة رفع الظهور في محركات البحث وعزز ثقة العملاء المحتملين.",
+        stats: [
+            { value: 19, suffix: "", label: "React أحدث إصدار" },
+            { value: 3, suffix: "D", label: "رسوميات تفاعلية" },
+            { value: 100, suffix: "٪", label: "متجاوب" },
+        ],
+        technologies: ["React 19", "Three.js", "Vite", "Node.js", "Express.js", "Framer Motion", "MUI"],
+        href: "https://www.alhisony.com/",
+        github: "",
+        images: [lawPreview],
+        imageAlt: "واجهة موقع مكتب المحامي صالح الحيسوني",
+        color: "#D4A017",
+        featured: false,
+    },
 ];
 
 const CATEGORIES = [
@@ -96,6 +122,7 @@ const CATEGORIES = [
     { key: "EdTech", label: "تعليمية" },
     { key: "Enterprise", label: "أنظمة مؤسسية" },
     { key: "Business", label: "أعمال" },
+    { key: "Legal", label: "قانوني" },
 ];
 
 // ─── Animated Counter ───────────────────────────────────────────
@@ -364,7 +391,7 @@ function CaseStudyModal({ project, onClose }) {
                             className="case-btn primary"
                             href="#ContactMe"
                         >
-                            <span>تواصل للاطلاع</span>
+                            <span>تواصل الآن للاطلاع</span>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                             </svg>
@@ -449,7 +476,7 @@ function ProjectCard({ project, onClick, index }) {
 
                 {/* CTA */}
                 <div className="card-cta">
-                    <span>عرض دراسة الحالة</span>
+                    <span>اطّلع الآن</span>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>

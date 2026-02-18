@@ -157,9 +157,9 @@ function Services() {
         transition={{ duration: 0.7, delay: 0.3 }}
         viewport={{ once: true }}
       >
-        <p>عندك فكرة مشروع؟ خلنا نتكلم عنها.</p>
+        <p>تأجيل الفكرة قد يفقدك عملاء مهتمين — ناقشها الآن.</p>
         <a className="services-link" href="https://wa.link/5zcep6">
-          تواصل عبر واتساب
+          تواصل الآن عبر واتساب
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
             <path
               d="M8 5h11v11"

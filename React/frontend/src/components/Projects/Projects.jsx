@@ -5,16 +5,17 @@ import { motion } from "framer-motion";
 import smlePreview from "./projectsImgs/pro2.png";
 import hirfaPreview from "./projectsImgs/mockuper.png";
 import erthPreview from "./projectsImgs/wsm.png";
+import lawPreview from "./projectsImgs/law.png";
 
 const PROJECTS = [
   {
     category: "منصة تعليمية",
     title: "منصة بنك أسئلة SMLE",
     description:
-      "حل متكامل لإدارة المحتوى التعليمي للمرشحين لاختبار الترخيص المهني السعودي مع تحليلات أداء لحظية ولوحات متابعة للمدربين.",
-    impact: "أكثر من 5000 سؤال تفاعلي رفع معدل الإتقان 2.3× خلال أول ثلاثة أشهر من الإطلاق.",
+      "حل متكامل لإدارة المحتوى التعليمي للمرشحين لاختبار الترخيص المهني السعودي مع مكتبة تضم أكثر من 8000 سؤال، تحليلات أداء لحظية، ولوحات متابعة للمدربين.",
+    impact: "أكثر من 8000 سؤال تفاعلي رفع معدل الإتقان 2.3× خلال أول ثلاثة أشهر من الإطلاق.",
     stats: [
-      { value: "5000+", label: "عنصر تعلّمي" },
+      { value: "8000+", label: "عنصر تعلّمي" },
       { value: "94%", label: "رضا المستخدمين" }
     ],
     technologies: ["React", "Postgres", "Chart.js"],
@@ -22,6 +23,22 @@ const PROJECTS = [
     image: smlePreview,
     imageAlt: "واجهة منصة بنك أسئلة SMLE",
     previewLabel: "SMLE Platform"
+  },
+  {
+    category: "نظام مؤسسي",
+    title: "نظام إدارة الموارد البشرية",
+    description:
+      "نظام HR متكامل لشركة رعاية صحية بأكثر من 600 موظف يشمل إدارة بيانات الموظفين، الرواتب، الحضور، النقل والحافلات، مع تقارير وإحصائيات ومراقبة مستمرة للبيانات.",
+    impact: "توحيد بيانات 25+ فرع في نظام واحد وإلغاء التقارير اليدوية بالكامل.",
+    stats: [
+      { value: "25+", label: "فرع موحّد" },
+      { value: "50+", label: "صفحة تفاعلية" }
+    ],
+    technologies: ["React", "Node.js", "Express.js", "PostgreSQL"],
+    href: "",
+    image: "/hr/Screenshot 2026-02-07 163928.jpg",
+    imageAlt: "واجهة نظام إدارة الموارد البشرية",
+    previewLabel: "HR Management System"
   },
   {
     category: "سوق خدمات",
@@ -54,6 +71,22 @@ const PROJECTS = [
     image: erthPreview,
     imageAlt: "واجهة منصة الأثر البيئي",
     previewLabel: "Erth Environmental"
+  },
+  {
+    category: "موقع قانوني",
+    title: "موقع مكتب المحامي صالح الحيسوني",
+    description:
+      "موقع احترافي لمكتب محاماة يضم واجهة تفاعلية مع نموذج 3D، نظام تواصل متكامل، وتحسين شامل لمحركات البحث مع دعم كامل للعربية.",
+    impact: "موقع متكامل بتقنيات حديثة رفع الظهور في محركات البحث وعزز ثقة العملاء المحتملين.",
+    stats: [
+      { value: "3D", label: "رسوميات تفاعلية" },
+      { value: "SEO", label: "تحسين محركات البحث" }
+    ],
+    technologies: ["React 19", "Three.js", "Node.js", "Express.js", "Vite"],
+    href: "https://www.alhisony.com/",
+    image: lawPreview,
+    imageAlt: "واجهة موقع مكتب المحامي صالح الحيسوني",
+    previewLabel: "Alhisony Law"
   }
 ];
 
@@ -136,13 +169,14 @@ function Projects() {
                   </span>
                 ))}
               </div>
+              {project.href ? (
               <a
                 className="project-link"
                 href={project.href}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span>استكشاف المشروع</span>
+                <span>اطّلع الآن</span>
                 <svg
                   viewBox="0 0 24 24"
                   width="18"
@@ -168,6 +202,9 @@ function Projects() {
                   />
                 </svg>
               </a>
+              ) : (
+                <span className="project-link private-label">نظام خاص</span>
+              )}
             </div>
           </motion.article>
         ))}

@@ -45,9 +45,21 @@ function IAM() {
   }, [currentRoleIndex, isTyping, currentText]);
 
   return (
-    <div className="im">
-      <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+    <div style={{ flex: 0.5, padding: 5, textAlign: 'center', fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif', fontSize: '2rem', lineHeight: 1 }}>
+      <span style={{ display: 'inline-block', whiteSpace: 'nowrap', fontWeight: 'bold', position: 'relative' }}>
         {currentText}
+        <span style={{
+          content: "''",
+          display: 'inline-block',
+          width: 5,
+          height: '1.2em',
+          background: 'currentColor',
+          marginInlineStart: 6,
+          animation: 'blink 1s infinite',
+          position: 'absolute',
+          right: -12,
+          top: 0
+        }} />
       </span>
     </div>
   )

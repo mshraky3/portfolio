@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const CONTACT_COPY = {
   title: "تواصل معي",
   subtitle: "خلنا نناقش مشروعك",
-  text: "يسعدني الاستماع إلى فكرتك أو سؤالك. اختر الطريقة الأنسب لك وسأعود إليك في أقرب وقت.",
+  text: "يسعدني الاستماع إلى فكرتك أو سؤالك. التأخير قد يفقدك فرصًا مهتمة — أرسل الآن وسأعود إليك سريعًا.",
   phone: "الهاتف",
   mail: "البريد الإلكتروني",
   footer: "© {date} جميع الحقوق محفوظة"
@@ -94,7 +94,7 @@ function Contact() {
 
               <div className="ContactInfoText">
                 <strong>{CONTACT_COPY.mail}</strong>
-                <p>muhmodalshraky3@gmail.com</p>
+                <p>alshraky3@gmail.com</p>
               </div>
               <motion.div
                 className="ContactIcon"
@@ -114,6 +114,16 @@ function Contact() {
           transition={{ duration: 0.8, delay: 1.0 }}
           viewport={{ once: true }}
         >
+          <a
+            href="#ContactMe"
+            className="signature-contact-btn"
+            aria-label="تواصل مباشر"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4em', margin: '1.2rem 0', padding: '0.4em 1em', background: 'linear-gradient(90deg, #6a1b9a 60%, #8e24aa 100%)', color: '#fff', borderRadius: '2em', fontSize: '1rem', fontWeight: 500, textDecoration: 'none', boxShadow: '0 2px 8px rgba(106,27,154,0.08)', transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s', cursor: 'pointer', border: 'none', outline: 'none', willChange: 'transform' }}
+            onMouseOver={e => e.currentTarget.style.background = 'linear-gradient(90deg, #8e24aa 60%, #6a1b9a 100%)'}
+            onMouseOut={e => e.currentTarget.style.background = 'linear-gradient(90deg, #6a1b9a 60%, #8e24aa 100%)'}
+          >
+            <span role="img" aria-label="Contact">✉️</span> تواصل مباشر
+          </a>
           <hr className="br" />
           {CONTACT_COPY.footer.replace('{date}', date)}
         </motion.div>
