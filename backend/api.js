@@ -42,7 +42,7 @@ app.post("/send-email", async (req, res) => {
     try {
         const result = await Email.sendMail({
             from: process.env.EMAIL_USER || "alshrakynodeapp@gmail.com",
-            to: `muhmodalshraky3@gmail.com`,
+            to: `alshraky3@gmail.com`,
             subject: data.subject || "No Subject Provided",
             text: `Message from ${data.firstName} (${data.email}):\n\n${data.message}`,
         });
@@ -52,6 +52,24 @@ app.post("/send-email", async (req, res) => {
     } catch (error) {
         console.error("Error sending email:", error);
         res.status(500).json({ error: "Failed to send email" });
+    }
+});
+
+app.post("/resume-downloaded", async (req, res) => {
+    const { timestamp } = req.body;
+
+    try {
+        await Email.sendMail({
+            from: process.env.EMAIL_USER || "alshrakynodeapp@gmail.com",
+            to: "alshraky3@gmail.com",
+            subject: "📄 Someone downloaded your Resume!",
+            text: `Your resume was downloaded.\n\nTime: ${timestamp || new Date().toISOString()}`,
+        });
+
+        res.status(200).json({ message: "Notification sent" });
+    } catch (error) {
+        console.error("Resume notification error:", error);
+        res.status(500).json({ error: "Failed to send notification" });
     }
 });
 
