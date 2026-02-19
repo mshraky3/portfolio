@@ -5,6 +5,7 @@ import ProjectShowcase from "./components/Projects/ProjectShowcase";
 import About from "./components/About/About";
 import Contact from "./components/contact/Contact";
 import Benefits from "./components/Benefits/Benefits";
+import Resume from "./components/Resume/Resume";
 import "./App.css";
 
 const TITLE = "محمود الشراكي | تصميم وتطوير مواقع";
@@ -119,6 +120,7 @@ function App() {
       <About />
       <Benefits />
       <Services />
+      <Resume />
       <Contact />
     </HelmetProvider>
   );

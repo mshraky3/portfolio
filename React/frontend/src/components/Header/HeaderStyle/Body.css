@@ -271,9 +271,13 @@
         padding-left: 4%;
     }
 
+    .black-content {
+        padding-top: 6rem;
+    }
+
     .image {
-        height: 45vh;
-        min-height: 260px;
+        height: 35vh;
+        min-height: 200px;
     }
 
     .hero-name {
@@ -308,12 +312,13 @@
 
     .black-content {
         gap: clamp(10px, 2.5vh, 18px);
-        padding: 0.5rem 0;
+        padding-top: 7rem;
+        padding-bottom: 0.5rem;
     }
 
     .image {
-        height: 40vh;
-        min-height: 220px;
+        height: 30vh;
+        min-height: 180px;
         margin: 5px 0;
     }
 
@@ -352,8 +357,8 @@
     }
 
     .image {
-        height: 35vh;
-        min-height: 200px;
+        height: 28vh;
+        min-height: 160px;
     }
 
     .btn a Button {
