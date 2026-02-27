@@ -13,7 +13,7 @@ const DESCRIPTION =
   "مطور ويب Full-Stack متخصص في بناء مواقع احترافية وأنظمة مؤسسية بتقنيات React وNode.js وPostgreSQL. أداء عالٍ وتجربة مستخدم مدروسة.";
 const KEYWORDS =
   "محمود الشراكي, مطور ويب, Full-Stack Developer, تصميم مواقع, تطوير مواقع, React, Node.js, PostgreSQL, أنظمة مؤسسية, تجربة مستخدم";
-const SITE_URL = "https://alshraky.com"; // TODO: update to your actual domain
+const SITE_URL = "https://web-dev-seven-iota.vercel.app/"; // TODO: update to your actual domain
 
 const PERSON_STRUCTURED_DATA = {
   "@context": "https://schema.org",
@@ -55,7 +55,7 @@ const FAQ_STRUCTURED_DATA = {
     },
     {
       "@type": "Question",
-      name: "ما الفرق بين تصميم المواقع وتطويرها؟",
+      name: "ما الفرق بين تصميم المواقع وتطوير البرمجيات؟",
       acceptedAnswer: {
         "@type": "Answer",
         text: "يركز التصميم على المظهر وتجربة المستخدم، بينما يهتم التطوير بالوظائف والأداء والحماية.",
