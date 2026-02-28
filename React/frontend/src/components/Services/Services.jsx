@@ -5,7 +5,7 @@ const SERVICES = [
   {
     title: "تطوير Full-Stack",
     description:
-      "أبني تطبيقات ويب متكاملة من الواجهة حتى السيرفر. React في الأمام وNode.js + Express في الخلف، مع قواعد بيانات PostgreSQL مصممة للتوسع.",
+      " تطبيقات ويب متكاملة من الواجهة حتى السيرفر. React في الأمام وNode.js + Express في الخلف، مع قواعد بيانات PostgreSQL مصممة للتوسع.",
     highlights: ["React 19 + Vite", "REST API مع Express", "PostgreSQL + Neon Serverless"],
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
