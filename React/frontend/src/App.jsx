@@ -47,7 +47,7 @@ const FAQ_STRUCTURED_DATA = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "لماذا يحتاج نشاطك التجاري إلى موقع إلكتروني؟",
+      name: "لماذا يحتاج نشاطك إلى موقع إلكتروني؟",
       acceptedAnswer: {
         "@type": "Answer",
         text: "يساعد الموقع الإلكتروني في تحسين الظهور على Google، وبناء الثقة، وتحويل الزوار إلى عملاء.",
