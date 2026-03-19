@@ -4,11 +4,10 @@ import { motion } from "framer-motion";
 
 const NAV_LINKS = [
   { href: "#HOME", label: "الرئيسية" },
+  { href: "#projects", label: "أعمالي" },
   { href: "#SERVICES", label: "الخدمات" },
-  { href: "#benefits", label: "الفوائد" },
-  { href: "#projects", label: "المشاريع" },
   { href: "#aboutSection", label: "من أنا" },
-  { href: "#ContactMe", label: "تواصل الآن" }
+  { href: "#ContactMe", label: "تواصل" }
 ];
 
 function Navbar() {

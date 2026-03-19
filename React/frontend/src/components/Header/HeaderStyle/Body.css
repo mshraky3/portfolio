@@ -1,368 +1,319 @@
-.contener {
-    display: flex;
-    justify-content: center;
-    height: 90vh;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+/* ═══════════════════════════════════════════
+   HERO — Work Gallery Cinematic
+   ═══════════════════════════════════════════ */
+
+.hero {
     position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 24px 80px;
     overflow: hidden;
-    background: transparent;
-    color: inherit;
+    text-align: center;
 }
 
-.contener::after {
-    content: "";
+/* Subtle noise texture */
+.hero-noise {
     position: absolute;
-    inset: -45vh -35vw;
-    background: var(--surface-glow-primary),
-        var(--surface-glow-secondary),
-        var(--surface-glow-tertiary);
-    mix-blend-mode: screen;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 0;
 }
 
-.black {
-    flex: 1.2;
-    background-color: transparent;
-    color: white;
-    padding-right: 2%;
-    padding-left: 2%;
+/* Accent glows */
+.hero-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.hero-glow-1 {
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    right: -150px;
+    background: rgba(193, 71, 233, 0.12);
+}
+
+.hero-glow-2 {
+    width: 500px;
+    height: 500px;
+    bottom: -150px;
+    left: -100px;
+    background: rgba(124, 58, 237, 0.08);
+}
+
+/* Content */
+.hero-content {
     position: relative;
     z-index: 1;
-}
-
-.black-content {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: clamp(12px, 2vh, 24px);
-    margin-left: 0;
-    text-align: right;
-    align-items: flex-start;
-    padding: 2rem 0;
+    align-items: center;
+    gap: 0;
+    max-width: 800px;
 }
 
-.black-content .stats {
-    text-align: right;
-    justify-content: flex-start;
-}
-
-
-
-.btn Button {
-    border: 1px solid #ffffff;
+/* Available badge */
+.hero-available {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    cursor: pointer;
-    color: #ffffff;
-    font-family: Arial;
-    font-size: 17px;
-    padding: 10px 12px;
+    padding: 8px 20px;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #10b981;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 32px;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.5);
+    }
+}
+
+/* Name */
+.hero-name {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    color: #fff;
+    margin: 0;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+}
+
+/* Role */
+.hero-role {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 600;
+    color: #C147E9;
+    margin: 12px 0 0;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    direction: ltr;
+}
+
+/* Tagline */
+.hero-tagline {
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    color: rgba(255, 255, 255, 0.6);
+    margin: 16px 0 0;
+    line-height: 1.7;
+    max-width: 500px;
+}
+
+/* Stats bar */
+.hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 40px;
+    padding: 16px 32px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 0 24px;
+}
+
+.stat-num {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 800;
+    color: #fff;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.05em;
+}
+
+.stat-sep {
+    width: 1px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* CTAs */
+.hero-cta {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-gallery {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border-radius: 14px;
+    background: #C147E9;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
     text-decoration: none;
-    flex-direction: row-reverse;
-    white-space: nowrap;
-}
-
-.btn Button img {
-    width: 16px;
-    height: 16px;
-    margin-left: 10px;
-}
-
-.image {
-    display: flex;
-    flex-direction: column-reverse;
-    /* make the 3D column visually smaller to reduce its footprint */
-    flex: 1;
-    min-width: 360px;
-    width: 520px;
-    background-color: transparent;
-    z-index: 3;
-    height: 100%;
-    position: relative;
-    align-items: stretch;
-    justify-content: stretch;
-    margin: 0;
-    padding: 0;
-}
-
-.image .profile-img {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    z-index: 3;
-    margin: 0;
-    padding: 0;
-}
-
-.profile-3d {
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    margin: 0;
-    padding: 0;
-}
-
-.profile-3d>div {
-    width: 100% !important;
-    height: 100% !important;
-    position: relative !important;
-    display: block !important;
-}
-
-.profile-3d canvas {
-    width: 100% !important;
-    height: 100% !important;
-    display: block !important;
-    position: relative !important;
-}
-
-/* Visual differentiation + UX hint */
-.profile-3d {
-    /* make 3D canvas visually part of the background */
-    border-radius: 0;
-    overflow: visible;
-    box-shadow: none;
+    transition: all 0.3s ease;
     border: none;
 }
 
-.profile-3d>div {
+.btn-gallery:hover {
+    background: #a936d4;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(193, 71, 233, 0.35);
+}
+
+.btn-gallery svg {
+    transition: transform 0.3s ease;
+}
+
+.btn-gallery:hover svg {
+    transform: translateY(3px);
+}
+
+.btn-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border-radius: 14px;
     background: transparent;
-}
-
-/* profile-scroll-hint removed per user request */
-
-/* Hero intro styles */
-.hero-intro {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    text-align: right;
-}
-
-.hero-name {
-    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-    font-weight: 800;
-    color: #fff;
-    margin: 0;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-}
-
-.hero-role {
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
     font-weight: 600;
-    color: #C147E9;
-    margin: 0;
+    font-family: inherit;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
 }
 
-.hero-subtitle {
-    font-size: clamp(0.95rem, 2vw, 1.15rem);
-    color: rgba(255, 255, 255, 0.75);
-    margin: 0.3rem 0 0 0;
-    max-width: 420px;
-    line-height: 1.6;
+.btn-contact:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
 }
 
-@media (max-width: 1025px) {
-    .contener {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-        padding: 20px 0;
+/* Scroll indicator */
+.hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.scroll-track {
+    width: 2px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.scroll-thumb {
+    width: 100%;
+    height: 16px;
+    background: rgba(193, 71, 233, 0.6);
+    border-radius: 2px;
+    animation: scrollDown 2s ease-in-out infinite;
+}
+
+@keyframes scrollDown {
+    0% {
+        transform: translateY(-16px);
     }
 
-    .black {
-        padding-right: 5%;
-        padding-left: 5%;
-        width: 100%;
-        margin-bottom: 0;
+    50% {
+        transform: translateY(48px);
     }
 
-    .image {
-        padding-right: 0%;
-        width: 100%;
-        min-width: auto;
-        align-items: stretch;
-        justify-content: stretch;
-        padding: 0;
-        margin: 10px 0;
-        height: 50vh;
-        min-height: 300px;
-    }
-
-    .black-content {
-        margin-right: 0;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: clamp(12px, 3vh, 24px);
-        padding: 1rem 0;
-    }
-
-    .black-content .stats {
-        justify-content: center;
-    }
-
-    .image .profile-img {
-        display: flex;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    .profile-3d {
-        width: 100%;
-        height: 100%;
-        display: block;
-        margin: 0;
-        padding: 0;
-        position: relative;
-    }
-
-    .profile-3d>div {
-        width: 100% !important;
-        height: 100% !important;
-        position: relative !important;
-        display: block !important;
-    }
-
-    .profile-3d canvas {
-        width: 100% !important;
-        height: 100% !important;
-        display: block !important;
-        position: relative !important;
-    }
-
-    .btn a Button {
-        font-size: 15px;
-        padding: 10px 18px;
-        gap: 8px;
-        white-space: nowrap;
-    }
-
-    .hero-intro {
-        text-align: center;
-        align-items: center;
-    }
-
-    .hero-subtitle {
-        max-width: 80vw;
+    100% {
+        transform: translateY(-16px);
     }
 }
 
-/* Small tablets / large phones (landscape) */
+/* ═══════════ Responsive ═══════════ */
+
 @media (max-width: 768px) {
-    .contener {
-        min-height: auto;
-        padding: 16px 0;
+    .hero {
+        padding: 100px 20px 60px;
     }
 
-    .black {
-        padding-right: 4%;
-        padding-left: 4%;
+    .hero-stats {
+        padding: 12px 16px;
     }
 
-    .black-content {
-        padding-top: 6rem;
+    .hero-stat {
+        padding: 0 16px;
     }
 
-    .image {
-        height: 35vh;
-        min-height: 200px;
+    .hero-glow-1 {
+        width: 300px;
+        height: 300px;
     }
 
-    .hero-name {
-        font-size: clamp(1.5rem, 6vw, 2rem);
-    }
-
-    .hero-role {
-        font-size: clamp(0.9rem, 3vw, 1.1rem);
-    }
-
-    .hero-subtitle {
-        font-size: clamp(0.85rem, 3vw, 1rem);
-        max-width: 85vw;
-    }
-
-    .btn a Button {
-        font-size: 14px;
-        padding: 8px 16px;
+    .hero-glow-2 {
+        width: 250px;
+        height: 250px;
     }
 }
 
-/* Mobile phones */
 @media (max-width: 480px) {
-    .contener {
-        padding: 12px 0;
+    .hero-stats {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px;
     }
 
-    .black {
-        padding-right: 5%;
-        padding-left: 5%;
+    .stat-sep {
+        width: 40px;
+        height: 1px;
     }
 
-    .black-content {
-        gap: clamp(10px, 2.5vh, 18px);
-        padding-top: 7rem;
-        padding-bottom: 0.5rem;
+    .hero-stat {
+        padding: 0;
     }
 
-    .image {
-        height: 30vh;
-        min-height: 180px;
-        margin: 5px 0;
+    .hero-cta {
+        flex-direction: column;
+        width: 100%;
     }
 
-    .hero-name {
-        font-size: clamp(1.4rem, 7vw, 1.8rem);
-    }
-
-    .hero-role {
-        font-size: clamp(0.85rem, 3.5vw, 1rem);
-    }
-
-    .hero-subtitle {
-        font-size: clamp(0.8rem, 3.5vw, 0.95rem);
-        max-width: 90vw;
-        line-height: 1.5;
-    }
-
-    .btn a Button {
-        font-size: 13px;
-        padding: 8px 14px;
-    }
-}
-
-/* Very small phones */
-@media (max-width: 360px) {
-    .hero-name {
-        font-size: 1.3rem;
-    }
-
-    .hero-role {
-        font-size: 0.85rem;
-    }
-
-    .hero-subtitle {
-        font-size: 0.78rem;
-    }
-
-    .image {
-        height: 28vh;
-        min-height: 160px;
-    }
-
-    .btn a Button {
-        font-size: 12px;
-        padding: 7px 12px;
+    .btn-gallery,
+    .btn-contact {
+        justify-content: center;
     }
 }

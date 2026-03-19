@@ -1,69 +1,103 @@
 import React from "react";
 import "./HeaderStyle/Body.css";
-import Button from '@mui/material/Button';
-import Stats from "./Stats";
 import { motion } from "framer-motion";
-import ProfileModel from "./ProfileModel";
-
-const CTA_LABEL = "تواصل الآن";
 
 function Body() {
   return (
-    <motion.div
-      className="contener"
-      id="HOME"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      <div className="black">
-        <div className="black-content">
-          <motion.div
-            className="hero-intro"
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <h1 className="hero-name">محمود الشراكي</h1>
-            <p className="hero-role">Software Engineer</p>
-            <p className="hero-subtitle">أحوّل أفكارك إلى مواقع وأنظمة تعمل بكفاءة وتجذب عملاءك</p>
-          </motion.div>
-          <motion.div
-            className="btn"
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <a href="https://wa.link/5zcep6">
-              <Button>
+    <section className="hero" id="HOME">
+      <div className="hero-noise" />
+      <div className="hero-glow hero-glow-1" />
+      <div className="hero-glow hero-glow-2" />
 
-                <img
-                  src="https://img.icons8.com/?size=50&id=biaPj0fC1TKb&format=png&color=ffffff"
-                  alt="أيقونة سهم"
-                  loading="lazy"
-                  style={{ marginRight: 10, transform: 'scaleX(-1)' }}
-                />
+      <div className="hero-content">
+        <motion.div
+          className="hero-available"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <span className="pulse-dot" />
+          <span>متاح للعمل </span>
+        </motion.div>
 
-                {CTA_LABEL}
-              </Button>
-            </a>
-          </motion.div>
-          <Stats />
-        </div>
+        <motion.h1
+          className="hero-name"
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          محمود الشراكي
+        </motion.h1>
+
+        <motion.p
+          className="hero-role"
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.55 }}
+        >
+          Full-Stack Engineer
+        </motion.p>
+
+        <motion.p
+          className="hero-tagline"
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+        >
+          أبني أنظمة ويب قوية — من الفكرة حتى الإطلاق
+        </motion.p>
+
+        <motion.div
+          className="hero-stats"
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.85 }}
+        >
+          <div className="hero-stat">
+            <span className="stat-num">25+</span>
+            <span className="stat-label">مشروع</span>
+          </div>
+          <span className="stat-sep" />
+          <div className="hero-stat">
+            <span className="stat-num">5+</span>
+            <span className="stat-label">عملاء</span>
+          </div>
+          <span className="stat-sep" />
+          <div className="hero-stat">
+            <span className="stat-num">2+</span>
+            <span className="stat-label">سنة خبرة</span>
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="hero-cta"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1 }}
+        >
+          <a href="#projects" className="btn-gallery">
+            استكشف أعمالي
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+          </a>
+          <a href="https://wa.link/5zcep6" className="btn-contact" target="_blank" rel="noreferrer">
+            تواصل معي
+          </a>
+        </motion.div>
       </div>
+
       <motion.div
-        className="image"
-        initial={{ x: 100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 1, delay: 0.4 }}
+        className="hero-scroll"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
       >
-        <div className="profile-img">
-          <ProfileModel />
+        <div className="scroll-track">
+          <div className="scroll-thumb" />
         </div>
       </motion.div>
-    </motion.div>
+    </section>
   );
 }
 

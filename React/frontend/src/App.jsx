@@ -4,7 +4,6 @@ import Services from "./components/Services/Services";
 import ProjectShowcase from "./components/Projects/ProjectShowcase";
 import About from "./components/About/About";
 import Contact from "./components/contact/Contact";
-import Benefits from "./components/Benefits/Benefits";
 import Resume from "./components/Resume/Resume";
 import "./App.css";
 
@@ -13,7 +12,7 @@ const DESCRIPTION =
   "مطور ويب Full-Stack متخصص في بناء مواقع احترافية وأنظمة مؤسسية بتقنيات React وNode.js وPostgreSQL. أداء عالٍ وتجربة مستخدم مدروسة.";
 const KEYWORDS =
   "محمود الشراكي, مطور ويب, Full-Stack Developer, تصميم مواقع, تطوير مواقع, React, Node.js, PostgreSQL, أنظمة مؤسسية, تجربة مستخدم";
-const SITE_URL = "https://web-dev-seven-iota.vercel.app/"; // TODO: update to your actual domain
+const SITE_URL = "https://alshraky.com"; // TODO: update to your actual domain
 
 const PERSON_STRUCTURED_DATA = {
   "@context": "https://schema.org",
@@ -47,7 +46,7 @@ const FAQ_STRUCTURED_DATA = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "لماذا يحتاج نشاطك إلى موقع إلكتروني؟",
+      name: "لماذا يحتاج نشاطك التجاري إلى موقع إلكتروني؟",
       acceptedAnswer: {
         "@type": "Answer",
         text: "يساعد الموقع الإلكتروني في تحسين الظهور على Google، وبناء الثقة، وتحويل الزوار إلى عملاء.",
@@ -55,7 +54,7 @@ const FAQ_STRUCTURED_DATA = {
     },
     {
       "@type": "Question",
-      name: "ما الفرق بين تصميم المواقع وتطوير البرمجيات؟",
+      name: "ما الفرق بين تصميم المواقع وتطويرها؟",
       acceptedAnswer: {
         "@type": "Answer",
         text: "يركز التصميم على المظهر وتجربة المستخدم، بينما يهتم التطوير بالوظائف والأداء والحماية.",
@@ -117,9 +116,8 @@ function App() {
       </Helmet>
       <Header />
       <ProjectShowcase />
-      <About />
-      <Benefits />
       <Services />
+      <About />
       <Resume />
       <Contact />
     </HelmetProvider>

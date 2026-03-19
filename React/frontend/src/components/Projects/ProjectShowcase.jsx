@@ -117,13 +117,7 @@ const PROJECTS = [
     },
 ];
 
-const CATEGORIES = [
-    { key: "all", label: "الكل" },
-    { key: "EdTech", label: "تعليمية" },
-    { key: "Enterprise", label: "أنظمة مؤسسية" },
-    { key: "Business", label: "أعمال" },
-    { key: "Legal", label: "قانوني" },
-];
+// (Category filters removed for gallery layout)
 
 // ─── Animated Counter ───────────────────────────────────────────
 function AnimatedCounter({ value, suffix = "", duration = 2000 }) {
@@ -416,67 +410,69 @@ function CaseStudyModal({ project, onClose }) {
     );
 }
 
-// ─── Project Card ───────────────────────────────────────────────
-function ProjectCard({ project, onClick, index }) {
+// ─── Gallery Item (Large Horizontal Showcase) ──────────────────
+function GalleryItem({ project, onClick, index }) {
+    const isEven = index % 2 === 0;
+
     return (
         <motion.article
-            className={`showcase-card ${project.featured ? "featured" : ""}`}
+            className={`gallery-item ${isEven ? "" : "gallery-item-reverse"}`}
             style={{ "--project-accent": project.color }}
-            initial={{ opacity: 0, y: 48 }}
+            initial={{ opacity: 0, y: 60 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: 0.15 + index * 0.1 }}
-            whileHover={{ y: -8 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
             onClick={() => onClick(project)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && onClick(project)}
             aria-label={`عرض تفاصيل مشروع ${project.title}`}
         >
-            {/* Glow accent */}
-            <div className="card-glow" />
-
-            {/* Browser frame preview */}
-            <div className="card-preview">
-                <BrowserMockup url={project.href.replace("https://", "")} color={project.color}>
+            <div className="gallery-item-image">
+                <div className="gallery-item-glow" />
+                <BrowserMockup
+                    url={project.href ? project.href.replace("https://", "") : "نظام خاص"}
+                    color={project.color}
+                >
                     <img src={project.images[0]} alt={project.imageAlt} loading="lazy" />
                 </BrowserMockup>
             </div>
 
-            {/* Content */}
-            <div className="card-content">
-                <div className="card-meta">
-                    <span className="card-category">{project.category}</span>
-                    <span className="card-subtitle">{project.subtitle}</span>
+            <div className="gallery-item-info">
+                <span className="gallery-item-number">
+                    {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="gallery-item-meta">
+                    <span className="gallery-item-category">{project.category}</span>
+                    <span className="gallery-item-subtitle">{project.subtitle}</span>
                 </div>
-                <h3 className="card-title">{project.title}</h3>
-                <p className="card-description">{project.problem}</p>
+                <h3 className="gallery-item-title">{project.title}</h3>
+                <p className="gallery-item-desc">{project.impact}</p>
 
-                {/* Quick stats */}
-                <div className="card-stats">
-                    {project.stats.slice(0, 2).map((stat) => (
-                        <div className="card-stat" key={stat.label}>
+                <div className="gallery-item-stats">
+                    {project.stats.map((stat) => (
+                        <div className="gallery-stat" key={stat.label}>
                             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                             <span>{stat.label}</span>
                         </div>
                     ))}
                 </div>
 
-                {/* Tech tags */}
-                <div className="card-tech">
-                    {project.technologies.slice(0, 3).map((tech) => (
-                        <span className="card-tag" key={tech}>
+                <div className="gallery-item-tech">
+                    {project.technologies.slice(0, 4).map((tech) => (
+                        <span className="gallery-tech-tag" key={tech}>
                             {tech}
                         </span>
                     ))}
-                    {project.technologies.length > 3 && (
-                        <span className="card-tag more">+{project.technologies.length - 3}</span>
+                    {project.technologies.length > 4 && (
+                        <span className="gallery-tech-tag gallery-tech-more">
+                            +{project.technologies.length - 4}
+                        </span>
                     )}
                 </div>
 
-                {/* CTA */}
-                <div className="card-cta">
-                    <span>اطّلع الآن</span>
+                <div className="gallery-item-cta">
+                    <span>اطّلع على التفاصيل</span>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -486,68 +482,40 @@ function ProjectCard({ project, onClick, index }) {
     );
 }
 
-// ─── Main Showcase Component ────────────────────────────────────
+// ─── Main Gallery Component ─────────────────────────────────────
 function ProjectShowcase() {
-    const [activeCategory, setActiveCategory] = useState("all");
     const [selectedProject, setSelectedProject] = useState(null);
-
-    const filteredProjects =
-        activeCategory === "all"
-            ? PROJECTS
-            : PROJECTS.filter((p) => p.categoryEn === activeCategory);
 
     const handleOpen = useCallback((project) => setSelectedProject(project), []);
     const handleClose = useCallback(() => setSelectedProject(null), []);
 
     return (
-        <section className="project-showcase-section" id="projects">
+        <section className="work-gallery" id="projects">
             {/* Section Header */}
             <motion.div
-                className="showcase-header"
+                className="gallery-header"
                 initial={{ opacity: 0, y: 32 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.1 }}
                 viewport={{ once: true }}
             >
-                <span className="showcase-eyebrow">أعمال مختارة</span>
-                <h2>مشاريع تبني نمواً قابلاً للقياس</h2>
-                <p className="showcase-lead">
-                    كل مشروع يبدأ بمشكلة حقيقية وينتهي بنتائج ملموسة. اضغط على أي مشروع
-                    لاستكشاف القصة الكاملة.
+                <span className="gallery-eyebrow">أعمال مختارة</span>
+                <h2>مشاريع حقيقية. نتائج ملموسة.</h2>
+                <p className="gallery-lead">
+                    كل مشروع يبدأ بمشكلة حقيقية وينتهي بنتائج قابلة للقياس — اضغط لاستكشاف التفاصيل.
                 </p>
             </motion.div>
 
-            {/* Category Filters */}
-            <motion.div
-                className="showcase-filters"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                viewport={{ once: true }}
-            >
-                {CATEGORIES.map((cat) => (
-                    <button
-                        key={cat.key}
-                        className={`filter-btn ${activeCategory === cat.key ? "active" : ""}`}
-                        onClick={() => setActiveCategory(cat.key)}
-                    >
-                        {cat.label}
-                    </button>
+            {/* Gallery List */}
+            <div className="gallery-list">
+                {PROJECTS.map((project, index) => (
+                    <GalleryItem
+                        key={project.id}
+                        project={project}
+                        onClick={handleOpen}
+                        index={index}
+                    />
                 ))}
-            </motion.div>
-
-            {/* Project Grid */}
-            <div className="showcase-grid">
-                <AnimatePresence mode="wait">
-                    {filteredProjects.map((project, index) => (
-                        <ProjectCard
-                            key={project.id}
-                            project={project}
-                            onClick={handleOpen}
-                            index={index}
-                        />
-                    ))}
-                </AnimatePresence>
             </div>
 
             {/* Case Study Modal */}
