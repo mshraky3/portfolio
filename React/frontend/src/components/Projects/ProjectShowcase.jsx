@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./ProjectShowcase.css";
+import PortfolioExportBtn from "./PortfolioExportBtn.jsx";
 
 import smlePreview from "./projectsImgs/pro2.png";
 import erthPreview from "./projectsImgs/wsm.png";
@@ -504,6 +505,9 @@ function ProjectShowcase() {
                 <p className="gallery-lead">
                     كل مشروع يبدأ بمشكلة حقيقية وينتهي بنتائج قابلة للقياس — اضغط لاستكشاف التفاصيل.
                 </p>
+                <div style={{ marginTop: '20px' }}>
+                    <PortfolioExportBtn />
+                </div>
             </motion.div>
 
             {/* Gallery List */}

@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
-Sitemap: https://your-website-url.com/sitemap.xml
+
+# Disallow build artifacts
+Disallow: /assets/
+
+Sitemap: https://web-dev-seven-iota.vercel.app/sitemap.xml
