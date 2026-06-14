@@ -110,6 +110,7 @@ function App() {
         <meta name="author" content="Mahmoud Alshraky" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
+        <meta name="google-site-verification" content="_D8kWKKjWX9kVbOg7WD19Qw9ifCGYer9F1cNlOY3c2I" />
         <meta name="geo.region" content="SA" />
         <meta name="geo.placename" content="Saudi Arabia" />
         <meta name="language" content="Arabic, English" />
@@ -137,6 +138,7 @@ function App() {
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@m_alshraky" />
         <meta name="twitter:title" content={TITLE} />
         <meta name="twitter:description" content={DESCRIPTION} />
         <meta name="twitter:image" content={`${SITE_URL}/me.png`} />
