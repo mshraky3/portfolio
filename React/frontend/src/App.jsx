@@ -7,14 +7,14 @@ import Contact from "./components/contact/Contact";
 import Resume from "./components/Resume/Resume";
 import "./App.css";
 
-const TITLE = "محمود الشراكي | مطور ويب Full-Stack | تصميم وتطوير مواقع احترافية";
-const TITLE_EN = "Mahmoud Alshraky | Full-Stack Web Developer | Professional Website Design";
+const TITLE = "محمود الشراكي | مهندس برمجيات Full-Stack | React · Node.js · PostgreSQL";
+const TITLE_EN = "Mahmoud Alshraky | Software Engineer | Full-Stack (React, Node.js, PostgreSQL)";
 const DESCRIPTION =
-  "مطور ويب Full-Stack متخصص في بناء مواقع احترافية وأنظمة مؤسسية بتقنيات React وNode.js وPostgreSQL. أداء عالٍ وتجربة مستخدم مدروسة. خبرة في تصميم واجهات المستخدم وتطوير واجهات برمجة التطبيقات.";
+  "مهندس برمجيات Full-Stack أبني أنظمة مؤسسية وتطبيقات عالية الأداء بتقنيات React وNode.js وPostgreSQL، بأساس هندسي في هياكل البيانات والخوارزميات وتصميم قواعد البيانات وبناء واجهات برمجة التطبيقات (REST APIs).";
 const DESCRIPTION_EN =
-  "Full-Stack Web Developer specializing in professional websites and enterprise systems using React, Node.js, and PostgreSQL. High performance and thoughtful UX. Expert in UI design and REST API development.";
+  "Software Engineer building production-grade enterprise systems and full-stack applications with React, Node.js, and PostgreSQL. Grounded in data structures, algorithms, database design, and REST API architecture.";
 const KEYWORDS =
-  "محمود الشراكي, مطور ويب, Full-Stack Developer, تصميم مواقع, تطوير مواقع, React, Node.js, PostgreSQL, Express.js, أنظمة مؤسسية, تجربة مستخدم, Mahmoud Alshraky, web developer, website design, frontend developer, backend developer, Saudi Arabia";
+  "محمود الشراكي, مهندس برمجيات, Software Engineer, Full-Stack Developer, Backend Developer, هياكل البيانات, خوارزميات, React, Node.js, PostgreSQL, Express.js, REST API, أنظمة مؤسسية, Mahmoud Alshraky, software engineer Saudi Arabia, full-stack engineer, computer science, Saudi Arabia";
 const SITE_URL = "https://web-dev-seven-iota.vercel.app";
 
 const PERSON_STRUCTURED_DATA = {
@@ -24,7 +24,7 @@ const PERSON_STRUCTURED_DATA = {
   alternateName: "محمود الشراكي",
   url: SITE_URL,
   image: `${SITE_URL}/me.png`,
-  jobTitle: "Full-Stack Web Developer",
+  jobTitle: "Software Engineer",
   description: DESCRIPTION_EN,
   email: "alshraky3@gmail.com",
   address: {
@@ -32,9 +32,14 @@ const PERSON_STRUCTURED_DATA = {
     addressCountry: "SA",
     addressRegion: "Saudi Arabia",
   },
-  knowsAbout: ["React", "Node.js", "PostgreSQL", "Express.js", "JavaScript", "Web Development", "UI/UX Design"],
+  knowsAbout: ["Software Engineering", "Data Structures", "Algorithms", "System Design", "Database Design", "React", "Node.js", "PostgreSQL", "Express.js", "JavaScript", "Python", "REST API"],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Qassim University",
+  },
   sameAs: [
     "https://github.com/mshraky3",
+    "https://www.linkedin.com/in/muhmod-alshraky-350b20318",
     "https://www.instagram.com/m_alshraky/",
     "https://wa.link/5zcep6",
   ],
@@ -94,6 +99,7 @@ const ORGANIZATION_STRUCTURED_DATA = {
   },
   sameAs: [
     "https://github.com/mshraky3",
+    "https://www.linkedin.com/in/muhmod-alshraky-350b20318",
     "https://www.instagram.com/m_alshraky/",
     "https://wa.link/5zcep6",
   ],
@@ -133,7 +139,7 @@ function App() {
         <meta property="og:image" content={`${SITE_URL}/me.png`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Mahmoud Alshraky - Full-Stack Web Developer" />
+        <meta property="og:image:alt" content="Mahmoud Alshraky - Software Engineer" />
         <meta property="og:url" content={SITE_URL} />
 
         {/* Twitter */}
@@ -142,7 +148,7 @@ function App() {
         <meta name="twitter:title" content={TITLE} />
         <meta name="twitter:description" content={DESCRIPTION} />
         <meta name="twitter:image" content={`${SITE_URL}/me.png`} />
-        <meta name="twitter:image:alt" content="Mahmoud Alshraky - Full-Stack Web Developer" />
+        <meta name="twitter:image:alt" content="Mahmoud Alshraky - Software Engineer" />
         <meta name="twitter:url" content={SITE_URL} />
 
         {/* Structured Data */}

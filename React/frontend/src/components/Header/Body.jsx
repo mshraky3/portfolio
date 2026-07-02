@@ -35,7 +35,7 @@ function Body() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.55 }}
         >
-          Full-Stack Engineer
+          Software Engineer · Full-Stack
         </motion.p>
 
         <motion.p
@@ -44,7 +44,7 @@ function Body() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.7 }}
         >
-          أبني أنظمة ويب قوية — من الفكرة حتى الإطلاق
+          أبني أنظمة برمجية موثوقة — من قاعدة البيانات حتى الواجهة
         </motion.p>
 
         <motion.div

@@ -4,13 +4,18 @@ import "./About.css";
 import { motion } from "framer-motion";
 
 const ABOUT_TITLE = "من أنا";
-const ABOUT_BODY = "أصنع تجارب ويب عالية الأداء.";
-const ABOUT_DETAIL = "أرافق مشروعك من الفكرة حتى الإطلاق، بتجربة مستخدم مدروسة وبنية تقنية تعتمد على React وExpress وPostgreSQL، موثوقة وسهلة التوسع.";
+const ABOUT_BODY = "مهندس برمجيات أبني أنظمة عالية الأداء.";
+const ABOUT_DETAIL = "طالب علوم حاسب أبني أنظمة برمجية إنتاجية حقيقية: من تصميم قاعدة البيانات وبناء الـ REST APIs حتى الواجهة — بأساس هندسي في هياكل البيانات والخوارزميات، وبنية تعتمد على React وExpress وPostgreSQL موثوقة وسهلة التوسع.";
 const SOCIAL_LINKS = [
     {
         href: "https://github.com/mshraky3",
         img: "https://img.icons8.com/fluency/40/github.png",
         alt: "شعار GitHub"
+    },
+    {
+        href: "https://www.linkedin.com/in/muhmod-alshraky-350b20318",
+        img: "https://img.icons8.com/color/40/linkedin.png",
+        alt: "شعار LinkedIn"
     },
     {
         href: "https://wa.link/5zcep6",
