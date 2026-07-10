@@ -100,3 +100,67 @@
 .hq-check.done .hq-check-name { text-decoration: line-through; color: #6a6a78; }
 .hq-check-note { margin-top: 0.25rem; }
 .hq-prio { font-size: 0.75rem; padding: 0.15rem 0.4rem; }
+
+/* ---- live jobs ---- */
+.hq-rule {
+  background: #17121e; border: 1px solid #3a2a4a; border-radius: 12px;
+  padding: 0.8rem 1rem; font-size: 0.88rem; color: #cfc5dd; margin-bottom: 1rem;
+  line-height: 1.5;
+}
+.hq-livebar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+.hq-livebar input {
+  flex: 1; min-width: 180px;
+  background: #0e0e12; border: 1px solid #2a2a33; color: #f2f2f5;
+  border-radius: 9px; padding: 0.6rem 0.7rem; font-size: 0.9rem; outline: none;
+}
+.hq-livebar input:focus { border-color: #C147E9; }
+.hq-livebar button {
+  background: #1c1c22; border: 1px solid #2a2a33; color: #f2f2f5;
+  border-radius: 9px; padding: 0.55rem 0.9rem; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+}
+.hq-livebar button:hover:not(:disabled) { border-color: #C147E9; }
+.hq-livebar button:disabled { opacity: 0.6; cursor: default; }
+.hq-livebar .hq-mail { background: linear-gradient(135deg, #6a1b9a, #C147E9); border: none; }
+.hq-updated { margin-left: auto; align-self: center; font-size: 0.75rem; }
+.hq-fit {
+  font-size: 0.72rem; font-weight: 700; border: 1px solid; border-radius: 20px;
+  padding: 0.18rem 0.6rem; white-space: nowrap;
+}
+.hq-src { background: #1b2430; color: #7fb8ff; }
+.hq-senior { color: #b08c3a; border-color: #b08c3a; opacity: 0.85; }
+.hq-salary { background: #14251c; color: #3ecf8e; }
+.hq-live-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+.hq-apply {
+  background: linear-gradient(135deg, #6a1b9a, #C147E9); color: #fff; text-decoration: none;
+  border-radius: 8px; padding: 0.45rem 1rem; font-size: 0.83rem; font-weight: 600;
+}
+.hq-apply:hover { filter: brightness(1.1); }
+.hq-save {
+  background: #1c1c22; border: 1px solid #2a2a33; color: #f2f2f5;
+  border-radius: 8px; padding: 0.45rem 1rem; font-size: 0.83rem; font-weight: 600; cursor: pointer;
+}
+.hq-save:hover:not(:disabled) { border-color: #3ecf8e; color: #3ecf8e; }
+.hq-save:disabled { color: #3ecf8e; border-color: #1f3a2d; cursor: default; }
+.hq-attrib { font-size: 0.72rem; margin-top: 1.2rem; text-align: center; }
+
+/* ---- Ireland plan ---- */
+.hq-ie-head { display: flex; flex-direction: column; gap: 0.7rem; }
+.hq-ie-progress { display: flex; align-items: center; gap: 0.7rem; }
+.hq-ie-bar {
+  flex: 1; height: 8px; background: #0e0e12; border: 1px solid #2a2a33;
+  border-radius: 20px; overflow: hidden;
+}
+.hq-ie-bar div {
+  height: 100%; background: linear-gradient(90deg, #169b62, #3ecf8e);
+  border-radius: 20px; transition: width 0.3s;
+}
+.hq-ie-links { gap: 0.45rem; }
+.hq-ie-links a {
+  background: #141418; border: 1px solid #2a2a33; color: #9a9aa8; text-decoration: none;
+  border-radius: 20px; padding: 0.3rem 0.8rem; font-size: 0.78rem;
+}
+.hq-ie-links a:hover { border-color: #169b62; color: #3ecf8e; }
+.hq-ie-phase h3 {
+  font-size: 0.95rem; color: #C147E9; margin: 1.3rem 0 0.6rem;
+  border-bottom: 1px solid #2a2a33; padding-bottom: 0.4rem;
+}

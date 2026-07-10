@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
+import axios from "axios";
 import "./Tracker.css";
 
 /*
@@ -10,6 +11,10 @@ import "./Tracker.css";
 
 const DATA_KEY = "jht_data_v1";
 const PASS_KEY = "jht_pass_v1";
+const LIVE_KEY = "jht_live_v1";
+
+// Same backend the contact form uses. Override locally with VITE_API_BASE.
+const API_BASE = import.meta.env.VITE_API_BASE || "https://portfolio-api-rose.vercel.app";
 
 const STATUSES = ["Wishlist", "Applied", "Interview", "Offer", "Rejected"];
 const STATUS_COLOR = {
@@ -41,10 +46,132 @@ const SEED_COURSES = [
   { id: "c6", name: "AWS Cloud Practitioner Essentials (Skill Builder)", url: "https://skillbuilder.aws/", state: "Not started", cert: "" },
 ];
 
+/*
+ * IRELAND FROM 0 — Egyptian citizen, living in KSA, CS student (grad 2027).
+ * Facts verified July 2026 (citizensinformation.ie, enterprise.gov.ie, irishimmigration.ie).
+ * Route: employer-sponsored Critical Skills Employment Permit (CSEP) → Stamp 4 after 2 yrs.
+ */
+const SEED_IRELAND = [
+  // Phase 0 — Reality check
+  { id: "ie01", phase: "0 · Reality check — read first", name: "Understand the route: Critical Skills Employment Permit (CSEP)", done: false,
+    note: "Software developer is on Ireland's Critical Skills Occupations List. An employer sponsors you — no labour-market test, family can join immediately, Stamp 4 (work without permit) after 2 years.",
+    url: "https://www.citizensinformation.ie/en/moving-country/working-in-ireland/employment-permits/green-card-permits/" },
+  { id: "ie02", phase: "0 · Reality check — read first", name: "Salary floor: €40,904/year (since 1 Mar 2026)", done: false,
+    note: "Your job offer must be at or above this, with a 2-year contract. Dublin junior/mid SWE pays €40–65k, so it's realistic.",
+    url: "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/permit-types/critical-skills-employment-permit/" },
+  { id: "ie03", phase: "0 · Reality check — read first", name: "⚠️ The degree catch: CSEP's listed-occupation tier requires a degree — you graduate 2027", done: false,
+    note: "Until then, two real paths: (1) remote contract work for Irish/EU companies from KSA NOW → income + references + inside track, (2) time the CSEP push for graduation. Fallback: General Employment Permit (experience can substitute for a degree, but it needs a labour-market test)." },
+  { id: "ie04", phase: "0 · Reality check — read first", name: "Egyptian passport = visa-required: after the permit you ALSO need a long-stay 'D' employment visa", done: false,
+    note: "Apply up to 3 months before travel at the Irish embassy (Cairo, or Riyadh as KSA resident). Needs contract, qualifications, and 6-month bank statements on headed paper.",
+    url: "https://www.irishimmigration.ie/coming-to-work-in-ireland/what-are-my-work-visa-options/applying-for-a-long-stay-employment-visa/employment-visa/" },
+
+  // Phase 1 — Foundation (from KSA, this month)
+  { id: "ie11", phase: "1 · Foundation (this month, from KSA)", name: "Irish-format CV: 2 pages max, no photo, no age/nationality", done: false,
+    note: "Lead with projects + metrics (600+ employee HR system, 8,000+ question SMLE platform)." },
+  { id: "ie12", phase: "1 · Foundation (this month, from KSA)", name: "LinkedIn: add Ireland to 'Open to Work' locations + 'open to relocation, visa sponsorship required'", done: false },
+  { id: "ie13", phase: "1 · Foundation (this month, from KSA)", name: "English interview fluency — 30 min speaking practice daily", done: false,
+    note: "Irish interviews are conversational; sharp English is half the battle." },
+
+  // Phase 2 — Target list
+  { id: "ie21", phase: "2 · Build the target list", name: "Mine the official sponsor register — DETE publishes every company granted permits", done: false,
+    note: "The insider move: these companies are PROVEN sponsors. Search 'software' in the latest quarter.",
+    url: "https://enterprise.gov.ie/en/publications/companies-issued-with-permits-2026.html" },
+  { id: "ie22", phase: "2 · Build the target list", name: "Tier-1 (big sponsors, Dublin/Cork): Google, Meta, Amazon, Microsoft, Stripe, Intercom, Workday, HubSpot, Zendesk, Salesforce, Mastercard, Apple (Cork)", done: false },
+  { id: "ie23", phase: "2 · Build the target list", name: "Tier-2 (Irish product companies): Fenergo, Tines, Flipdish, Wayflyer, LearnUpon, Teamwork", done: false,
+    note: "Smaller = your application actually gets read." },
+  { id: "ie24", phase: "2 · Build the target list", name: "Register with Irish tech recruiters: Cpl, Morgan McKinley, Reperio, Solas IT", done: false,
+    note: "Recruiters know which clients sponsor — ask them directly." },
+
+  // Phase 3 — Apply (remote-first bridge)
+  { id: "ie31", phase: "3 · Apply — remote-first bridge", name: "Apply to remote roles at Irish/EU companies you can do from KSA today", done: false,
+    note: "This is the bridge: income now, Irish references, and the inside track to sponsorship later. Use the Live Jobs tab + the links below." },
+  { id: "ie32", phase: "3 · Apply — remote-first bridge", name: "Daily: 3 Ireland applications through the live links below", done: false },
+  { id: "ie33", phase: "3 · Apply — remote-first bridge", name: "Weekly: 5 warm messages to engineers/recruiters at target companies", done: false,
+    note: "Short + specific beats mass-apply. Mention one thing about their product." },
+
+  // Phase 4 — Interviews
+  { id: "ie41", phase: "4 · Interviews", name: "DSA on a schedule (LeetCode easy→medium) — same prep as the KSA plan, two markets one effort", done: false },
+  { id: "ie42", phase: "4 · Interviews", name: "Timezone is your friend: Ireland is 2h behind KSA — a 2 PM Dublin interview = 4 PM Qassim", done: false,
+    note: "Fits your after-3-PM rule while you're still studying." },
+  { id: "ie43", phase: "4 · Interviews", name: "Negotiate ≥ €41k so the offer clears the CSEP floor", done: false },
+
+  // Phase 5 — Offer → paperwork
+  { id: "ie51", phase: "5 · Offer → paperwork", name: "CSEP application: €1,000 fee (usually employer pays), 2-year contract, ~4–8 weeks processing", done: false,
+    url: "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/permit-types/critical-skills-employment-permit/" },
+  { id: "ie52", phase: "5 · Offer → paperwork", name: "Long-stay D visa at the Irish embassy (permit + contract + qualifications + 6-month bank statements)", done: false,
+    url: "https://www.irishimmigration.ie/coming-to-work-in-ireland/what-are-my-work-visa-options/applying-for-a-long-stay-employment-visa/employment-visa/" },
+  { id: "ie53", phase: "5 · Offer → paperwork", name: "Book flights only after the visa is in your passport", done: false },
+
+  // Phase 6 — Landing
+  { id: "ie61", phase: "6 · Landing in Ireland", name: "Register with immigration → IRP card (€300)", done: false },
+  { id: "ie62", phase: "6 · Landing in Ireland", name: "Get a PPS number (needed for payroll and tax)", done: false },
+  { id: "ie63", phase: "6 · Landing in Ireland", name: "At 21 months on CSEP: apply for Stamp 4 — work for anyone, no permit. Citizenship possible after 5 years", done: false },
+];
+
+const IRELAND_LINKS = [
+  { label: "LinkedIn · SWE Ireland (past week)", url: "https://www.linkedin.com/jobs/search/?keywords=software%20engineer&location=Ireland&f_TPR=r604800" },
+  { label: "LinkedIn · 'visa sponsorship' Ireland", url: "https://www.linkedin.com/jobs/search/?keywords=software%20engineer%20visa%20sponsorship&location=Ireland" },
+  { label: "IrishJobs.ie · software engineer", url: "https://www.irishjobs.ie/jobs/software-engineer" },
+  { label: "Indeed.ie · sponsorship", url: "https://ie.indeed.com/jobs?q=software+engineer+visa+sponsorship" },
+  { label: "Official sponsor register (DETE)", url: "https://enterprise.gov.ie/en/publications/companies-issued-with-permits-2026.html" },
+  { label: "Critical Skills Occupations List", url: "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/employment-permit-eligibility/highly-skilled-eligible-occupations-list/" },
+];
+
+/*
+ * 12-WEEK LEARNING ROADMAP — turns "things I need to learn" into a schedule.
+ * Ordered for maximum hire-signal per week: tests → TS/SQL → Docker/CI →
+ * cloud → system design → interview mode. Works for KSA + Ireland + remote.
+ */
+const SEED_ROADMAP = [
+  { id: "r01", phase: "Every day — all 12 weeks", name: "3 job applications (Live Jobs tab)", done: false,
+    note: "Non-negotiable. 3/day → 90/month → interviews." },
+  { id: "r02", phase: "Every day — all 12 weeks", name: "2 LeetCode problems (easy → medium)", done: false,
+    url: "https://leetcode.com/problemset/" },
+  { id: "r03", phase: "Every day — all 12 weeks", name: "30 min English speaking out loud", done: false,
+    note: "Interviews are conversations. Record yourself answering 'tell me about your HR system'." },
+
+  { id: "r11", phase: "Weeks 1–2 · Testing (fastest red-flag fix)", name: "Learn Jest + write tests for your portfolio backend", done: false,
+    note: "'No tests in projects' filters out juniors instantly. Add real tests to the HR/SMLE repos and say so in the READMEs.",
+    url: "https://jestjs.io/docs/getting-started" },
+  { id: "r12", phase: "Weeks 1–2 · Testing (fastest red-flag fix)", name: "HackerRank certs: JavaScript + Problem Solving", done: false,
+    note: "Free, ~1h each, instant CV/LinkedIn lines.", url: "https://www.hackerrank.com/skills-verification" },
+
+  { id: "r21", phase: "Weeks 3–4 · TypeScript + SQL depth", name: "Convert one React project to TypeScript", done: false,
+    note: "TS is in almost every serious JS job post now.", url: "https://www.typescriptlang.org/docs/handbook/intro.html" },
+  { id: "r22", phase: "Weeks 3–4 · TypeScript + SQL depth", name: "HackerRank SQL cert + practice joins/window functions", done: false,
+    note: "You already design schemas — make the paper prove it.", url: "https://www.hackerrank.com/skills-verification" },
+
+  { id: "r31", phase: "Weeks 5–6 · Docker + CI/CD", name: "Dockerize your portfolio backend", done: false,
+    url: "https://docker-curriculum.com/" },
+  { id: "r32", phase: "Weeks 5–6 · Docker + CI/CD", name: "GitHub Actions: lint + build on every push to portfolio", done: false,
+    note: "A green checkmark on your repo is a hire-signal recruiters actually see.",
+    url: "https://docs.github.com/en/actions/quickstart" },
+
+  { id: "r41", phase: "Weeks 7–8 · Cloud (KSA is cloud-first)", name: "AWS Cloud Practitioner Essentials (free on Skill Builder)", done: false,
+    url: "https://skillbuilder.aws/" },
+  { id: "r42", phase: "Weeks 7–8 · Cloud (KSA is cloud-first)", name: "Deploy one real thing on AWS free tier (EC2 or S3+RDS)", done: false,
+    note: "'I deployed X on AWS' beats any certificate in an interview." },
+
+  { id: "r51", phase: "Weeks 9–10 · System design basics", name: "Work through system-design-primer (GitHub)", done: false,
+    url: "https://github.com/donnemartin/system-design-primer" },
+  { id: "r52", phase: "Weeks 9–10 · System design basics", name: "Write a 1-page design doc for your HR system (RBAC, caching, indexing)", done: false,
+    note: "Interview gold: 'here's how I designed a 25-branch system' with a diagram." },
+
+  { id: "r61", phase: "Weeks 11–12 · Interview mode", name: "3 mock interviews in English (Pramp — free peer mocks)", done: false,
+    url: "https://www.pramp.com/" },
+  { id: "r62", phase: "Weeks 11–12 · Interview mode", name: "Write STAR stories for your 4 featured projects", done: false,
+    note: "Situation → Task → Action → Result, with the numbers (600+ employees, 8,000+ questions)." },
+  { id: "r63", phase: "Weeks 11–12 · Interview mode", name: "Salary research: KSA junior SWE + Dublin junior (≥€40,904)", done: false,
+    note: "Never let 'what's your expected salary?' catch you cold." },
+];
+
 const DEFAULT_DATA = {
   jobs: [],
+
   skills: SEED_SKILLS,
   courses: SEED_COURSES,
+  ireland: SEED_IRELAND,
+  learn: SEED_ROADMAP,
   settings: { targetDate: "", dailyGoal: 7 },
 };
 
@@ -65,6 +192,8 @@ function load() {
       jobs: d.jobs || [],
       skills: d.skills || SEED_SKILLS,
       courses: d.courses || SEED_COURSES,
+      ireland: d.ireland || SEED_IRELAND,
+      learn: d.learn || SEED_ROADMAP,
       settings: d.settings || DEFAULT_DATA.settings,
     };
   } catch {
@@ -127,7 +256,7 @@ export default function Tracker() {
 
 function Board() {
   const [data, setData] = useState(load);
-  const [tab, setTab] = useState("jobs");
+  const [tab, setTab] = useState("live");
   const fileRef = useRef(null);
 
   useEffect(() => {
@@ -172,6 +301,8 @@ function Board() {
           jobs: d.jobs || [],
           skills: d.skills || SEED_SKILLS,
           courses: d.courses || SEED_COURSES,
+          ireland: d.ireland || SEED_IRELAND,
+          learn: d.learn || SEED_ROADMAP,
           settings: d.settings || DEFAULT_DATA.settings,
         });
       } catch {
@@ -220,14 +351,15 @@ function Board() {
       </div>
 
       <nav className="hq-tabs">
-        {[["jobs", "Jobs"], ["skills", "Skills gap"], ["courses", "Courses"]].map(([k, t]) => (
+        {[["live", "🔴 Live Jobs"], ["jobs", "My Pipeline"], ["ireland", "🇮🇪 Ireland"], ["learn", "📚 Learn"]].map(([k, t]) => (
           <button key={k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>{t}</button>
         ))}
       </nav>
 
+      {tab === "live" && <LiveJobs data={data} setData={setData} />}
       {tab === "jobs" && <Jobs data={data} setData={setData} counts={counts} />}
-      {tab === "skills" && <Skills data={data} setData={setData} />}
-      {tab === "courses" && <Courses data={data} setData={setData} />}
+      {tab === "ireland" && <Ireland data={data} setData={setData} />}
+      {tab === "learn" && <Learn data={data} setData={setData} />}
     </div>
   );
 }
@@ -404,6 +536,276 @@ function Courses({ data, setData }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+/* ================= LIVE JOBS — aggregated remote feed from the backend ================= */
+
+function timeAgo(iso) {
+  if (!iso) return "";
+  const m = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.round(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.round(h / 24)}d ago`;
+}
+
+const fitOf = (score) => (score >= 10 ? ["🔥 Strong fit", "#3ecf8e"] : score >= 6 ? ["Good fit", "#C147E9"] : ["Fit", "#8a8a99"]);
+
+const EU_RE = /(ireland|europe|emea|worldwide|anywhere|global|uk|remote)/i;
+
+function LiveJobs({ data, setData }) {
+  const cached = useMemo(() => {
+    try { return JSON.parse(localStorage.getItem(LIVE_KEY)) || null; } catch { return null; }
+  }, []);
+  const [jobs, setJobs] = useState(cached?.jobs || []);
+  const [updatedAt, setUpdatedAt] = useState(cached?.updatedAt || "");
+  const [loading, setLoading] = useState(!cached);
+  const [error, setError] = useState("");
+  const [q, setQ] = useState("");
+  const [source, setSource] = useState("All");
+  const [euOnly, setEuOnly] = useState(false);
+  const [hideSenior, setHideSenior] = useState(true); // he's junior — senior roles hidden by default
+  const [mailState, setMailState] = useState(""); // "" | "sending" | "sent" | "failed"
+
+  async function fetchJobs() {
+    setLoading(true);
+    setError("");
+    try {
+      const { data: res } = await axios.get(`${API_BASE}/jobs?limit=80`);
+      setJobs(res.jobs);
+      setUpdatedAt(res.updatedAt);
+      localStorage.setItem(LIVE_KEY, JSON.stringify({ jobs: res.jobs, updatedAt: res.updatedAt }));
+    } catch {
+      setError("Couldn't reach the job feed. Check your connection and hit Refresh.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => { fetchJobs(); }, []); // always refresh on open; cache paints instantly meanwhile
+
+  const savedLinks = useMemo(() => new Set(data.jobs.map((j) => j.link)), [data.jobs]);
+
+  const sourceNames = useMemo(() => ["All", ...new Set(jobs.map((j) => j.source))], [jobs]);
+
+  const shown = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    return jobs.filter((j) => {
+      if (source !== "All" && j.source !== source) return false;
+      if (euOnly && !EU_RE.test(j.location)) return false;
+      if (hideSenior && j.senior) return false;
+      if (needle && !(`${j.title} ${j.company} ${j.tags.join(" ")}`.toLowerCase().includes(needle))) return false;
+      return true;
+    });
+  }, [jobs, q, source, euOnly, hideSenior]);
+
+  function saveToPipeline(j) {
+    if (savedLinks.has(j.url)) return;
+    const job = {
+      id: uid(), company: j.company, role: j.title, link: j.url,
+      source: j.source, status: "Wishlist", dateApplied: "", nextFollowUp: "",
+      notes: `Remote · ${j.location}${j.salary ? ` · ${j.salary}` : ""}${j.tags.length ? ` · ${j.tags.join(", ")}` : ""} · via ${j.source} (Live Jobs)`,
+    };
+    setData((d) => ({ ...d, jobs: [job, ...d.jobs] }));
+  }
+
+  async function emailMe() {
+    setMailState("sending");
+    try {
+      await axios.post(`${API_BASE}/email-jobs`, { q });
+      setMailState("sent");
+    } catch {
+      setMailState("failed");
+    }
+    setTimeout(() => setMailState(""), 4000);
+  }
+
+  return (
+    <div>
+      <div className="hq-rule">
+        ✅ Showing <strong>online/remote roles only</strong> — every one fits your "must be online" rule.
+        On-site Qassim roles are excluded. Sorted by fit to your stack.
+      </div>
+
+      <div className="hq-livebar">
+        <input placeholder="Search title / company / tags…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <button onClick={fetchJobs} disabled={loading}>{loading ? "…" : "⟳ Refresh"}</button>
+        <button className="hq-mail" onClick={emailMe} disabled={mailState === "sending"}>
+          {mailState === "sending" ? "Sending…" : mailState === "sent" ? "✓ Sent to your inbox" : mailState === "failed" ? "✗ Failed — retry" : "✉️ Email me these"}
+        </button>
+      </div>
+
+      <div className="hq-filters">
+        {sourceNames.map((s) => (
+          <button key={s} className={source === s ? "on" : ""} onClick={() => setSource(s)}>{s}</button>
+        ))}
+        <button className={euOnly ? "on" : ""} onClick={() => setEuOnly(!euOnly)}>🇮🇪 EU / worldwide</button>
+        <button className={hideSenior ? "on" : ""} onClick={() => setHideSenior(!hideSenior)}
+                title="Hide senior / staff / lead roles">🎯 My level</button>
+        <span className="hq-muted hq-updated">
+          {updatedAt && `updated ${timeAgo(updatedAt)}`} · {shown.length} jobs
+        </span>
+      </div>
+
+      {error && <p className="hq-err hq-empty">{error}</p>}
+      {loading && jobs.length === 0 && <p className="hq-muted hq-empty">Fetching live jobs…</p>}
+      {!loading && !error && shown.length === 0 && (
+        <p className="hq-muted hq-empty">No matches — clear the search or hit Refresh.</p>
+      )}
+
+      <div className="hq-joblist">
+        {shown.map((j) => {
+          const [fitLabel, fitColor] = fitOf(j.score);
+          const saved = savedLinks.has(j.url);
+          return (
+            <div className="hq-job hq-live" key={j.id}>
+              <div className="hq-job-head">
+                <div className="hq-job-title">
+                  <strong>{j.title}</strong>
+                  <span> — {j.company}</span>
+                </div>
+                <div className="hq-job-controls">
+                  {j.senior && <span className="hq-fit hq-senior">senior — long shot</span>}
+                  <span className="hq-fit" style={{ color: fitColor, borderColor: fitColor }}>{fitLabel}</span>
+                </div>
+              </div>
+              <div className="hq-job-meta">
+                <span className="hq-tag hq-src">{j.source}</span>
+                <span className="hq-tag">🌍 {j.location || "Remote"}</span>
+                {j.salary && <span className="hq-tag hq-salary">💰 {j.salary}</span>}
+                {j.tags.slice(0, 5).map((t) => <span key={t} className="hq-tag">{t}</span>)}
+                <span className="hq-muted">{timeAgo(j.date)}</span>
+              </div>
+              <div className="hq-live-actions">
+                <a className="hq-apply" href={j.url} target="_blank" rel="noreferrer">Apply ↗</a>
+                <button className="hq-save" onClick={() => saveToPipeline(j)} disabled={saved}>
+                  {saved ? "✓ Saved" : "➕ Save to pipeline"}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="hq-muted hq-attrib">
+        Live jobs via RemoteOK · Jobicy · Arbeitnow · Remotive · We Work Remotely · Himalayas · Telegram (قناة IT Jobs) —
+        links go to the original posting.
+      </p>
+    </div>
+  );
+}
+
+/* ============== shared: phase-grouped checklist (Ireland plan + Learn roadmap) ============== */
+
+function GroupedChecklist({ items, onToggle }) {
+  const phases = useMemo(() => {
+    const m = new Map();
+    items.forEach((s) => {
+      if (!m.has(s.phase)) m.set(s.phase, []);
+      m.get(s.phase).push(s);
+    });
+    return [...m.entries()];
+  }, [items]);
+
+  return phases.map(([phase, steps]) => (
+    <div key={phase} className="hq-ie-phase">
+      <h3>{phase} <span className="hq-muted">({steps.filter((s) => s.done).length}/{steps.length})</span></h3>
+      <div className="hq-checklist">
+        {steps.map((s) => (
+          <div className={"hq-check" + (s.done ? " done" : "")} key={s.id}>
+            <input type="checkbox" checked={s.done} onChange={(e) => onToggle(s.id, e.target.checked)} />
+            <div className="hq-check-body">
+              <div className="hq-check-name">
+                {s.name}
+                {s.url && <a href={s.url} target="_blank" rel="noreferrer" className="hq-job-link">↗</a>}
+              </div>
+              {s.note && <div className="hq-muted hq-check-note">{s.note}</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ));
+}
+
+/* ================= IRELAND — full plan from 0 (Egyptian, living in KSA) ================= */
+
+function Ireland({ data, setData }) {
+  const items = useMemo(() => data.ireland || [], [data.ireland]);
+  const toggle = (id, done) =>
+    setData((d) => ({ ...d, ireland: d.ireland.map((s) => (s.id === id ? { ...s, done } : s)) }));
+
+  const done = items.filter((s) => s.done).length;
+  const pct = items.length ? Math.round((done / items.length) * 100) : 0;
+
+  return (
+    <div>
+      <div className="hq-rule hq-ie-head">
+        <div>
+          🇮🇪 <strong>Ireland from 0</strong> — Egyptian passport, living in KSA, graduating 2027.
+          Route: employer-sponsored <strong>Critical Skills Employment Permit</strong> (software dev is on the list)
+          → long-stay D visa → Stamp 4 after 2 years. English-speaking, EU tech capital, and its timezone
+          fits your after-3-PM rule while you study.
+        </div>
+        <div className="hq-ie-progress">
+          <div className="hq-ie-bar"><div style={{ width: `${pct}%` }} /></div>
+          <span className="hq-muted">{done}/{items.length} done</span>
+        </div>
+      </div>
+
+      <div className="hq-filters hq-ie-links">
+        {IRELAND_LINKS.map((l) => (
+          <a key={l.url} href={l.url} target="_blank" rel="noreferrer">{l.label} ↗</a>
+        ))}
+      </div>
+
+      <GroupedChecklist items={items} onToggle={toggle} />
+
+      <p className="hq-muted hq-attrib">
+        Figures verified July 2026 — citizensinformation.ie · enterprise.gov.ie (DETE) · irishimmigration.ie.
+        Rules change; re-check official pages before paperwork.
+      </p>
+    </div>
+  );
+}
+
+/* ================= LEARN — 12-week roadmap + skills gap + courses ================= */
+
+function Learn({ data, setData }) {
+  const [sub, setSub] = useState("roadmap");
+  const items = useMemo(() => data.learn || [], [data.learn]);
+  const toggle = (id, done) =>
+    setData((d) => ({ ...d, learn: d.learn.map((s) => (s.id === id ? { ...s, done } : s)) }));
+
+  const done = items.filter((s) => s.done).length;
+  const pct = items.length ? Math.round((done / items.length) * 100) : 0;
+
+  return (
+    <div>
+      <div className="hq-rule hq-ie-head">
+        <div>
+          📚 <strong>12 weeks to a stronger hire.</strong> One focus per two weeks, ordered by
+          hire-signal: tests → TypeScript/SQL → Docker/CI → cloud → system design → interview mode.
+          The daily block never changes. Same prep works for KSA, remote, and Ireland.
+        </div>
+        <div className="hq-ie-progress">
+          <div className="hq-ie-bar"><div style={{ width: `${pct}%` }} /></div>
+          <span className="hq-muted">{done}/{items.length} done</span>
+        </div>
+      </div>
+
+      <div className="hq-filters">
+        {[["roadmap", "🗓️ Roadmap"], ["skills", "Skills gap"], ["courses", "Certificates & courses"]].map(([k, t]) => (
+          <button key={k} className={sub === k ? "on" : ""} onClick={() => setSub(k)}>{t}</button>
+        ))}
+      </div>
+
+      {sub === "roadmap" && <GroupedChecklist items={items} onToggle={toggle} />}
+      {sub === "skills" && <Skills data={data} setData={setData} />}
+      {sub === "courses" && <Courses data={data} setData={setData} />}
     </div>
   );
 }
