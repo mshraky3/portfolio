@@ -165,6 +165,146 @@ const SEED_ROADMAP = [
     note: "Never let 'what's your expected salary?' catch you cold." },
 ];
 
+/* ================= APPLY KIT — cover letters, follow-ups, resume variants ================= */
+
+const ME = {
+  name: "Mahmoud Alshraky",
+  email: "alshraky3@gmail.com",
+  phone: "+966 58 261 9119",
+  portfolio: "https://web-dev-seven-iota.vercel.app",
+  github: "https://github.com/mshraky3",
+  linkedin: "https://www.linkedin.com/in/muhmod-alshraky-350b20318",
+};
+
+const PROOF_EN = `• Enterprise HR platform (healthcare): 600+ employees across 25 branches — 25-table PostgreSQL schema, JWT + role-based access control, caching and composite indexing for sub-second responses, automated document-expiry alerts, Arabic RTL reporting.
+• SMLE Question Bank (my own product): 8,000+ questions with adaptive mock tests — users measured a 2.3× proficiency improvement in 3 months.`;
+
+const SIGNATURE_EN = `Best regards,
+${ME.name}
+${ME.phone} · ${ME.email}
+Portfolio: ${ME.portfolio}
+GitHub: ${ME.github} · LinkedIn: ${ME.linkedin}`;
+
+const team = (company, manager) => (manager ? manager : `${company || "…"} Hiring Team`);
+const joinParas = (...ps) => ps.filter(Boolean).join("\n\n");
+
+const LETTER_TEMPLATES = {
+  ksa_en: {
+    label: "🇸🇦 KSA (English)",
+    dir: "ltr",
+    build: ({ company, role, manager, custom }) => ({
+      subject: `Application for ${role || "Software Engineer"} — ${ME.name}`,
+      body: joinParas(
+        `Dear ${team(company, manager)},`,
+        `I'm applying for the ${role || "Software Engineer"} role at ${company || "your company"}. I'm a full-stack software engineer based in Qassim, Saudi Arabia (React, Node.js, PostgreSQL), and I build production systems that real organizations run on:`,
+        PROOF_EN,
+        custom,
+        `I'm based locally, can interview any time, and can commit to consistent daily hours — full afternoons and evenings during the semester, full-time during breaks. I deliver end to end: schema design, API, front-end, deployment.`,
+        SIGNATURE_EN
+      ),
+    }),
+  },
+  ksa_ar: {
+    label: "🇸🇦 السعودية (عربي)",
+    dir: "rtl",
+    build: ({ company, role, manager, custom }) => ({
+      subject: `التقديم على وظيفة ${role || "مهندس برمجيات"} — محمود الشراكي`,
+      body: joinParas(
+        `السلام عليكم ورحمة الله وبركاته،`,
+        `${manager ? `الأستاذ/ ${manager} المحترم،` : `فريق التوظيف في ${company || "شركتكم"} المحترمين،`}`,
+        `أتقدم بطلب للانضمام إلى ${company || "شركتكم"} في وظيفة ${role || "مهندس برمجيات"}. أنا مهندس برمجيات Full-Stack مقيم في القصيم، أعمل بتقنيات React وNode.js وPostgreSQL، وقمت ببناء أنظمة إنتاجية تعمل عليها منشآت حقيقية:`,
+        `• نظام موارد بشرية مؤسسي لشركة رعاية صحية يخدم أكثر من 600 موظف في 25 فرعًا — تصميم قاعدة بيانات (25 جدولًا)، صلاحيات RBAC، تنبيهات آلية لانتهاء الوثائق، وتقارير عربية.
+• منصة بنك أسئلة SMLE بأكثر من 8000 سؤال واختبارات محاكية — تحسّن مقاس في مستوى المستخدمين بلغ 2.3×.`,
+        custom,
+        `أقيم في القصيم ويمكنني الحضور للمقابلة في أي وقت، مع التزام كامل بساعات عمل ثابتة (بعد الظهر والمساء خلال الفصل الدراسي، ودوام كامل في الإجازات).`,
+        `مع خالص التحية،
+محمود الشراكي
+${ME.phone} · ${ME.email}
+${ME.portfolio}`
+      ),
+    }),
+  },
+  ireland: {
+    label: "🇮🇪 Ireland (visa-honest)",
+    dir: "ltr",
+    build: ({ company, role, manager, custom }) => ({
+      subject: `${role || "Software Engineer"} — Full-Stack Engineer (React/Node/PostgreSQL), open to sponsorship or remote start`,
+      body: joinParas(
+        `Dear ${team(company, manager)},`,
+        `I'm applying for the ${role || "Software Engineer"} role at ${company || "your company"}. I'm a full-stack software engineer (React, Node.js, PostgreSQL) currently based in Saudi Arabia, and I build production systems end to end:`,
+        PROOF_EN,
+        custom,
+        `On logistics, up front: I'm an Egyptian citizen. Software developer is on Ireland's Critical Skills Occupations List, so an employer-sponsored Critical Skills Employment Permit is the standard route — and I'm equally happy to start as a remote contractor first. My timezone (UTC+3) is only 2–3 hours ahead of Dublin, so I overlap your entire business day.`,
+        SIGNATURE_EN
+      ),
+    }),
+  },
+  remote: {
+    label: "🌍 Remote-first",
+    dir: "ltr",
+    build: ({ company, role, manager, custom }) => ({
+      subject: `${role || "Software Engineer"} — Remote Full-Stack Engineer (React/Node/PostgreSQL, UTC+3)`,
+      body: joinParas(
+        `Hi ${manager || `${company || "…"} team`},`,
+        `I'm applying for the ${role || "Software Engineer"} role. I'm a remote-first full-stack engineer (React, Node.js, PostgreSQL) at UTC+3 — full overlap with European hours and 6+ hours with US-East. I build and run production systems end to end:`,
+        PROOF_EN,
+        custom,
+        `Everything above I designed, built, deployed, and operate myself (Vercel serverless, PostgreSQL) — I'm used to owning outcomes without hand-holding, and I communicate async in fluent English.`,
+        SIGNATURE_EN
+      ),
+    }),
+  },
+};
+
+function followUpEmail(j) {
+  const role = j.role || "software engineer";
+  const when = j.dateApplied ? ` on ${j.dateApplied}` : " recently";
+  return `Subject: Following up — ${role} application (${ME.name})
+
+Hi ${j.company} team,
+
+I applied for the ${role} role${when} and wanted to follow up — I'm still very interested. One thing worth adding since I applied: my enterprise HR platform now serves 600+ employees across 25 branches, and I'd be glad to walk you through how I built it (React, Node.js, PostgreSQL).
+
+Everything is here if easier — portfolio: ${ME.portfolio} · GitHub: ${ME.github}
+
+Best regards,
+${ME.name}
+${ME.phone} · ${ME.email}`;
+}
+
+const researchLinks = (company) => {
+  const c = encodeURIComponent(company || "");
+  return [
+    ["Google", `https://www.google.com/search?q=${c}`],
+    ["Careers page", `https://www.google.com/search?q=${c}+careers`],
+    ["LinkedIn", `https://www.linkedin.com/search/results/companies/?keywords=${c}`],
+    ["Glassdoor", `https://www.glassdoor.com/Search/results.htm?keyword=${c}`],
+    ["Salaries", `https://www.google.com/search?q=site%3Alevels.fyi+OR+site%3Aglassdoor.com+${c}+salary`],
+    ["IE sponsor register", "https://enterprise.gov.ie/en/publications/companies-issued-with-permits-2026.html"],
+  ];
+};
+
+const RESUME_VARIANTS = [
+  {
+    file: "Mahmoud_Alshraky_Resume_KSA.pdf",
+    flag: "🇸🇦", name: "KSA / Gulf",
+    when: "Saudi companies, Gulf companies, anything via Bayt or local referrals.",
+    diff: "Headline: “Software Engineer | CS Student”. Leads with local presence in Qassim.",
+  },
+  {
+    file: "Mahmoud_Alshraky_Resume_Ireland.pdf",
+    flag: "🇮🇪", name: "Ireland / EU",
+    when: "Irish and EU applications, anything mentioning sponsorship.",
+    diff: "Summary states the Critical Skills route + open to remote start + timezone overlap.",
+  },
+  {
+    file: "Mahmoud_Alshraky_Resume_Remote.pdf",
+    flag: "🌍", name: "Remote worldwide",
+    when: "RemoteOK / WWR / Jobicy / Himalayas applications — any fully-remote role.",
+    diff: "Headline: “Remote Full-Stack Software Engineer”. Summary proves async + self-managed delivery.",
+  },
+];
+
 const DEFAULT_DATA = {
   jobs: [],
 
@@ -247,6 +387,17 @@ export default function Tracker() {
           )}
           {err && <div className="hq-err">{err}</div>}
           <button type="submit">{hasPass ? "Unlock" : "Create & Enter"}</button>
+          {hasPass && (
+            <button type="button" className="hq-gate-reset"
+              onClick={() => {
+                if (!window.confirm("Reset the passphrase? Your saved jobs and checklists stay — you'll just set a new passphrase.")) return;
+                localStorage.removeItem(PASS_KEY);
+                setHasPass(false);
+                setPw(""); setPw2(""); setErr("");
+              }}>
+              Forgot it? Reset passphrase (keeps your data)
+            </button>
+          )}
         </form>
       </div>
     );
@@ -281,6 +432,27 @@ function Board() {
     if (!data.settings.targetDate) return null;
     return Math.ceil((new Date(data.settings.targetDate) - new Date()) / 864e5);
   }, [data.settings.targetDate]);
+
+  // Applications going stale: follow-up date passed, or applied 7+ days ago
+  // with no follow-up scheduled. Most offers come from the follow-up, not the apply.
+  const followUps = useMemo(() => {
+    const t = today();
+    const weekAgo = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+    return data.jobs.filter(
+      (j) =>
+        (j.status === "Applied" || j.status === "Interview") &&
+        ((j.nextFollowUp && j.nextFollowUp <= t) ||
+          (!j.nextFollowUp && j.dateApplied && j.dateApplied <= weekAgo))
+    );
+  }, [data.jobs]);
+  const followUpIds = useMemo(() => new Set(followUps.map((j) => j.id)), [followUps]);
+
+  // "✍️ Letter" on any job card jumps here with company/role prefilled
+  const [letterJob, setLetterJob] = useState(null);
+  const openLetter = (job) => {
+    setLetterJob({ company: job.company || "", role: job.role || "" });
+    setTab("kit");
+  };
 
   // ---- export / import ----
   function exportJSON() {
@@ -332,12 +504,25 @@ function Board() {
         <Stat label="Applied this week" value={appliedThisWeek} sub={`goal ${data.settings.dailyGoal}/day`} />
         <Stat label="Interviews" value={counts.Interview} accent="#f5a623" />
         <Stat label="Offers" value={counts.Offer} accent="#3ecf8e" />
+        <Stat label="Follow-ups due" value={followUps.length}
+              accent={followUps.length > 0 ? "#e05260" : "#3ecf8e"} />
         <Stat
           label="Days to target"
           value={daysLeft === null ? "—" : daysLeft}
           accent={daysLeft !== null && daysLeft < 10 ? "#e05260" : "#C147E9"}
         />
       </div>
+
+      {followUps.length > 0 && (
+        <div className="hq-alert">
+          <span>
+            ⏰ <strong>{followUps.length} application{followUps.length > 1 ? "s" : ""} going stale:</strong>{" "}
+            {followUps.slice(0, 4).map((j) => j.company).join(" · ")}{followUps.length > 4 ? " …" : ""}
+            {" "}— a 3-line follow-up doubles your reply rate.
+          </span>
+          <button onClick={() => setTab("jobs")}>Handle them →</button>
+        </div>
+      )}
 
       <div className="hq-settings">
         <label>Target date:
@@ -351,13 +536,14 @@ function Board() {
       </div>
 
       <nav className="hq-tabs">
-        {[["live", "🔴 Live Jobs"], ["jobs", "My Pipeline"], ["ireland", "🇮🇪 Ireland"], ["learn", "📚 Learn"]].map(([k, t]) => (
+        {[["live", "🔴 Live Jobs"], ["jobs", "My Pipeline"], ["kit", "🧰 Apply Kit"], ["ireland", "🇮🇪 Ireland"], ["learn", "📚 Learn"]].map(([k, t]) => (
           <button key={k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>{t}</button>
         ))}
       </nav>
 
-      {tab === "live" && <LiveJobs data={data} setData={setData} />}
-      {tab === "jobs" && <Jobs data={data} setData={setData} counts={counts} />}
+      {tab === "live" && <LiveJobs data={data} setData={setData} onLetter={openLetter} />}
+      {tab === "jobs" && <Jobs data={data} setData={setData} counts={counts} onLetter={openLetter} followUpIds={followUpIds} />}
+      {tab === "kit" && <ApplyKit prefill={letterJob} />}
       {tab === "ireland" && <Ireland data={data} setData={setData} />}
       {tab === "learn" && <Learn data={data} setData={setData} />}
     </div>
@@ -374,9 +560,19 @@ function Stat({ label, value, sub, accent = "#C147E9" }) {
   );
 }
 
-function Jobs({ data, setData, counts }) {
+function Jobs({ data, setData, counts, onLetter, followUpIds }) {
   const [form, setForm] = useState({ company: "", role: "", link: "", source: "LinkedIn" });
   const [filter, setFilter] = useState("All");
+  const [copiedId, setCopiedId] = useState(null);
+  const [researchId, setResearchId] = useState(null);
+
+  // Copy a ready-to-send follow-up and push the next reminder 5 days out
+  const copyFollowUp = (j) => {
+    navigator.clipboard.writeText(followUpEmail(j));
+    upd(j.id, { nextFollowUp: new Date(Date.now() + 5 * 864e5).toISOString().slice(0, 10) });
+    setCopiedId(j.id);
+    setTimeout(() => setCopiedId(null), 2500);
+  };
 
   const add = (e) => {
     e.preventDefault();
@@ -420,13 +616,16 @@ function Jobs({ data, setData, counts }) {
       {shown.length === 0 && <p className="hq-muted hq-empty">No jobs here yet. Add your first target above ☝️</p>}
 
       <div className="hq-joblist">
-        {shown.map((j) => (
-          <div className="hq-job" key={j.id} style={{ borderLeftColor: STATUS_COLOR[j.status] }}>
+        {shown.map((j) => {
+          const overdue = followUpIds?.has(j.id);
+          return (
+          <div className="hq-job" key={j.id} style={{ borderLeftColor: overdue ? "#e05260" : STATUS_COLOR[j.status] }}>
             <div className="hq-job-head">
               <div className="hq-job-title">
                 <strong>{j.company}</strong>
                 {j.role && <span> — {j.role}</span>}
                 {j.link && <a href={j.link} target="_blank" rel="noreferrer" className="hq-job-link">↗</a>}
+                {overdue && <span className="hq-tag hq-overdue">⚠ follow-up due</span>}
               </div>
               <div className="hq-job-controls">
                 <select value={j.status} onChange={(e) => {
@@ -444,10 +643,33 @@ function Jobs({ data, setData, counts }) {
               <label>Applied: <input type="date" value={j.dateApplied} onChange={(e) => upd(j.id, { dateApplied: e.target.value })} /></label>
               <label>Follow-up: <input type="date" value={j.nextFollowUp} onChange={(e) => upd(j.id, { nextFollowUp: e.target.value })} /></label>
             </div>
+            <div className="hq-live-actions">
+              <button className="hq-save" title="Copies a ready follow-up email and re-schedules the reminder +5 days"
+                      onClick={() => copyFollowUp(j)}>
+                {copiedId === j.id ? "✓ Copied — now send it" : "📨 Copy follow-up"}
+              </button>
+              <button className="hq-save" onClick={() => onLetter(j)}>✍️ Letter</button>
+              <button className="hq-save" onClick={() => setResearchId(researchId === j.id ? null : j.id)}>
+                🔍 Research
+              </button>
+            </div>
+            {researchId === j.id && (
+              <div className="hq-research">
+                <div className="hq-filters hq-ie-links">
+                  {researchLinks(j.company).map(([label, url]) => (
+                    <a key={label} href={url} target="_blank" rel="noreferrer">{label} ↗</a>
+                  ))}
+                </div>
+                <textarea className="hq-job-notes"
+                          placeholder="Research notes: what they do · size · sponsors visas? · salary range · why I fit"
+                          defaultValue={j.research || ""} onBlur={(e) => upd(j.id, { research: e.target.value })} />
+              </div>
+            )}
             <textarea className="hq-job-notes" placeholder="What did I do? (tailored resume? cover note? who I contacted? interview notes?)"
                       defaultValue={j.notes} onBlur={(e) => upd(j.id, { notes: e.target.value })} />
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -556,7 +778,7 @@ const fitOf = (score) => (score >= 10 ? ["🔥 Strong fit", "#3ecf8e"] : score >
 
 const EU_RE = /(ireland|europe|emea|worldwide|anywhere|global|uk|remote)/i;
 
-function LiveJobs({ data, setData }) {
+function LiveJobs({ data, setData, onLetter }) {
   const cached = useMemo(() => {
     try { return JSON.parse(localStorage.getItem(LIVE_KEY)) || null; } catch { return null; }
   }, []);
@@ -569,6 +791,7 @@ function LiveJobs({ data, setData }) {
   const [euOnly, setEuOnly] = useState(false);
   const [hideSenior, setHideSenior] = useState(true); // he's junior — senior roles hidden by default
   const [mailState, setMailState] = useState(""); // "" | "sending" | "sent" | "failed"
+  const [researchId, setResearchId] = useState(null);
 
   async function fetchJobs() {
     setLoading(true);
@@ -684,7 +907,19 @@ function LiveJobs({ data, setData }) {
                 <button className="hq-save" onClick={() => saveToPipeline(j)} disabled={saved}>
                   {saved ? "✓ Saved" : "➕ Save to pipeline"}
                 </button>
+                <button className="hq-save" onClick={() => onLetter({ company: j.company, role: j.title })}>✍️ Letter</button>
+                <button className="hq-save" onClick={() => setResearchId(researchId === j.id ? null : j.id)}>🔍</button>
               </div>
+              {researchId === j.id && (
+                <div className="hq-research">
+                  <div className="hq-filters hq-ie-links">
+                    {researchLinks(j.company).map(([label, url]) => (
+                      <a key={label} href={url} target="_blank" rel="noreferrer">{label} ↗</a>
+                    ))}
+                  </div>
+                  <span className="hq-muted">Save to pipeline first if you want to keep research notes.</span>
+                </div>
+              )}
             </div>
           );
         })}
@@ -806,6 +1041,111 @@ function Learn({ data, setData }) {
       {sub === "roadmap" && <GroupedChecklist items={items} onToggle={toggle} />}
       {sub === "skills" && <Skills data={data} setData={setData} />}
       {sub === "courses" && <Courses data={data} setData={setData} />}
+    </div>
+  );
+}
+
+/* ================= APPLY KIT — cover letter generator + resume variants ================= */
+
+function ApplyKit({ prefill }) {
+  const [sub, setSub] = useState("letter");
+  return (
+    <div>
+      <div className="hq-filters">
+        {[["letter", "✍️ Cover letter"], ["resumes", "📄 Resume variants"]].map(([k, t]) => (
+          <button key={k} className={sub === k ? "on" : ""} onClick={() => setSub(k)}>{t}</button>
+        ))}
+      </div>
+      {sub === "letter" && <CoverLetter prefill={prefill} />}
+      {sub === "resumes" && <Resumes />}
+    </div>
+  );
+}
+
+function CoverLetter({ prefill }) {
+  const [tpl, setTpl] = useState("ksa_en");
+  const [fields, setFields] = useState({ company: "", role: "", manager: "", custom: "" });
+  const [copied, setCopied] = useState(""); // "" | "subject" | "body"
+
+  // A "✍️ Letter" click on any job card lands here with company/role filled in
+  useEffect(() => {
+    if (prefill) setFields((f) => ({ ...f, company: prefill.company || "", role: prefill.role || "" }));
+  }, [prefill]);
+
+  const template = LETTER_TEMPLATES[tpl];
+  const gen = useMemo(() => template.build(fields), [template, fields]);
+  const [body, setBody] = useState(gen.body);
+  useEffect(() => setBody(gen.body), [gen.body]); // regenerate when fields/template change
+
+  const setF = (k) => (e) => setFields((f) => ({ ...f, [k]: e.target.value }));
+  const copy = (what, text) => {
+    navigator.clipboard.writeText(text);
+    setCopied(what);
+    setTimeout(() => setCopied(""), 2000);
+  };
+  const mailto = `mailto:?subject=${encodeURIComponent(gen.subject)}&body=${encodeURIComponent(body)}`;
+
+  return (
+    <div>
+      <div className="hq-rule">
+        ✍️ Pick a template, fill company + role, add <strong>one honest line about why them</strong> (it's what
+        separates you from mass-appliers), then copy. Editing the preview is fine — it regenerates when fields change.
+      </div>
+
+      <div className="hq-letter-form">
+        <select value={tpl} onChange={(e) => setTpl(e.target.value)}>
+          {Object.entries(LETTER_TEMPLATES).map(([k, t]) => <option key={k} value={k}>{t.label}</option>)}
+        </select>
+        <input placeholder="Company *" value={fields.company} onChange={setF("company")} />
+        <input placeholder="Role / title *" value={fields.role} onChange={setF("role")} />
+        <input placeholder="Hiring manager name (optional)" value={fields.manager} onChange={setF("manager")} />
+        <input className="hq-letter-custom" value={fields.custom} onChange={setF("custom")}
+               placeholder="Why this company? One specific sentence — e.g. 'I've used your product X and …'" />
+      </div>
+
+      <div className="hq-subject-row">
+        <strong className="hq-subject" dir={template.dir}>{gen.subject}</strong>
+        <button className="hq-save" onClick={() => copy("subject", gen.subject)}>
+          {copied === "subject" ? "✓" : "Copy subject"}
+        </button>
+      </div>
+
+      <textarea className="hq-letter-body" dir={template.dir} value={body}
+                onChange={(e) => setBody(e.target.value)} spellCheck={false} />
+
+      <div className="hq-live-actions">
+        <button className="hq-apply hq-apply-btn" onClick={() => copy("body", body)}>
+          {copied === "body" ? "✓ Copied — paste it in the application" : "📋 Copy letter"}
+        </button>
+        <a className="hq-save" href={mailto}>📧 Open in email app</a>
+      </div>
+    </div>
+  );
+}
+
+function Resumes() {
+  return (
+    <div>
+      <div className="hq-rule">
+        📄 <strong>Three targeted one-pagers, same facts, different emphasis.</strong> A Saudi HR screener and a
+        Dublin recruiter scan for different things — send each one the version written for them.
+        (Regenerate after edits: <code>python resume-src/gen_resume.py &lt;out.pdf&gt; ksa|ireland|remote</code>)
+      </div>
+      <div className="hq-kit-grid">
+        {RESUME_VARIANTS.map((v) => (
+          <div className="hq-kit-card" key={v.file}>
+            <div className="hq-kit-flag">{v.flag}</div>
+            <strong>{v.name}</strong>
+            <div className="hq-muted"><strong>Use for:</strong> {v.when}</div>
+            <div className="hq-muted">{v.diff}</div>
+            <a className="hq-apply hq-kit-dl" href={`/resumes/${v.file}`} download>⬇ Download PDF</a>
+          </div>
+        ))}
+      </div>
+      <p className="hq-muted hq-attrib">
+        Rule of thumb: KSA version for anything Gulf · Ireland version when sponsorship might come up ·
+        Remote version for every job in the Live Jobs feed.
+      </p>
     </div>
   );
 }
