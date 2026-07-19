@@ -11,7 +11,7 @@ function Body({ language, setLanguage }) {
 
   const translations = {
     en: {
-      title: "I'm Mahmoud.",
+      title: "I'm Mahmoud",
       buttonText: "GET IN TOUCH",
       specialties: "Specialties"
     },
