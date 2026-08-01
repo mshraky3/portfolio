@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import axios from "axios";
 import "./Tracker.css";
+import { HOME, EMPLOYERS, SECTORS, FIT, RINGS, CV_PROFILES, CV_ORDER } from "./qassimMap";
 
 /*
  * PRIVATE JOB-HUNT TRACKER — local-only, passphrase-gated.
@@ -10,8 +11,8 @@ import "./Tracker.css";
  */
 
 const DATA_KEY = "jht_data_v1";
-const PASS_KEY = "jht_pass_v1";
 const LIVE_KEY = "jht_live_v1";
+const HQ_PASSPHRASE = "3303"; // hardcoded on purpose — private checklist, not real security
 
 // Same backend the contact form uses. Override locally with VITE_API_BASE.
 const API_BASE = import.meta.env.VITE_API_BASE || "https://portfolio-api-rose.vercel.app";
@@ -284,27 +285,6 @@ const researchLinks = (company) => {
   ];
 };
 
-const RESUME_VARIANTS = [
-  {
-    file: "Mahmoud_Alshraky_Resume_KSA.pdf",
-    flag: "🇸🇦", name: "KSA / Gulf",
-    when: "Saudi companies, Gulf companies, anything via Bayt or local referrals.",
-    diff: "Headline: “Software Engineer | CS Student”. Leads with local presence in Qassim.",
-  },
-  {
-    file: "Mahmoud_Alshraky_Resume_Ireland.pdf",
-    flag: "🇮🇪", name: "Ireland / EU",
-    when: "Irish and EU applications, anything mentioning sponsorship.",
-    diff: "Summary states the Critical Skills route + open to remote start + timezone overlap.",
-  },
-  {
-    file: "Mahmoud_Alshraky_Resume_Remote.pdf",
-    flag: "🌍", name: "Remote worldwide",
-    when: "RemoteOK / WWR / Jobicy / Himalayas applications — any fully-remote role.",
-    diff: "Headline: “Remote Full-Stack Software Engineer”. Summary proves async + self-managed delivery.",
-  },
-];
-
 const DEFAULT_DATA = {
   jobs: [],
 
@@ -312,13 +292,10 @@ const DEFAULT_DATA = {
   courses: SEED_COURSES,
   ireland: SEED_IRELAND,
   learn: SEED_ROADMAP,
+  // Per-employer progress for the Qassim 40 km map: { [employerId]: { stage, note } }
+  qassim: {},
   settings: { targetDate: "", dailyGoal: 7 },
 };
-
-async function sha256(text) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}
 
 const uid = () => Math.random().toString(36).slice(2, 9);
 const today = () => new Date().toISOString().slice(0, 10);
@@ -334,6 +311,7 @@ function load() {
       courses: d.courses || SEED_COURSES,
       ireland: d.ireland || SEED_IRELAND,
       learn: d.learn || SEED_ROADMAP,
+      qassim: d.qassim || {},
       settings: d.settings || DEFAULT_DATA.settings,
     };
   } catch {
@@ -343,29 +321,21 @@ function load() {
 
 export default function Tracker() {
   const [unlocked, setUnlocked] = useState(false);
-  const [hasPass, setHasPass] = useState(false);
   const [pw, setPw] = useState("");
-  const [pw2, setPw2] = useState("");
   const [err, setErr] = useState("");
 
   useEffect(() => {
-    setHasPass(!!localStorage.getItem(PASS_KEY));
     document.title = "HQ";
   }, []);
 
-  async function submitPass(e) {
+  function submitPass(e) {
     e.preventDefault();
-    setErr("");
-    if (!hasPass) {
-      if (pw.length < 4) return setErr("Use at least 4 characters.");
-      if (pw !== pw2) return setErr("Passphrases don't match.");
-      localStorage.setItem(PASS_KEY, await sha256(pw));
+    if (pw === HQ_PASSPHRASE) {
       setUnlocked(true);
-      return;
+      setErr("");
+    } else {
+      setErr("Wrong passphrase.");
     }
-    const h = await sha256(pw);
-    if (h === localStorage.getItem(PASS_KEY)) setUnlocked(true);
-    else setErr("Wrong passphrase.");
   }
 
   if (!unlocked) {
@@ -373,31 +343,12 @@ export default function Tracker() {
       <div className="hq-gate">
         <form className="hq-gate-card" onSubmit={submitPass}>
           <div className="hq-lock">🔒</div>
-          <h1>{hasPass ? "Enter passphrase" : "Create a passphrase"}</h1>
-          <p className="hq-muted">
-            {hasPass
-              ? "Private job-hunt HQ. This device only."
-              : "First time here — set a passphrase. It's stored hashed in this browser only."}
-          </p>
+          <h1>Enter passphrase</h1>
+          <p className="hq-muted">Private job-hunt HQ. This device only.</p>
           <input type="password" autoFocus placeholder="Passphrase" value={pw}
                  onChange={(e) => setPw(e.target.value)} />
-          {!hasPass && (
-            <input type="password" placeholder="Confirm passphrase" value={pw2}
-                   onChange={(e) => setPw2(e.target.value)} />
-          )}
           {err && <div className="hq-err">{err}</div>}
-          <button type="submit">{hasPass ? "Unlock" : "Create & Enter"}</button>
-          {hasPass && (
-            <button type="button" className="hq-gate-reset"
-              onClick={() => {
-                if (!window.confirm("Reset the passphrase? Your saved jobs and checklists stay — you'll just set a new passphrase.")) return;
-                localStorage.removeItem(PASS_KEY);
-                setHasPass(false);
-                setPw(""); setPw2(""); setErr("");
-              }}>
-              Forgot it? Reset passphrase (keeps your data)
-            </button>
-          )}
+          <button type="submit">Unlock</button>
         </form>
       </div>
     );
@@ -475,6 +426,7 @@ function Board() {
           courses: d.courses || SEED_COURSES,
           ireland: d.ireland || SEED_IRELAND,
           learn: d.learn || SEED_ROADMAP,
+          qassim: d.qassim || {},
           settings: d.settings || DEFAULT_DATA.settings,
         });
       } catch {
@@ -536,16 +488,19 @@ function Board() {
       </div>
 
       <nav className="hq-tabs">
-        {[["live", "🔴 Live Jobs"], ["jobs", "My Pipeline"], ["kit", "🧰 Apply Kit"], ["ireland", "🇮🇪 Ireland"], ["learn", "📚 Learn"]].map(([k, t]) => (
+        {[["live", "🔴 Live Jobs"], ["jobs", "My Pipeline"], ["qassim", "🗺️ Qassim 40km"], ["kit", "🧰 Apply Kit"], ["ireland", "🇮🇪 Ireland"], ["learn", "📚 Learn"]].map(([k, t]) => (
           <button key={k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>{t}</button>
         ))}
       </nav>
 
-      {tab === "live" && <LiveJobs data={data} setData={setData} onLetter={openLetter} />}
-      {tab === "jobs" && <Jobs data={data} setData={setData} counts={counts} onLetter={openLetter} followUpIds={followUpIds} />}
-      {tab === "kit" && <ApplyKit prefill={letterJob} />}
-      {tab === "ireland" && <Ireland data={data} setData={setData} />}
-      {tab === "learn" && <Learn data={data} setData={setData} />}
+      <div className="hq-tabpanel" key={tab}>
+        {tab === "live" && <LiveJobs data={data} setData={setData} onLetter={openLetter} />}
+        {tab === "jobs" && <Jobs data={data} setData={setData} counts={counts} onLetter={openLetter} followUpIds={followUpIds} />}
+        {tab === "qassim" && <QassimMap data={data} setData={setData} onLetter={openLetter} />}
+        {tab === "kit" && <ApplyKit prefill={letterJob} />}
+        {tab === "ireland" && <Ireland data={data} setData={setData} />}
+        {tab === "learn" && <Learn data={data} setData={setData} />}
+      </div>
     </div>
   );
 }
@@ -926,7 +881,7 @@ function LiveJobs({ data, setData, onLetter }) {
       </div>
 
       <p className="hq-muted hq-attrib">
-        Live jobs via RemoteOK · Jobicy · Arbeitnow · Remotive · We Work Remotely · Himalayas · Telegram (قناة IT Jobs) —
+        Live jobs via Jobicy · Arbeitnow · Remotive · We Work Remotely · Himalayas · Telegram (قناة IT Jobs) —
         links go to the original posting.
       </p>
     </div>
@@ -964,6 +919,220 @@ function GroupedChecklist({ items, onToggle }) {
       </div>
     </div>
   ));
+}
+
+/* ============ QASSIM 40 km — every employer within driving distance of home ============ */
+
+const STAGES = ["Not touched", "Researched", "Contacted", "Meeting", "Dead end"];
+const STAGE_COLOR = {
+  "Not touched": "#8a8a99",
+  Researched: "#7fb8ff",
+  Contacted: "#C147E9",
+  Meeting: "#3ecf8e",
+  "Dead end": "#6a6a78",
+};
+
+// Google Maps opens on the Arabic name — local listings are indexed in Arabic.
+const mapsUrl = (e) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${e.ar || e.name} ${e.city}`)}`;
+
+function QassimMap({ data, setData, onLetter }) {
+  const [sector, setSector] = useState("All");
+  const [realisticOnly, setRealisticOnly] = useState(false);
+  const [openId, setOpenId] = useState(null);
+  const [addedId, setAddedId] = useState(null);
+
+  const prog = data.qassim || {};
+  const patchEmp = (id, patch) =>
+    setData((d) => ({
+      ...d,
+      qassim: { ...(d.qassim || {}), [id]: { ...((d.qassim || {})[id] || {}), ...patch } },
+    }));
+
+  // Push an employer straight into My Pipeline, pre-filled with the research already done here.
+  const addToPipeline = (e) => {
+    const job = {
+      id: uid(),
+      company: e.name,
+      role: e.role,
+      link: e.links[0]?.[1] || "",
+      source: "Company site",
+      status: "Wishlist",
+      dateApplied: "",
+      nextFollowUp: "",
+      notes: `${e.km} km · ${e.city}. Send the ${CV_PROFILES[e.cv].name} CV (${CV_PROFILES[e.cv].file}).`,
+      research: `${e.what}\n\nRoute in: ${e.apply}`,
+    };
+    setData((d) => ({ ...d, jobs: [job, ...d.jobs] }));
+    patchEmp(e.id, { stage: prog[e.id]?.stage === "Not touched" || !prog[e.id]?.stage ? "Researched" : prog[e.id].stage });
+    setAddedId(e.id);
+    setTimeout(() => setAddedId(null), 2200);
+  };
+
+  const shown = useMemo(
+    () =>
+      EMPLOYERS.filter(
+        (e) => (sector === "All" || e.sector === sector) && (!realisticOnly || e.fit === "strong")
+      ),
+    [sector, realisticOnly]
+  );
+
+  const strong = EMPLOYERS.filter((e) => e.fit === "strong").length;
+  const touched = EMPLOYERS.filter((e) => {
+    const s = prog[e.id]?.stage;
+    return s && s !== "Not touched";
+  }).length;
+
+  return (
+    <div>
+      <div className="hq-rule hq-ie-head">
+        <div>
+          🗺️ <strong>{EMPLOYERS.length} employers within 40 km of your pin</strong> ({HOME.label} — {HOME.note}).
+          The radius reaches Al-Bukayriyah, Riyadh Al-Khabra, Ar-Rass, Unaizah, Qassim University, and just
+          touches Buraydah city. Every one of these is compatible with your rule: <strong>Qassim work only
+          after 3 PM</strong> while you're still a student.
+        </div>
+        <div className="hq-emp-stats">
+          <span><strong>{strong}</strong> realistic</span>
+          <span><strong>{touched}</strong> touched</span>
+          <span><strong>{EMPLOYERS.length - touched}</strong> untouched</span>
+        </div>
+      </div>
+
+      <div className="hq-rule hq-emp-truth">
+        <strong>The honest filter.</strong> You're an Egyptian national on a student track, so the split that
+        matters here is not big-vs-small — it's <em>who is legally free to hire you</em>. Private software houses,
+        private universities, private hospitals and private industry hire non-Saudis every day.
+        Government bodies, ministry hospitals and TVTC effectively do not. For those, the route is the
+        <em> contractor</em> that builds their systems — which you find on{" "}
+        <a href="https://tenders.etimad.sa/" target="_blank" rel="noreferrer">Etimad</a>. Cards marked{" "}
+        <span style={{ color: FIT.stretch.color }}>{FIT.stretch.label}</span> are listed so you can rule them out
+        deliberately instead of wondering.
+      </div>
+
+      <div className="hq-filters">
+        <button className={sector === "All" ? "on" : ""} onClick={() => setSector("All")}>
+          All ({EMPLOYERS.length})
+        </button>
+        {Object.entries(SECTORS).map(([k, s]) => (
+          <button key={k} className={sector === k ? "on" : ""} onClick={() => setSector(k)}
+                  style={sector === k ? { borderColor: s.color, color: s.color } : {}}>
+            {s.label} ({EMPLOYERS.filter((e) => e.sector === k).length})
+          </button>
+        ))}
+        <button className={realisticOnly ? "on" : ""} onClick={() => setRealisticOnly(!realisticOnly)}
+                style={realisticOnly ? { borderColor: FIT.strong.color, color: FIT.strong.color } : {}}>
+          🔥 Realistic only
+        </button>
+      </div>
+
+      {RINGS.map((ring, i) => {
+        const min = i === 0 ? 0 : RINGS[i - 1].max;
+        const inRing = shown.filter((e) => e.km > min && e.km <= ring.max).sort((a, b) => a.km - b.km);
+        if (!inRing.length) return null;
+        return (
+          <div key={ring.key} className="hq-ie-phase">
+            <h3>
+              {ring.label} <span className="hq-muted">({inRing.length})</span>
+            </h3>
+            <p className="hq-muted hq-ring-note">{ring.note}</p>
+            <div className="hq-joblist">
+              {inRing.map((e) => (
+                <EmployerCard
+                  key={e.id}
+                  e={e}
+                  state={prog[e.id] || {}}
+                  open={openId === e.id}
+                  added={addedId === e.id}
+                  onToggle={() => setOpenId(openId === e.id ? null : e.id)}
+                  onPatch={(p) => patchEmp(e.id, p)}
+                  onAdd={() => addToPipeline(e)}
+                  onLetter={() => onLetter({ company: e.name, role: e.role })}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      <p className="hq-muted hq-attrib">
+        Built July 2026 from OpenStreetMap coordinates, Google Maps listings, dlilsa.com and each employer's own
+        site. Distances are straight-line from your pin — the ones drawn from exact building coordinates are
+        marked ⌖; the rest are town-centre estimates (±3 km). Always check the map link before driving.
+      </p>
+    </div>
+  );
+}
+
+function EmployerCard({ e, state, open, added, onToggle, onPatch, onAdd, onLetter }) {
+  const sec = SECTORS[e.sector];
+  const fit = FIT[e.fit];
+  const cv = CV_PROFILES[e.cv];
+  const stage = state.stage || "Not touched";
+
+  return (
+    <div className="hq-job hq-emp" style={{ borderLeftColor: sec.color }}>
+      <div className="hq-job-head">
+        <div className="hq-job-title">
+          <strong>{e.name}</strong>
+          <span className="hq-emp-ar"> · {e.ar}</span>
+        </div>
+        <div className="hq-job-controls">
+          <span className="hq-fit" style={{ color: fit.color, borderColor: fit.color }}>{fit.label}</span>
+          <select value={stage} onChange={(ev) => onPatch({ stage: ev.target.value })}
+                  style={{ color: STAGE_COLOR[stage] }}>
+            {STAGES.map((s) => <option key={s}>{s}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div className="hq-emp-meta">
+        <span className="hq-tag hq-emp-km">{e.km} km{e.osm && <span title="from exact building coordinates"> ⌖</span>}</span>
+        <span className="hq-tag hq-src">{e.city}</span>
+        <span className="hq-tag" style={{ background: "#1a1a22", color: sec.color }}>{sec.label}</span>
+      </div>
+
+      <p className="hq-emp-what">{e.what}</p>
+      <p className="hq-emp-line"><strong>Ask for:</strong> {e.role}</p>
+      <p className="hq-emp-line"><strong>Route in:</strong> {e.apply}</p>
+
+      <div className="hq-emp-cv">
+        <span className="hq-emp-cv-icon">{cv.icon}</span>
+        <div>
+          <strong>Send the {cv.name} CV</strong>
+          <div className="hq-muted">{cv.headline} — {cv.leads}</div>
+        </div>
+        <a className="hq-apply" href={`/resumes/${cv.file}`} download>⬇ CV</a>
+      </div>
+
+      <div className="hq-live-actions hq-emp-actions">
+        <a className="hq-save hq-emp-map" href={mapsUrl(e)} target="_blank" rel="noreferrer">📍 Map</a>
+        <button className="hq-save" onClick={onLetter}>✍️ Letter</button>
+        <button className="hq-save" onClick={onAdd} disabled={added}>
+          {added ? "✓ In pipeline" : "+ Pipeline"}
+        </button>
+        <button className="hq-save" onClick={onToggle}>{open ? "▾ Hide prep" : "▸ Prep me"}</button>
+      </div>
+
+      {open && (
+        <div className="hq-research">
+          {e.links.length > 0 && (
+            <div className="hq-filters hq-ie-links">
+              {e.links.map(([label, url]) => (
+                <a key={label} href={url} target="_blank" rel="noreferrer">{label} ↗</a>
+              ))}
+            </div>
+          )}
+          <ul className="hq-emp-prep">
+            {e.prep.map((p, i) => <li key={i}>{p}</li>)}
+          </ul>
+          <textarea className="hq-job-notes"
+                    placeholder="My notes: who I spoke to · what they said · what to do next"
+                    defaultValue={state.note || ""} onBlur={(ev) => onPatch({ note: ev.target.value })} />
+        </div>
+      )}
+    </div>
+  );
 }
 
 /* ================= IRELAND — full plan from 0 (Egyptian, living in KSA) ================= */
@@ -1127,24 +1296,31 @@ function Resumes() {
   return (
     <div>
       <div className="hq-rule">
-        📄 <strong>Three targeted one-pagers, same facts, different emphasis.</strong> A Saudi HR screener and a
-        Dublin recruiter scan for different things — send each one the version written for them.
-        (Regenerate after edits: <code>python resume-src/gen_resume.py &lt;out.pdf&gt; ksa|ireland|remote</code>)
+        📄 <strong>Eight targeted one-pagers — same facts, different emphasis, different project order.</strong>{" "}
+        Three by market (KSA · Remote · Ireland) and five by sector, one for each kind of employer in the
+        🗺️ Qassim 40km tab. A cement-plant IT manager and a hospital IT manager scan for completely different
+        things; nothing is invented, only re-ordered and re-framed.
+        (Regenerate after edits: <code>python resume-src/gen_resume.py &lt;out.pdf&gt; ksa|ireland|remote|enterprise|agency|health|edu|gov</code>)
       </div>
       <div className="hq-kit-grid">
-        {RESUME_VARIANTS.map((v) => (
-          <div className="hq-kit-card" key={v.file}>
-            <div className="hq-kit-flag">{v.flag}</div>
-            <strong>{v.name}</strong>
-            <div className="hq-muted"><strong>Use for:</strong> {v.when}</div>
-            <div className="hq-muted">{v.diff}</div>
-            <a className="hq-apply hq-kit-dl" href={`/resumes/${v.file}`} download>⬇ Download PDF</a>
-          </div>
-        ))}
+        {CV_ORDER.map((k) => {
+          const v = CV_PROFILES[k];
+          return (
+            <div className="hq-kit-card" key={k}>
+              <div className="hq-kit-flag">{v.icon}</div>
+              <strong>{v.name}</strong>
+              <div className="hq-muted">{v.headline}</div>
+              <div className="hq-muted"><strong>Why:</strong> {v.why}</div>
+              <div className="hq-muted"><strong>Leads with:</strong> {v.leads}</div>
+              <a className="hq-apply hq-kit-dl" href={`/resumes/${v.file}`} download>⬇ Download PDF</a>
+            </div>
+          );
+        })}
       </div>
       <p className="hq-muted hq-attrib">
-        Rule of thumb: KSA version for anything Gulf · Ireland version when sponsorship might come up ·
-        Remote version for every job in the Live Jobs feed.
+        Rule of thumb: sector variant whenever you know the employer (every card in 🗺️ Qassim 40km tells you
+        which one) · KSA version when you can't tell · Remote version for every job in the Live Jobs feed ·
+        Ireland version whenever sponsorship might come up.
       </p>
     </div>
   );
