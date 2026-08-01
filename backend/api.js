@@ -1,11 +1,41 @@
+import "dotenv/config";
 import express from "express"
 import cors from "cors";
 import nodemailer from "nodemailer"
 import { getJobs, buildDigestHtml, buildCheckinHtml, esc } from "./jobs.js";
+import { createEmailClient } from "./email-client.js";
 
 const app = express()
 
 const OWNER_EMAIL = "alshraky3@gmail.com";
+
+// ── central email gateway (added 2026-08-01) ────────────────────────────────
+//
+// Every email this backend sends goes to ONE recipient: me. That makes all of
+// it `audience: 'owner'` on the gateway, which routes it over Gmail — the same
+// transport as before — so it costs ZERO of the shared Resend budget while
+// still being logged, rationed and digested alongside every other project.
+//
+// The contact form and resume pings now fold into a daily digest instead of
+// arriving one at a time. The two cron emails stay immediate.
+//
+// EMAIL_GATEWAY_MODE: off | shadow | on. Rollback is one env var.
+const gateway = createEmailClient({
+  baseUrl: process.env.EMAIL_GATEWAY_URL,
+  apiKey: process.env.EMAIL_GATEWAY_KEY,
+  mode: process.env.EMAIL_GATEWAY_MODE || "off",
+  legacy: (p) => Email.sendMail(p),
+  log: (m, e) => console.warn("[gateway]", m, e ?? ""),
+});
+
+/**
+ * Drop-in for Email.sendMail. Keeps the exact same argument shape so the five
+ * call sites below did not have to change, and adds the gateway's routing
+ * fields on top.
+ */
+function sendMail(opts) {
+  return gateway.send(opts);
+}
 const SITE_URL = "https://web-dev-seven-iota.vercel.app";
 
 // SECURITY: Restrict CORS to your actual domains
@@ -70,8 +100,10 @@ app.post("/send-email", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
     if (!message || message.length > 5000) return res.status(400).json({ error: "Invalid message" });
 
     try {
-        const result = await Email.sendMail({
-            from: process.env.EMAIL_USER || "alshrakynodeapp@gmail.com",
+        const result = await sendMail({
+            event: "portfolio.owner.contact_form",
+            sourceOrigin: req.headers.referer || req.headers.origin,
+            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             replyTo: email, // hit "Reply" in Gmail → goes straight to the sender
             subject: `📬 ${subject} — from ${firstName}`,
@@ -97,8 +129,10 @@ app.post("/resume-downloaded", rateLimit(10, 15 * 60 * 1000), async (req, res) =
     const { timestamp } = req.body || {};
 
     try {
-        await Email.sendMail({
-            from: process.env.EMAIL_USER || "alshrakynodeapp@gmail.com",
+        await sendMail({
+            event: "portfolio.owner.resume_download",
+            dedupeKey: "portfolio.resume",
+            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             subject: "📄 Someone downloaded your Resume!",
             text: `Your resume was downloaded.\n\nTime: ${timestamp || new Date().toISOString()}`,
@@ -142,8 +176,9 @@ app.get("/job-digest", async (req, res) => {
 
     try {
         const { jobs } = await getJobs({ limit: 12 });
-        await Email.sendMail({
-            from: process.env.EMAIL_USER || "alshrakynodeapp@gmail.com",
+        await sendMail({
+            event: "portfolio.owner.job_digest",
+            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             subject: `🔴 ${jobs.length} fresh remote jobs — daily digest`,
             html: buildDigestHtml(jobs, { siteUrl: SITE_URL }),
@@ -170,8 +205,9 @@ app.get("/evening-checkin", async (req, res) => {
         const newest = [...jobs]
             .sort((a, b) => new Date(b.date) - new Date(a.date))
             .slice(0, 3);
-        await Email.sendMail({
-            from: process.env.EMAIL_USER || "alshrakynodeapp@gmail.com",
+        await sendMail({
+            event: "portfolio.owner.evening_checkin",
+            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             subject: "🌙 Evening check-in — did today count?",
             html: buildCheckinHtml(newest, { siteUrl: SITE_URL }),
@@ -190,8 +226,9 @@ app.post("/email-jobs", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
     try {
         const q = String(req.body?.q || "").slice(0, 100);
         const { jobs } = await getJobs({ q, limit: 15 });
-        await Email.sendMail({
-            from: process.env.EMAIL_USER || "alshrakynodeapp@gmail.com",
+        await sendMail({
+            event: "portfolio.owner.email_jobs",
+            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             subject: `✉️ ${jobs.length} remote jobs${q ? ` matching “${q}”` : ""} — sent from HQ`,
             html: buildDigestHtml(jobs, { siteUrl: SITE_URL }),

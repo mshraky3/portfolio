@@ -3,7 +3,6 @@ import axios from "axios";
 /*
  * Live job aggregator.
  * Sources (all free; every card/email links back to the original posting):
- *   - RemoteOK    https://remoteok.com/api
  *   - Jobicy      https://jobicy.com/api/v2/remote-jobs
  *   - Arbeitnow   https://www.arbeitnow.com/api/job-board-api   (remote === true only)
  *   - Remotive    https://remotive.com/api/remote-jobs          (ToS: attribute + max ~4 calls/day → 6h cache complies)
@@ -53,7 +52,7 @@ function hashId(str) {
     return h.toString(36);
 }
 
-// Some sources (RemoteOK) occasionally serve corrupted text (mojibake / U+FFFD).
+// Some sources occasionally serve corrupted text (mojibake / U+FFFD).
 // If a field is irreparably mangled, fall back rather than render garbage.
 const safeText = (s, fallback = "") => {
     if (!s) return fallback;
@@ -74,27 +73,6 @@ const fmtSalary = (min, max, cur = "USD") => {
     if (min && max) return `${sym}${k(min)}–${k(max)}`;
     return `${sym}${k(min || max)}`;
 };
-
-async function fetchRemoteOK() {
-    const { data } = await axios.get("https://remoteok.com/api", {
-        timeout: TIMEOUT,
-        headers: { "User-Agent": UA },
-    });
-    // element [0] is RemoteOK's legal notice, not a job
-    return (Array.isArray(data) ? data.slice(1) : [])
-        .filter((j) => j.url && j.position)
-        .map((j) => ({
-            id: hashId(j.url),
-            title: safeText(j.position, "Untitled role"),
-            company: safeText(j.company, "—"),
-            location: safeText(j.location, "Remote"),
-            url: j.url,
-            tags: (j.tags || []).slice(0, 6),
-            salary: fmtSalary(j.salary_min, j.salary_max),
-            source: "RemoteOK",
-            date: j.date ? new Date(j.date).toISOString() : new Date().toISOString(),
-        }));
-}
 
 async function fetchJobicy() {
     const { data } = await axios.get(
@@ -260,7 +238,6 @@ async function fetchTelegram() {
 let cache = { jobs: null, updatedAt: 0, sources: [] };
 
 const SOURCES = [
-    ["RemoteOK", fetchRemoteOK],
     ["Jobicy", fetchJobicy],
     ["Arbeitnow", fetchArbeitnow],
     ["Remotive", fetchRemotive],
@@ -395,7 +372,7 @@ export function buildDigestHtml(jobs, { siteUrl = SITE_URL_DEFAULT } = {}) {
     ${jobs.map(jobRow).join("") || `<p style="color:#6a5f7a;">No matching jobs today — check again tomorrow.</p>`}
     ${quickLinks(siteUrl)}
     <p style="color:#a99fb8;font-size:11px;margin-top:16px;">
-      Live jobs via RemoteOK · Jobicy · Arbeitnow · Remotive · We Work Remotely · Himalayas · Telegram — links go to the original posting.
+      Live jobs via Jobicy · Arbeitnow · Remotive · We Work Remotely · Himalayas · Telegram — links go to the original posting.
     </p>
   </div>`;
 }
