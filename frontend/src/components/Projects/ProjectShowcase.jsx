@@ -1,0 +1,563 @@
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import "./ProjectShowcase.css";
+import PortfolioExportBtn from "./PortfolioExportBtn.jsx";
+
+import smlePreview from "./projectsImgs/pro2.png";
+import erthPreview from "./projectsImgs/wsm.png";
+import lawPreview from "./projectsImgs/law.png";
+import emailSystemPreview from "./projectsImgs/emailSystem.svg";
+
+// HR System screenshots (served from /public)
+const hrPreview1 = "/hr/Screenshot 2026-02-07 163928.jpg";
+const hrPreview2 = "/hr/Screenshot 2026-02-07 163952.jpg";
+const hrPreview3 = "/hr/Screenshot 2026-02-07 164015.jpg";
+
+// ─── Project Data ───────────────────────────────────────────────
+// You can expand each project with more screenshots, problem/solution, etc.
+const PROJECTS = [
+    {
+        id: "smle",
+        category: "منصة تعليمية",
+        categoryEn: "EdTech",
+        title: "منصة بنك أسئلة SMLE",
+        subtitle: "SMLE Question Bank",
+        problem:
+            "المرشحون لاختبار SMLE يعانون من تشتت المصادر وعدم وجود منصة موحدة لقياس مستواهم الفعلي قبل الامتحان.",
+        solution:
+            "بنينا منصة متكاملة بنظام اختبارات ذكي يتكيف مع مستوى الطالب، مع لوحة تحليلات أداء لحظية ولوحات متابعة للمدربين. أضفنا نظام اشتراكات ودفع متكامل عبر Moyasar بخمس خطط تسعير وشراء جماعي، وأطلقنا تطبيق جوال (Expo/React Native) وبوت تيليجرام يشاركان نفس الواجهة الخلفية.",
+        impact:
+            "أكثر من 8000 سؤال تفاعلي رفع معدل الإتقان 2.3× خلال أول ثلاثة أشهر من الإطلاق، مع نظام دفع مباشر ينتج فواتير مطابقة لضريبة القيمة المضافة.",
+        stats: [
+            { value: 8000, suffix: "+", label: "عنصر تعلّمي" },
+            { value: 94, suffix: "٪", label: "رضا المستخدمين" },
+            { value: 2.3, suffix: "×", label: "تحسّن الأداء" },
+            { value: 5, suffix: "", label: "خطط اشتراك" },
+        ],
+        technologies: ["React", "PostgreSQL", "Node.js", "Express", "Moyasar", "Expo / React Native"],
+        href: "https://www.smle-question-bank.com",
+        github: "",
+        images: [smlePreview],
+        imageAlt: "واجهة منصة بنك أسئلة SMLE",
+        color: "#7C3AED",
+        featured: true,
+    },
+    {
+        id: "hr-system",
+        category: "نظام مؤسسي",
+        categoryEn: "Enterprise",
+        title: "نظام إدارة الموارد البشرية",
+        subtitle: "Enterprise HR System",
+        problem:
+            "مؤسسات تعليمية وصحية تدير أكثر من 25 فرعًا تعاني من تتبع يدوي لبيانات الموظفين، وثائق مبعثرة بدون تتبع انتهاء، ورواتب وغياب ورقي عرضة للأخطاء.",
+        solution:
+            "بنينا نظام HR متكامل يشمل إدارة موظفين متعددة الفروع، تتبع وثائق آلي مع تنبيهات انتهاء (30/60/90 يوم)، نظام رواتب وغياب، إدارة نقل بالحافلات، وتقارير PDF/Excel بدعم كامل للعربية والتقويم الهجري.",
+        impact:
+            "توحيد بيانات 25+ فرع في نظام واحد، إلغاء التقارير اليدوية بالكامل، وتقليل حوادث انتهاء الوثائق عبر التنبيهات الآلية.",
+        stats: [
+            { value: 25, suffix: "+", label: "فرع موحّد" },
+            { value: 50, suffix: "+", label: "صفحة تفاعلية" },
+            { value: 25, suffix: "", label: "جدول علائقي" },
+        ],
+        technologies: ["React", "Node.js", "Express.js", "PostgreSQL", "JWT", "Redis", "Vercel"],
+        href: "",
+        github: "",
+        images: [hrPreview1, hrPreview2, hrPreview3],
+        imageAlt: "واجهة نظام إدارة الموارد البشرية",
+        color: "#06B6D4",
+        featured: false,
+        privateNotice: "هذا النظام يحتوي على بيانات خاصة لذلك لا يمكن توفير رابط عام. إذا أحببت الاطلاع على التفاصيل يمكننا التواصل.",
+    },
+    {
+        id: "email-system",
+        category: "بنية تحتية",
+        categoryEn: "Infrastructure",
+        title: "بوابة بريد مشتركة متعددة المشاريع",
+        subtitle: "Shared Email Gateway",
+        problem:
+            "أربعة مشاريع منفصلة (SMLE، HR، الموقع الشخصي، اللعبة) كل واحد بحاجة لإرسال بريد موثوق، لكن حصة Resend المجانية محدودة بـ100 رسالة يوميًا ونطاق واحد فقط.",
+        solution:
+            "بنيت بوابة بريد مركزية واحدة تُقسّم حصة Resend بين المشاريع الأربعة، وتتحول تلقائيًا إلى Gmail SMTP عند نفاد الحصة اليومية. تشمل قمع الارتدادات والشكاوى عبر Webhook موقّع من Svix بسمعة إرسال مشتركة، مفاتيح idempotency لمنع التكرار، وتبريد (cooldown) لتنبيهات الأخطاء يمنع إغراق البريد عند تعطل أحد الأنظمة.",
+        impact:
+            "بنية تحتية واحدة تخدم 4 مشاريع إنتاجية بدون طابور أو مجدول مهام — إرسال فوري مع إعادة محاولة تلقائية (×2) واسترجاع عند الطلب التالي.",
+        stats: [
+            { value: 4, suffix: "", label: "مشاريع متصلة" },
+            { value: 51, suffix: "", label: "اختبار وحدة" },
+            { value: 95, suffix: "", label: "حصة يومية/مشروع" },
+        ],
+        technologies: ["Next.js", "PostgreSQL", "Nodemailer", "Resend API", "TypeScript", "Svix"],
+        href: "",
+        github: "",
+        images: [emailSystemPreview],
+        imageAlt: "رسم توضيحي لبوابة البريد المشتركة",
+        color: "#3B82F6",
+        featured: false,
+        privateNotice: "هذه بنية تحتية داخلية تخدم بقية المشاريع، ولوحتها الإدارية تعرض بيانات مستخدمين حقيقية لذلك لا يمكن مشاركة رابط عام لها. تواصل معي للاطلاع على التفاصيل التقنية.",
+    },
+    {
+        id: "erth",
+        category: "استشارات أعمال",
+        categoryEn: "Business",
+        title: "منصة الأثر البيئي",
+        subtitle: "Erth Environmental",
+        problem:
+            "شركة استشارات بيئية تحتاج واجهة ثنائية اللغة مع أتمتة جمع التقييمات وربط خرائط Google.",
+        solution:
+            "واجهة ثنائية اللغة مع تكاملات تلقائية مع خرائط Google وExpress.js لدعم طلبات الاستشارات البيئية ومتابعتها.",
+        impact:
+            "أتمتة جمع التقييمات رفعت معدل الطلبات المتكررة 1.8× وخفضت وقت الردود بنسبة 40%.",
+        stats: [
+            { value: 1.8, suffix: "×", label: "طلبات متكررة" },
+            { value: 40, suffix: "٪", label: "تسريع الاستجابة" },
+            { value: 2, suffix: " لغة", label: "واجهة متعددة" },
+        ],
+        technologies: ["React", "Express.js", "Apify", "Google Maps API"],
+        href: "https://erthfc.com/",
+        github: "",
+        images: [erthPreview],
+        imageAlt: "واجهة منصة الأثر البيئي",
+        color: "#10B981",
+        featured: false,
+    },
+    {
+        id: "law",
+        category: "موقع قانوني",
+        categoryEn: "Legal",
+        title: "موقع مكتب المحامي صالح الحيسوني",
+        subtitle: "Alhisony Law Firm",
+        problem:
+            "مكتب محاماة يحتاج حضورًا رقميًا احترافيًا يعكس هوية المكتب ويسهّل تواصل العملاء المحتملين.",
+        solution:
+            "موقع تفاعلي بتقنيات حديثة يضم نموذج 3D، نظام تواصل عبر البريد، تحسين SEO شامل مع Schema.org، وتصميم متجاوب بالكامل.",
+        impact:
+            "موقع متكامل بتقنيات حديثة رفع الظهور في محركات البحث وعزز ثقة العملاء المحتملين.",
+        stats: [
+            { value: 19, suffix: "", label: "React أحدث إصدار" },
+            { value: 3, suffix: "D", label: "رسوميات تفاعلية" },
+            { value: 100, suffix: "٪", label: "متجاوب" },
+        ],
+        technologies: ["React 19", "Three.js", "Vite", "Node.js", "Express.js", "Framer Motion", "MUI"],
+        href: "https://www.alhisony.com/",
+        github: "",
+        images: [lawPreview],
+        imageAlt: "واجهة موقع مكتب المحامي صالح الحيسوني",
+        color: "#D4A017",
+        featured: false,
+    },
+];
+
+// (Category filters removed for gallery layout)
+
+// ─── Animated Counter ───────────────────────────────────────────
+function AnimatedCounter({ value, suffix = "", duration = 2000 }) {
+    const [count, setCount] = useState(0);
+    const ref = useRef(null);
+    const hasAnimated = useRef(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !hasAnimated.current) {
+                    hasAnimated.current = true;
+                    const start = performance.now();
+                    const isFloat = !Number.isInteger(value);
+
+                    const animate = (now) => {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        // easeOutExpo
+                        const eased = 1 - Math.pow(2, -10 * progress);
+                        const current = eased * value;
+                        setCount(isFloat ? parseFloat(current.toFixed(1)) : Math.floor(current));
+                        if (progress < 1) requestAnimationFrame(animate);
+                    };
+                    requestAnimationFrame(animate);
+                }
+            },
+            { threshold: 0.5 }
+        );
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [value, duration]);
+
+    return (
+        <span ref={ref} className="counter-value">
+            {count}
+            {suffix}
+        </span>
+    );
+}
+
+// ─── Browser Mockup ─────────────────────────────────────────────
+function BrowserMockup({ children, url, color }) {
+    return (
+        <div className="browser-mockup" style={{ "--project-accent": color }}>
+            <div className="browser-topbar">
+                <div className="browser-dots">
+                    <span className="dot red" />
+                    <span className="dot yellow" />
+                    <span className="dot green" />
+                </div>
+                <div className="browser-url-bar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    <span>{url}</span>
+                </div>
+            </div>
+            <div className="browser-content">{children}</div>
+        </div>
+    );
+}
+
+// ─── Image Gallery (for projects with multiple screenshots) ─────
+function ImageGallery({ images, alt, href, color }) {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const urlText = href ? href.replace("https://", "") : "نظام خاص";
+
+    return (
+        <div className="gallery-wrapper">
+            <BrowserMockup url={urlText} color={color}>
+                <AnimatePresence mode="wait">
+                    <motion.img
+                        key={activeIndex}
+                        src={images[activeIndex]}
+                        alt={`${alt} - ${activeIndex + 1}`}
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -30 }}
+                        transition={{ duration: 0.3 }}
+                    />
+                </AnimatePresence>
+            </BrowserMockup>
+            {images.length > 1 && (
+                <div className="gallery-controls">
+                    <button
+                        className="gallery-arrow"
+                        onClick={() => setActiveIndex((i) => (i - 1 + images.length) % images.length)}
+                        aria-label="الصورة السابقة"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                    <div className="gallery-dots">
+                        {images.map((_, i) => (
+                            <button
+                                key={i}
+                                className={`gallery-dot ${i === activeIndex ? "active" : ""}`}
+                                onClick={() => setActiveIndex(i)}
+                                aria-label={`صورة ${i + 1}`}
+                            />
+                        ))}
+                    </div>
+                    <button
+                        className="gallery-arrow"
+                        onClick={() => setActiveIndex((i) => (i + 1) % images.length)}
+                        aria-label="الصورة التالية"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ─── Case Study Modal ───────────────────────────────────────────
+function CaseStudyModal({ project, onClose }) {
+    const modalRef = useRef(null);
+
+    // Close on Escape
+    useEffect(() => {
+        const handleKey = (e) => e.key === "Escape" && onClose();
+        document.addEventListener("keydown", handleKey);
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.removeEventListener("keydown", handleKey);
+            document.body.style.overflow = "";
+        };
+    }, [onClose]);
+
+    // Close on backdrop click
+    const handleBackdrop = (e) => {
+        if (e.target === modalRef.current) onClose();
+    };
+
+    return (
+        <motion.div
+            className="case-study-overlay"
+            ref={modalRef}
+            onClick={handleBackdrop}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+        >
+            <motion.div
+                className="case-study-modal"
+                style={{ "--project-accent": project.color }}
+                initial={{ opacity: 0, y: 60, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 40, scale: 0.97 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            >
+                <button className="case-study-close" onClick={onClose} aria-label="إغلاق">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M18 6 6 18M6 6l12 12" />
+                    </svg>
+                </button>
+
+                {/* Header */}
+                <div className="case-study-header">
+                    <span className="case-study-category">{project.category}</span>
+                    <h2>{project.title}</h2>
+                    <p className="case-study-subtitle">{project.subtitle}</p>
+                </div>
+
+                {/* Browser Preview with Gallery */}
+                <ImageGallery images={project.images} alt={project.imageAlt} href={project.href} color={project.color} />
+
+                {/* Problem → Solution */}
+                <div className="case-study-story">
+                    <div className="story-block">
+                        <div className="story-icon problem-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 8v4M12 16h.01" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>المشكلة</h4>
+                            <p>{project.problem}</p>
+                        </div>
+                    </div>
+                    <div className="story-connector">
+                        <svg width="24" height="40" viewBox="0 0 24 40">
+                            <path d="M12 0v40" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" opacity="0.3" />
+                            <path d="M6 30l6 8 6-8" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.5" />
+                        </svg>
+                    </div>
+                    <div className="story-block">
+                        <div className="story-icon solution-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <path d="M22 4 12 14.01l-3-3" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>الحل</h4>
+                            <p>{project.solution}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Impact */}
+                <div className="case-study-impact">
+                    <h4>النتائج</h4>
+                    <p>{project.impact}</p>
+                </div>
+
+                {/* Animated Stats */}
+                <div className="case-study-stats">
+                    {project.stats.map((stat) => (
+                        <div className="case-stat" key={stat.label}>
+                            <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                            <span className="case-stat-label">{stat.label}</span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Tech Stack */}
+                <div className="case-study-tech">
+                    <h4>التقنيات المستخدمة</h4>
+                    <div className="tech-pills">
+                        {project.technologies.map((tech) => (
+                            <span className="tech-pill" key={tech}>
+                                {tech}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Private Notice */}
+                {project.privateNotice && (
+                    <div className="case-study-private-notice">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <span>{project.privateNotice}</span>
+                    </div>
+                )}
+
+                {/* Actions */}
+                <div className="case-study-actions">
+                    {project.href && (
+                        <a
+                            className="case-btn primary"
+                            href={project.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <span>زيارة المشروع</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                            </svg>
+                        </a>
+                    )}
+                    {!project.href && project.privateNotice && (
+                        <a
+                            className="case-btn primary"
+                            href="#ContactMe"
+                        >
+                            <span>تواصل الآن للاطلاع</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                            </svg>
+                        </a>
+                    )}
+                    {project.github && (
+                        <a
+                            className="case-btn secondary"
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <span>الكود المصدري</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.43 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.17c-3.34.73-4.03-1.41-4.03-1.41-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6.02 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.19.7.8.58C20.57 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z" />
+                            </svg>
+                        </a>
+                    )}
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+}
+
+// ─── Gallery Item (Large Horizontal Showcase) ──────────────────
+function GalleryItem({ project, onClick, index }) {
+    const isEven = index % 2 === 0;
+
+    return (
+        <motion.article
+            className={`gallery-item ${isEven ? "" : "gallery-item-reverse"}`}
+            style={{ "--project-accent": project.color }}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            onClick={() => onClick(project)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === "Enter" && onClick(project)}
+            aria-label={`عرض تفاصيل مشروع ${project.title}`}
+        >
+            <div className="gallery-item-image">
+                <div className="gallery-item-glow" />
+                <BrowserMockup
+                    url={project.href ? project.href.replace("https://", "") : "نظام خاص"}
+                    color={project.color}
+                >
+                    <img src={project.images[0]} alt={project.imageAlt} loading="lazy" />
+                </BrowserMockup>
+            </div>
+
+            <div className="gallery-item-info">
+                <span className="gallery-item-number">
+                    {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="gallery-item-meta">
+                    <span className="gallery-item-category">{project.category}</span>
+                    <span className="gallery-item-subtitle">{project.subtitle}</span>
+                </div>
+                <h3 className="gallery-item-title">{project.title}</h3>
+                <p className="gallery-item-desc">{project.impact}</p>
+
+                <div className="gallery-item-stats">
+                    {project.stats.map((stat) => (
+                        <div className="gallery-stat" key={stat.label}>
+                            <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                            <span>{stat.label}</span>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="gallery-item-tech">
+                    {project.technologies.slice(0, 4).map((tech) => (
+                        <span className="gallery-tech-tag" key={tech}>
+                            {tech}
+                        </span>
+                    ))}
+                    {project.technologies.length > 4 && (
+                        <span className="gallery-tech-tag gallery-tech-more">
+                            +{project.technologies.length - 4}
+                        </span>
+                    )}
+                </div>
+
+                <div className="gallery-item-cta">
+                    <span>اطّلع على التفاصيل</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
+        </motion.article>
+    );
+}
+
+// ─── Main Gallery Component ─────────────────────────────────────
+function ProjectShowcase() {
+    const [selectedProject, setSelectedProject] = useState(null);
+
+    const handleOpen = useCallback((project) => setSelectedProject(project), []);
+    const handleClose = useCallback(() => setSelectedProject(null), []);
+
+    return (
+        <section className="work-gallery" id="projects">
+            {/* Section Header */}
+            <motion.div
+                className="gallery-header"
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                viewport={{ once: true }}
+            >
+                <span className="gallery-eyebrow">أعمال مختارة</span>
+                <h2>مشاريع حقيقية. نتائج ملموسة.</h2>
+                <p className="gallery-lead">
+                    كل مشروع يبدأ بمشكلة حقيقية وينتهي بنتائج قابلة للقياس — اضغط لاستكشاف التفاصيل.
+                </p>
+                <div style={{ marginTop: '20px' }}>
+                    <PortfolioExportBtn />
+                </div>
+            </motion.div>
+
+            {/* Gallery List */}
+            <div className="gallery-list">
+                {PROJECTS.map((project, index) => (
+                    <GalleryItem
+                        key={project.id}
+                        project={project}
+                        onClick={handleOpen}
+                        index={index}
+                    />
+                ))}
+            </div>
+
+            {/* Case Study Modal */}
+            <AnimatePresence>
+                {selectedProject && (
+                    <CaseStudyModal project={selectedProject} onClose={handleClose} />
+                )}
+            </AnimatePresence>
+        </section>
+    );
+}
+
+export default ProjectShowcase;

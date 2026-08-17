@@ -1,0 +1,59 @@
+.portfolio-pdf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 12px;
+    border: 1px solid rgba(193, 71, 233, 0.45);
+    background: rgba(193, 71, 233, 0.12);
+    color: #C147E9;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease,
+        box-shadow 0.25s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.portfolio-pdf-btn:hover:not(:disabled) {
+    background: #C147E9;
+    border-color: #C147E9;
+    color: #ffffff;
+    box-shadow: 0 8px 28px rgba(193, 71, 233, 0.35);
+    transform: translateY(-2px);
+}
+
+.portfolio-pdf-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Loading state */
+.portfolio-pdf-btn--loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    border-color: rgba(193, 71, 233, 0.3);
+}
+
+/* Done / success state */
+.portfolio-pdf-btn--done {
+    background: rgba(16, 185, 129, 0.14);
+    border-color: rgba(16, 185, 129, 0.45);
+    color: #10b981;
+}
+
+/* Spinner animation */
+.pdf-spin {
+    animation: pdf-spin 0.9s linear infinite;
+    transform-origin: center;
+}
+
+@keyframes pdf-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

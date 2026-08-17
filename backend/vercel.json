@@ -1,0 +1,25 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "api.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/api.js"
+        }
+    ],
+    "crons": [
+        {
+            "path": "/job-digest",
+            "schedule": "0 5 * * *"
+        },
+        {
+            "path": "/evening-checkin",
+            "schedule": "0 16 * * *"
+        }
+    ]
+}
