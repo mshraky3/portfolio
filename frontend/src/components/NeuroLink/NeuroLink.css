@@ -1,0 +1,88 @@
+.nl-tag {
+  justify-self: start;
+  padding: 2px var(--s4);
+  border: 1px solid var(--signal);
+  border-radius: 999px;
+  color: var(--signal);
+  font-family: var(--font-head);
+  font-size: var(--fs-0);
+}
+
+.nl-headline {
+  font-size: clamp(2rem, 4.4vw, 3.3rem);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.nl-intro {
+  font-size: var(--fs-2);
+}
+
+.nl-context,
+.nl-cue {
+  color: var(--blueprint-line);
+  font-size: var(--fs-1);
+}
+
+.nl-cue {
+  font-family: var(--font-mono);
+  font-size: var(--fs-0);
+}
+
+.nl-after {
+  padding-block: var(--s8);
+  background: var(--blueprint-2);
+  color: var(--blueprint-text);
+  border-block-start: 1px solid rgba(159, 192, 234, 0.3);
+}
+
+.nl-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  border-block: 1px solid rgba(159, 192, 234, 0.45);
+}
+
+.nl-facts > div {
+  padding: var(--s5);
+  border-inline-start: 1px solid rgba(159, 192, 234, 0.3);
+}
+
+.nl-facts > div:first-child {
+  border-inline-start: 0;
+}
+
+.nl-facts dt {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: var(--fs-4);
+  line-height: 1.1;
+}
+
+.nl-facts dd {
+  margin: var(--s1) 0 0;
+  color: var(--blueprint-line);
+  font-size: var(--fs-1);
+}
+
+.nl-note {
+  max-width: 68ch;
+  margin-block-start: var(--s5);
+  color: var(--blueprint-line);
+  font-size: var(--fs-1);
+}
+
+@media (max-width: 720px) {
+  .nl-facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nl-facts > div {
+    border-inline-start: 0;
+    border-block-start: 1px solid rgba(159, 192, 234, 0.3);
+  }
+
+  .nl-facts > div:first-child {
+    border-block-start: 0;
+  }
+}

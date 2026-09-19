@@ -1,0 +1,221 @@
+.li {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: var(--s5);
+  padding: var(--s5);
+  background: var(--blueprint);
+  color: var(--blueprint-text);
+  border-radius: var(--radius);
+  background-image:
+    linear-gradient(rgba(159, 192, 234, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(159, 192, 234, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.li-stage {
+  perspective: 900px;
+  display: grid;
+  place-items: center;
+  min-height: 300px;
+}
+
+.li-stack {
+  --gap: 34px;
+  position: relative;
+  width: 200px;
+  height: 125px;
+  transform-style: preserve-3d;
+  transform: rotateX(56deg) rotateZ(-34deg) translateZ(-60px);
+}
+
+.li-plate {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(calc(var(--i) * var(--gap)));
+  transition: transform 0.35s var(--ease);
+}
+
+.li-plate button {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 1.5px solid var(--blueprint-line);
+  border-radius: 3px;
+  background: rgba(159, 192, 234, 0.14);
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.li-plate[data-active="true"] {
+  transform: translateZ(calc(var(--i) * var(--gap) + 16px));
+}
+
+.li-plate[data-active="true"] button {
+  border-color: var(--signal);
+  background: rgba(255, 194, 26, 0.2);
+}
+
+.li-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  opacity: 0.85;
+}
+
+.li-lines {
+  position: absolute;
+  inset: 16px;
+  background: repeating-linear-gradient(to bottom, rgba(159, 192, 234, 0.55) 0 2px, transparent 2px 12px);
+  opacity: 0.5;
+}
+
+.li-num {
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-end: 6px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--signal);
+  color: var(--blueprint-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  transform: rotateZ(34deg) rotateX(-56deg);
+}
+
+.li-panel {
+  display: grid;
+  gap: var(--s3);
+  min-width: 0;
+  align-content: start;
+}
+
+.li-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+
+.li-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 44px;
+  padding: 0 var(--s3);
+  border: 1px solid rgba(159, 192, 234, 0.5);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--blueprint-text);
+  font-family: var(--font-head);
+  font-size: var(--fs-0);
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.li-tabs button:hover {
+  background: rgba(159, 192, 234, 0.16);
+}
+
+.li-tabs button[aria-selected="true"] {
+  border-color: var(--signal);
+  background: var(--signal);
+  color: var(--blueprint-2);
+}
+
+.li-tabs button:focus-visible {
+  outline-color: var(--signal);
+}
+
+.li-tabnum {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.li-body {
+  display: grid;
+  gap: var(--s2);
+  padding: var(--s4);
+  border: 1px solid rgba(159, 192, 234, 0.4);
+  border-radius: var(--radius);
+  background: rgba(12, 34, 70, 0.7);
+  min-width: 0;
+}
+
+.li-body h4 {
+  font-size: var(--fs-3);
+}
+
+.li-role {
+  color: var(--blueprint-line);
+  font-family: var(--font-mono);
+  font-size: var(--fs-0);
+}
+
+.li-rows {
+  display: grid;
+  margin-block-start: var(--s2);
+}
+
+.li-rows li {
+  display: grid;
+  grid-template-columns: minmax(5.2rem, auto) minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--s3);
+  padding-block: var(--s2);
+  border-block-end: 1px solid rgba(159, 192, 234, 0.18);
+}
+
+.li-chip {
+  justify-self: start;
+  padding: 0 var(--s2);
+  border: 1px solid var(--blueprint-line);
+  border-radius: 6px;
+  color: var(--blueprint-line);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.li-text {
+  font-family: var(--font-mono);
+  font-size: var(--fs-0);
+  overflow-wrap: anywhere;
+}
+
+.li-note {
+  margin-block-start: var(--s2);
+  color: var(--blueprint-line);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.li-shot {
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(159, 192, 234, 0.5);
+  border-radius: var(--radius);
+}
+
+@media (max-width: 900px) {
+  .li {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--s4);
+  }
+
+  .li-stage {
+    min-height: 240px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .li-plate {
+    transition: none;
+  }
+}

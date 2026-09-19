@@ -1,0 +1,183 @@
+.proof {
+  background: var(--paper);
+  border-block: 1px solid var(--rule);
+}
+
+.proof-headline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-block: 1.5px solid var(--ink);
+}
+
+.proof-headline li {
+  display: grid;
+  align-content: start;
+  gap: var(--s2);
+  padding: var(--s6) var(--s5);
+  border-inline-start: 1px solid var(--rule);
+}
+
+.proof-headline li:first-child {
+  border-inline-start: 0;
+  padding-inline-start: 0;
+}
+
+.proof-value {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  text-align: start;
+  unicode-bidi: isolate;
+}
+
+.proof-label {
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: var(--fs-2);
+  line-height: 1.45;
+}
+
+.proof-detail {
+  color: var(--ink-2);
+  font-size: var(--fs-1);
+}
+
+.proof-source {
+  margin-block-start: var(--s2);
+  color: var(--ink-3);
+  font-size: var(--fs-0);
+  line-height: 1.55;
+}
+
+.proof-table-wrap {
+  margin-block-start: var(--s7);
+  overflow-x: auto;
+}
+
+.proof-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-1);
+}
+
+.proof-table caption {
+  padding-block-end: var(--s3);
+  text-align: start;
+  font-family: var(--font-head);
+  font-weight: 600;
+}
+
+.proof-table th,
+.proof-table td {
+  padding: var(--s3) var(--s4);
+  border-block-end: 1px solid var(--rule);
+  text-align: start;
+  vertical-align: top;
+}
+
+.proof-table thead th {
+  border-block-end: 1.5px solid var(--ink);
+  color: var(--ink-2);
+  font-weight: 500;
+  font-size: var(--fs-0);
+}
+
+.proof-table tbody th {
+  font-weight: 500;
+}
+
+.proof-table tbody th span {
+  display: block;
+  color: var(--ink-3);
+  font-size: var(--fs-0);
+  font-weight: 400;
+}
+
+.proof-note {
+  color: var(--ink-3);
+  font-size: var(--fs-0);
+}
+
+.proof-scale {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: var(--s5) var(--s6);
+  margin: var(--s7) 0 0;
+}
+
+.proof-scale dt {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: var(--fs-4);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.proof-scale dd {
+  margin: var(--s1) 0 0;
+  color: var(--ink-2);
+  font-size: var(--fs-1);
+  line-height: 1.55;
+}
+
+.proof-scale dd span {
+  display: block;
+  margin-block-start: var(--s1);
+  color: var(--ink-3);
+  font-size: var(--fs-0);
+}
+
+@media (max-width: 860px) {
+  .proof-headline {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .proof-headline li,
+  .proof-headline li:first-child {
+    padding: var(--s5) 0;
+    border-inline-start: 0;
+    border-block-end: 1px solid var(--rule);
+  }
+
+  .proof-headline li:last-child {
+    border-block-end: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .proof-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .proof-table,
+  .proof-table tbody,
+  .proof-table tr,
+  .proof-table th,
+  .proof-table td {
+    display: block;
+  }
+
+  .proof-table tr {
+    padding-block: var(--s3);
+    border-block-end: 1px solid var(--rule);
+  }
+
+  .proof-table th,
+  .proof-table td {
+    padding: var(--s1) 0;
+    border: 0;
+  }
+
+  .proof-table td::before {
+    content: attr(data-label) ": ";
+    color: var(--ink-3);
+    font-size: var(--fs-0);
+  }
+}

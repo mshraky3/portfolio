@@ -1,0 +1,43 @@
+import { HERO, SITE } from "../../data/content";
+import TeardownStage from "../Teardown/TeardownStage";
+import "./Hero.css";
+
+const RESUME = "/Mahmoud_Ahmed%20El-Sharaky_Resume.pdf";
+
+export default function Hero() {
+  return (
+    <TeardownStage
+      id="top"
+      data={HERO}
+      layers={HERO.layers}
+      label="SQB, taken apart layer by layer"
+      intro={
+        <>
+          <p className="hero-status">
+            <span className="hero-dot" aria-hidden="true" />
+            {HERO.eyebrow}
+          </p>
+          <h1 className="hero-name">{SITE.name}</h1>
+          <p className="hero-line">{HERO.headline}</p>
+          <p className="hero-meta">
+            {SITE.city}. {SITE.degree}.
+          </p>
+          <div className="hero-actions">
+            <a className="btn btn-primary" href="#work">
+              See the systems
+            </a>
+            <a className="btn" href={RESUME} download="Mahmoud_Alshraky_Resume.pdf">
+              Download CV
+            </a>
+          </div>
+          <p className="hero-cue">{HERO.scrollCue}</p>
+        </>
+      }
+      outroAction={
+        <a className="btn btn-primary" href="#work">
+          See the other systems
+        </a>
+      }
+    />
+  );
+}

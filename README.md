@@ -1,6 +1,6 @@
 # Portfolio — Mahmoud Alshraky
 
-Full-stack portfolio site: an Arabic-first (RTL) React single-page app with a small Express API behind it for the contact form and a live-jobs aggregator.
+English-only React portfolio. Scrolling takes a real system apart: the camera flies through its layers (WebGL), and each layer shows the system's real routes, tables, features and screenshots. It also carries dated real traffic numbers and a case study of a browser face and hand tracking prototype. A small Express API behind it handles the contact form.
 
 **Live:** [web-dev-seven-iota.vercel.app](https://web-dev-seven-iota.vercel.app)
 
@@ -10,9 +10,9 @@ Full-stack portfolio site: an Arabic-first (RTL) React single-page app with a sm
 
 | Layer | Tech |
 | --- | --- |
-| Frontend | React 19, Vite 6, React Router 7, plain CSS, Framer Motion, Three.js (`@react-three/fiber`) |
+| Frontend | React 19, Vite 6, React Router 7, plain CSS with design tokens, three.js through `@react-three/fiber` and `drei`; Bricolage Grotesque and IBM Plex Mono |
 | Backend | Node.js, Express 4, Nodemailer, deployed as a Vercel serverless function |
-| Hosting | Vercel (frontend + API deployed separately) |
+| Hosting | Vercel (frontend and API deployed separately) |
 | Tooling | ESLint 9 (flat config), Python + ReportLab for résumé generation |
 
 ---
@@ -20,18 +20,28 @@ Full-stack portfolio site: an Arabic-first (RTL) React single-page app with a sm
 ## Layout
 
 ```
-frontend/          React SPA
+frontend/
+  index.html         head markers <!--seo--> and <!--crawl--> filled at build time
+  vite.config.js     siteHtml() plugin: writes meta, JSON-LD and crawler HTML from content.js
   src/
-    App.jsx          public portfolio page (SEO meta + structured data)
-    main.jsx         router: public site + private /hq area
-    components/      portfolio sections + the Job-Hunt HQ tracker
-    pages/hq/        private research pages (see below)
-    utils/           client-side PDF export
-  public/            résumé PDFs, images, robots.txt, sitemap.xml
-backend/           Express API (contact email, résumé tracking, job aggregation)
-resume-src/        Python generators for the 8 résumé variants
-job-hunt/          personal job-hunt notes and templates
+    data/content.js  every claim on the page, with its source and date
+    data/images.js   image keys used by content.js
+    components/      Nav, Hero, Proof, Work, NeuroLink, Experience, About, contact,
+                     Teardown (the scroll-driven 3D engine), Tracker (private /hq, lazy-loaded)
+    utils/           capabilities.js: WebGL, low-power and reduced-motion checks
+  public/            résumé PDFs, og.png (1200x630), robots.txt, sitemap.xml
+backend/             Express API (contact email, résumé tracking, job aggregation)
+resume-src/          Python generators for the résumé variants
+job-hunt/            private notes (git-ignored)
 ```
+
+## Rules for changing the content
+
+- **No number without a source.** Add it to `src/data/content.js` with where it came from and the date. Traffic figures come from Google Search Console and Vercel Web Analytics; re-read them and update `METRICS_AS_OF` when you refresh them.
+- The résumé generator (`resume-src/gen_resume.py`) carries the same facts. Change both, then regenerate the PDFs (command below).
+- **English only.** No Arabic text, fonts or screenshots of Arabic interfaces on the public site. Screenshots come from the English mode of each product (`src/assets/shots`). The private `/hq` tool is lazy-loaded so its data never ships in the public bundle.
+- **How the 3D works.** `components/Teardown/timeline.js` maps scroll progress to a camera path through the layers; `TeardownScene.jsx` draws each layer's real content onto a plate (`plateTexture.js`). Everything is a pure function of scroll, so nothing moves on its own and it behaves the same under the OS reduced-motion setting. Without WebGL (or on low-powered devices) the section falls back to `LayerInspector` plus the same captions as a list.
+- To add a system, add it to `PROJECTS` in `content.js` with `layers` (rows are `[tag, text]`, each a real route, table or feature).
 
 ## Routes
 
@@ -39,30 +49,23 @@ job-hunt/          personal job-hunt notes and templates
 | --- | --- |
 | `/` | Public portfolio |
 | `/hq` | Job-Hunt HQ tracker — passphrase-gated, data stored per-browser |
-| `/hq/companies` | Qassim tech companies, grouped by tier, filter + mark Target/Skip |
-| `/hq/targets` | The 11 ranked targets, plus the remaining shortlist |
-| `/hq/shortlist` | Employers within 50 km, grouped into distance rings |
-| `/hq/it-jobs` | Tech-companies-only cut of the 50 km sweep |
+| `/hq/companies`, `/hq/targets`, `/hq/shortlist`, `/hq/it-jobs`, `/hq/route` | Private research pages |
 
-Everything under `/hq` is `noindex, nofollow` and keeps its state in `localStorage` only — nothing is sent to a server.
+Everything under `/hq` is `noindex, nofollow` and keeps its state in `localStorage` only.
 
 ---
 
 ## Running locally
 
-**Frontend**
-
 ```bash
 cd frontend && npm install && npm run dev
 ```
-
-**Backend**
 
 ```bash
 cd backend && npm install && cp .env.example .env && npm run dev
 ```
 
-Fill in `.env` before starting the API — see `backend/.env.example` for what each variable does. To point the frontend at a local API, create `frontend/.env.local`:
+Fill in `.env` before starting the API. To point the frontend at a local API, create `frontend/.env.local`:
 
 ```bash
 echo "VITE_API_BASE=http://localhost:3000" > frontend/.env.local
@@ -78,11 +81,13 @@ cd frontend && npm run build
 cd frontend && npm run lint
 ```
 
-Regenerate a résumé variant (`ksa`, `ireland`, `remote`, `enterprise`, `agency`, `health`, `edu`, `gov`):
+Regenerate the résumé variants (`ksa`, `ireland`, `remote`, `enterprise`, `agency`, `health`, `edu`, `gov`, `frontend`):
 
 ```bash
 python resume-src/gen_resume.py frontend/public/resumes/Mahmoud_Alshraky_Resume_KSA.pdf ksa
 ```
+
+The default download (`frontend/public/Mahmoud_Ahmed El-Sharaky_Resume.pdf`) is a copy of the KSA variant.
 
 ---
 

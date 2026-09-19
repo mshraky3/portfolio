@@ -1,104 +1,51 @@
-import React from "react";
-import img from "./me.png";
+import { ABOUT, SITE, SKILLS } from "../../data/content";
+import photo from "../../assets/me.webp";
 import "./About.css";
-import { motion } from "framer-motion";
 
-const ABOUT_TITLE = "من أنا";
-const ABOUT_BODY = "مهندس برمجيات أبني أنظمة عالية الأداء.";
-const ABOUT_DETAIL = "طالب علوم حاسب أبني أنظمة برمجية إنتاجية حقيقية: من تصميم قاعدة البيانات وبناء الـ REST APIs حتى الواجهة — بأساس هندسي في هياكل البيانات والخوارزميات، وبنية تعتمد على React وExpress وPostgreSQL موثوقة وسهلة التوسع.";
-const SOCIAL_LINKS = [
-    {
-        href: "https://github.com/mshraky3",
-        img: "https://img.icons8.com/fluency/40/github.png",
-        alt: "شعار GitHub"
-    },
-    {
-        href: "https://www.linkedin.com/in/mahmoud-alshraky",
-        img: "https://img.icons8.com/color/40/linkedin.png",
-        alt: "شعار LinkedIn"
-    },
-    {
-        href: "https://wa.link/5zcep6",
-        img: "https://img.icons8.com/ios-glyphs/40/whatsapp.png",
-        alt: "شعار واتساب"
-    }
-];
+export default function About() {
+  return (
+    <section className="section about" id="about" aria-labelledby="about-title">
+      <div className="wrap">
+        <div className="about-top">
+          <img className="about-photo" src={photo} alt="My logo: a serpent inside a circuit-board pyramid" width="560" height="456" loading="lazy" />
+          <div className="about-text">
+            <h2 id="about-title">About me</h2>
+            <p className="about-lead">{ABOUT.lead}</p>
+            {ABOUT.body.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+            <p className="about-degree">{SITE.degree}</p>
+          </div>
+        </div>
 
-function About() {
-    return (
-        <motion.div
-            className="aboutSection"
-            id="aboutSection"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-        >
-            <motion.div
-                className="aboutImageSection"
-                initial={{ x: -100, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                viewport={{ once: true }}
-            >
-                <motion.div
-                    className="aboutCurcle"
-                    whileHover={{ scale: 1.5 }}
-                    transition={{ type: "spring", stiffness: 10 }}
-                >
-                    <img src={img} alt="صورة محمود الشراكي" loading="lazy" />
-                </motion.div>
-            </motion.div>
-            <motion.div
-                className="aboutText"
-                initial={{ x: 100, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                viewport={{ once: true }}
-            >
-                <motion.div
-                    className="aboutTextTitle"
-                    initial={{ y: 30, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.6, delay: 0.6 }}
-                    viewport={{ once: true }}
-                >
-                    {ABOUT_TITLE}
-                </motion.div>
-                <motion.div
-                    className="aboutTextBody"
-                    initial={{ y: 30, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.6, delay: 0.8 }}
-                    viewport={{ once: true }}
-                >
-                    {ABOUT_BODY}
-                </motion.div>
-                <motion.div
-                    className="aboutTextDeilt"
-                    initial={{ y: 30, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.6, delay: 1 }}
-                    viewport={{ once: true }}
-                >
-                    {ABOUT_DETAIL}
-                </motion.div>
-                <motion.div
-                    className="aboutTexticons"
-                    initial={{ y: 30, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.6, delay: 1.2 }}
-                    viewport={{ once: true }}
-                >
-                    {SOCIAL_LINKS.map(({ href, img: src, alt }) => (
-                        <a key={href} href={href} target="_blank" rel="noreferrer">
-                            <img width="40" height="40" src={src} alt={alt} loading="lazy" />
-                        </a>
-                    ))}
-                </motion.div>
-            </motion.div>
-        </motion.div>
-    );
+        <dl className="about-habits">
+          {ABOUT.habits.map(([k, v]) => (
+            <div key={k}>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="about-skills">
+          <h3>Skills, and where I used each</h3>
+          <div className="skills-grid">
+            {SKILLS.map((g) => (
+              <section key={g.group} aria-label={g.group}>
+                <h4>{g.group}</h4>
+                <dl>
+                  {g.items.map(([name, where]) => (
+                    <div key={name}>
+                      <dt>{name}</dt>
+                      <dd>{where}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
-
-export default About;

@@ -1,0 +1,157 @@
+.work-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s8);
+}
+
+.sheet {
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.sheet-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2) var(--s4);
+  padding: var(--s4) var(--s5);
+  border-block-end: 1.5px solid var(--ink);
+}
+
+.sheet-head h3 {
+  font-size: var(--fs-3);
+}
+
+.sheet-sub {
+  color: var(--ink-3);
+  font-size: var(--fs-1);
+}
+
+.sheet-body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: var(--s6);
+  padding: var(--s5);
+}
+
+.sheet-text {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: var(--s4);
+  min-width: 0;
+}
+
+.sheet-facts {
+  display: grid;
+  gap: var(--s2);
+  color: var(--ink-2);
+  font-size: var(--fs-1);
+}
+
+.sheet-facts li {
+  position: relative;
+  padding-inline-start: var(--s4);
+}
+
+.sheet-facts li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.8em;
+  width: 8px;
+  height: 1.5px;
+  background: var(--ink);
+}
+
+.sheet-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+
+.sheet-stack li {
+  padding: 2px var(--s3);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--vellum);
+  color: var(--ink-2);
+  font-size: var(--fs-0);
+  line-height: 1.7;
+}
+
+.sheet-link {
+  justify-self: start;
+  max-width: 100%;
+  text-align: center;
+}
+
+.sheet-link .mono {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.sheet-private {
+  padding: var(--s3) var(--s4);
+  border-inline-start: 3px solid var(--ink-3);
+  background: var(--vellum);
+  color: var(--ink-2);
+  font-size: var(--fs-1);
+}
+
+.sheet-block {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  border-block-start: 1.5px solid var(--ink);
+}
+
+.sheet-block > div {
+  padding: var(--s3) var(--s5);
+  border-inline-start: 1px solid var(--rule);
+}
+
+.sheet-block > div:first-child {
+  border-inline-start: 0;
+}
+
+.sheet-block dt {
+  color: var(--ink-3);
+  font-size: var(--fs-0);
+}
+
+.sheet-block dd {
+  margin: 0;
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: var(--fs-1);
+}
+
+@media (max-width: 900px) {
+  .sheet-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .sheet-head,
+  .sheet-body {
+    padding: var(--s4);
+  }
+
+  .sheet-block {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sheet-block > div {
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--rule);
+    padding: var(--s2) var(--s4);
+  }
+
+  .sheet-block > div:first-child {
+    border-block-start: 0;
+  }
+}
