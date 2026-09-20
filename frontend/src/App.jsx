@@ -30,7 +30,7 @@ export default function App() {
           id="work"
           group="prod"
           title="Systems in production"
-          lead="Each system is shown as layers. Pick a layer to see its real routes, tables and screens, and the role, period and status underneath."
+          lead="The systems I have built and run. Open Technical details under any of them for the routes, tables and files behind it."
         />
         <NeuroLink />
         <Work

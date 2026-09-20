@@ -4,9 +4,10 @@
   gap: var(--s2);
   justify-self: start;
   padding: var(--s1) var(--s4);
-  border: 1px solid rgba(159, 192, 234, 0.5);
+  border: 1px solid var(--accent-line);
+  background: var(--accent-soft);
   border-radius: 999px;
-  color: var(--blueprint-text);
+  color: var(--text);
   font-size: var(--fs-0);
 }
 
@@ -14,8 +15,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #4ade80;
-  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.2);
+  background: var(--ok);
+  box-shadow: 0 0 0 4px rgba(62, 207, 142, 0.2);
 }
 
 .hero-name {
@@ -30,12 +31,12 @@
   font-weight: 500;
   font-size: clamp(1.25rem, 2.2vw, 1.75rem);
   line-height: 1.25;
-  color: var(--signal);
+  color: var(--accent);
   text-wrap: balance;
 }
 
 .hero-meta {
-  color: var(--blueprint-line);
+  color: var(--muted);
   font-size: var(--fs-1);
 }
 
@@ -46,7 +47,7 @@
 }
 
 .hero-cue {
-  color: var(--blueprint-line);
+  color: var(--muted);
   font-family: var(--font-mono);
   font-size: var(--fs-0);
 }

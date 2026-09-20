@@ -1,5 +1,5 @@
 .exp-list {
-  border-block-start: 1.5px solid var(--ink);
+  border-block-start: 1px solid var(--line-2);
 }
 
 .exp-item {
@@ -7,11 +7,11 @@
   grid-template-columns: 200px minmax(0, 1fr);
   gap: var(--s6);
   padding-block: var(--s6);
-  border-block-end: 1px solid var(--rule);
+  border-block-end: 1px solid var(--line);
 }
 
 .exp-when {
-  color: var(--ink-2);
+  color: var(--text-2);
   font-family: var(--font-head);
   font-size: var(--fs-1);
   font-weight: 500;
@@ -28,7 +28,7 @@
 }
 
 .exp-org {
-  color: var(--ink-3);
+  color: var(--muted);
   font-size: var(--fs-1);
 }
 
@@ -36,7 +36,7 @@
   display: grid;
   gap: var(--s2);
   margin-block-start: var(--s2);
-  color: var(--ink-2);
+  color: var(--text-2);
 }
 
 .exp-what ul li {
@@ -51,7 +51,7 @@
   inset-block-start: 0.9em;
   width: 8px;
   height: 1.5px;
-  background: var(--ink);
+  background: var(--text);
 }
 
 @media (max-width: 720px) {

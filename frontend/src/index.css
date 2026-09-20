@@ -2,22 +2,26 @@
    dark blueprint panels for the 3D scenes, and one warm callout colour that
    only appears on those panels. Use these values; do not invent new ones. */
 :root {
-  --ink: #0e1a2b;
-  --ink-2: #2b3a4f;
-  --ink-3: #566579;
-  --vellum: #edf1f5;
-  --vellum-2: #e0e7ee;
-  --paper: #f8fafc;
-  --rule: #b9c6d4;
-  --blueprint: #12325f;
-  --blueprint-2: #0c2246;
-  --blueprint-line: #9fc0ea;
-  --blueprint-text: #e6eefb;
-  --signal: #ffc21a;
-  --cobalt: #1b47c9;
-  --cobalt-dark: #143a9f;
-  --ok: #157a54;
-  --err: #b42318;
+  color-scheme: dark;
+  /* Surfaces: near-black, the same family as the original portfolio */
+  --bg: #0a0a0c;
+  --bg-2: #0e0e12;
+  --surface: #141418;
+  --surface-2: #17171d;
+  --line: #2a2a33;
+  --line-2: #3a3a46;
+  /* Text */
+  --text: #f2f2f5;
+  --text-2: #cfcfd8;
+  --muted: #9a9aa8;
+  /* The one accent: magenta-purple */
+  --accent: #c147e9;
+  --accent-hi: #eeb0ff;
+  --accent-deep: #6a1b9a;
+  --accent-soft: rgba(193, 71, 233, 0.14);
+  --accent-line: rgba(193, 71, 233, 0.45);
+  --ok: #3ecf8e;
+  --err: #e05260;
 
   --s1: 4px;
   --s2: 8px;
@@ -36,9 +40,9 @@
   --fs-4: clamp(1.75rem, 3.4vw, 2.5rem);
   --fs-5: clamp(2.75rem, 7vw, 5.25rem);
 
-  --radius: 4px;
-  --radius-lg: 8px;
-  --shadow: 0 1px 0 rgba(14, 26, 43, 0.06), 0 12px 32px -16px rgba(14, 26, 43, 0.28);
+  --radius: 8px;
+  --radius-lg: 14px;
+  --glow: 0 0 0 1px var(--accent-line), 0 12px 40px -12px rgba(193, 71, 233, 0.35);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --measure: 66ch;
   --page: 1180px;
@@ -59,12 +63,16 @@ html {
   scroll-behavior: smooth;
   scroll-padding-block-start: 72px;
   -webkit-text-size-adjust: 100%;
+  background: var(--bg);
 }
 
 body {
   margin: 0;
-  background: var(--vellum);
-  color: var(--ink);
+  background:
+    radial-gradient(circle at 1% 120%, rgba(193, 71, 233, 0.12), transparent 55%),
+    radial-gradient(circle at 85% 0%, rgba(193, 71, 233, 0.06), transparent 40%),
+    var(--bg);
+  color: var(--text);
   font-family: var(--font-body);
   font-size: var(--fs-2);
   line-height: 1.6;
@@ -97,12 +105,12 @@ ol {
 }
 
 a {
-  color: var(--cobalt);
+  color: var(--accent-hi);
   text-underline-offset: 0.2em;
 }
 
 a:hover {
-  color: var(--cobalt-dark);
+  color: #fff;
 }
 
 img,
@@ -119,14 +127,15 @@ textarea {
   color: inherit;
 }
 
-:focus-visible {
-  outline: 3px solid var(--cobalt);
-  outline-offset: 3px;
-  border-radius: var(--radius);
+::selection {
+  background: var(--accent);
+  color: var(--bg);
 }
 
-.on-dark :focus-visible {
-  outline-color: var(--signal);
+:focus-visible {
+  outline: 3px solid var(--accent-hi);
+  outline-offset: 3px;
+  border-radius: var(--radius);
 }
 
 .wrap {
@@ -150,7 +159,15 @@ textarea {
 }
 
 .section-head p {
-  color: var(--ink-2);
+  color: var(--muted);
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-0);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .mono {
@@ -172,21 +189,22 @@ bdi,
   gap: var(--s2);
   min-height: 48px;
   padding: 0 var(--s5);
-  border: 1.5px solid var(--ink);
-  border-radius: var(--radius);
+  border: 1.5px solid var(--line-2);
+  border-radius: 999px;
   background: transparent;
-  color: var(--ink);
+  color: var(--text);
   font-family: var(--font-head);
   font-weight: 500;
   font-size: var(--fs-1);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.15s, color 0.15s, transform 0.15s, border-color 0.15s;
+  transition: background-color 0.15s, color 0.15s, transform 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
 .btn:hover {
-  background: var(--ink);
-  color: var(--vellum);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text);
 }
 
 .btn:active {
@@ -199,36 +217,17 @@ bdi,
 }
 
 .btn-primary {
-  background: var(--ink);
-  color: var(--vellum);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: var(--cobalt);
-  border-color: var(--cobalt);
-  color: #fff;
-}
-
-.on-dark .btn {
-  border-color: var(--blueprint-line);
-  color: var(--blueprint-text);
-}
-
-.on-dark .btn:hover {
-  background: var(--blueprint-text);
-  color: var(--blueprint);
-}
-
-.on-dark .btn-primary {
-  background: var(--signal);
-  border-color: var(--signal);
-  color: var(--blueprint-2);
-}
-
-.on-dark .btn-primary:hover {
-  background: #ffd45c;
-  border-color: #ffd45c;
-  color: var(--blueprint-2);
+  background: var(--accent-hi);
+  border-color: var(--accent-hi);
+  color: var(--bg);
+  box-shadow: 0 0 32px rgba(193, 71, 233, 0.5);
 }
 
 .skip-link {
@@ -237,8 +236,8 @@ bdi,
   inset-inline-start: var(--s4);
   z-index: 100;
   padding: var(--s2) var(--s4);
-  background: var(--ink);
-  color: var(--vellum);
+  background: var(--accent);
+  color: var(--bg);
   border-radius: var(--radius);
 }
 

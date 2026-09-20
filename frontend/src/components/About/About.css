@@ -1,6 +1,6 @@
 .about {
-  background: var(--paper);
-  border-block: 1px solid var(--rule);
+  background: var(--surface);
+  border-block: 1px solid var(--line);
 }
 
 .about-top {
@@ -13,9 +13,9 @@
 .about-photo {
   width: 100%;
   height: auto;
-  border: 1.5px solid var(--ink);
+  border: 1px solid var(--line-2);
   border-radius: var(--radius);
-  background: var(--vellum-2);
+  background: var(--surface-2);
 }
 
 .about-text {
@@ -29,13 +29,13 @@
 }
 
 .about-text p {
-  color: var(--ink-2);
+  color: var(--text-2);
 }
 
 .about-degree {
   padding-block-start: var(--s3);
-  border-block-start: 1px solid var(--rule);
-  color: var(--ink) !important;
+  border-block-start: 1px solid var(--line);
+  color: var(--text) !important;
   font-family: var(--font-head);
   font-size: var(--fs-1);
   font-weight: 500;
@@ -54,7 +54,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: var(--s6);
-  border-block-start: 1.5px solid var(--ink);
+  border-block-start: 1px solid var(--line-2);
   padding-block-start: var(--s5);
 }
 
@@ -78,7 +78,7 @@
 
 .skills-grid dd {
   margin: 0;
-  color: var(--ink-3);
+  color: var(--muted);
   font-size: var(--fs-0);
   line-height: 1.5;
 }
@@ -95,7 +95,7 @@
 }
 
 .about-lead {
-  color: var(--ink) !important;
+  color: var(--text) !important;
   font-family: var(--font-head);
   font-size: var(--fs-3);
   font-weight: 500;
@@ -108,7 +108,7 @@
   gap: var(--s6);
   margin: var(--s7) 0 0;
   padding-block-start: var(--s5);
-  border-block-start: 1.5px solid var(--ink);
+  border-block-start: 1px solid var(--line-2);
 }
 
 .about-habits dt {
@@ -119,7 +119,7 @@
 
 .about-habits dd {
   margin: var(--s1) 0 0;
-  color: var(--ink-2);
+  color: var(--text-2);
   font-size: var(--fs-1);
 }
 

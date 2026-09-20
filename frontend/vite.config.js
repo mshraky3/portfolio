@@ -71,7 +71,7 @@ function siteHtml() {
       const crawl = `<div class="crawl">
 <h1>${esc(SITE.name)}</h1>
 <p>${esc(HERO.headline)} ${esc(DESCRIPTION)}</p>
-<h2>SQB, taken apart</h2>
+<h2>SQB, built layer by layer</h2>
 ${HERO.layers.map((l) => `<h3>${esc(l.step.title)}</h3><p>${esc(l.step.text)}</p>${list(l.step.facts)}`).join('\n')}
 <h2>Numbers (${esc(METRICS_AS_OF)})</h2>
 ${list(HEADLINE_METRICS.map((m) => `${m.value} ${m.label}. ${m.detail} Source: ${m.source.by}, ${m.source.site}, ${m.source.when}`))}

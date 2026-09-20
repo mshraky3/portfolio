@@ -20,7 +20,7 @@ export const SITE = {
 
 export const TITLE = "Mahmoud Alshraky | Software engineer, full-stack";
 export const DESCRIPTION =
-  "Full-stack software engineer. I build and run production systems with React, Node.js and PostgreSQL: an exam platform, an HR system for 25+ branches, a job marketplace, and an in-browser face and hand tracking prototype. Explore each one, taken apart layer by layer.";
+  "Full-stack software engineer. I build and run production systems with React, Node.js and PostgreSQL: an exam platform, an HR system for 25+ branches, a job marketplace, and an in-browser face and hand tracking prototype. Watch each one get built, layer by layer.";
 
 // ─── Proof: measured traffic and scale ───────────────────────────
 export const METRICS_AS_OF = "19 September 2026";
@@ -62,102 +62,107 @@ export const SCALE_FACTS = [
   { value: "35", label: "automated tests for the shared email gateway", evidence: "tests/*.test.ts" },
 ];
 
-// ─── The hero teardown: SQB, layer by layer ──────────────────────
-// `rows` are [tag, text]. Every row is a real route, table, file or feature.
+// ─── The hero: SQB, built layer by layer as you scroll ───────────
+// Modules are listed in build order, bottom of the stack first. `visual` picks the
+// 3D scene the module plays (see components/Assembly/visuals). `step` is the plain
+// language caption. `rows` are [tag, text] technical details, shown only in the
+// collapsed "Technical details" panel, never in the 3D scene.
 export const HERO = {
   eyebrow: "Open to full-time roles and freelance work",
   headline: "I build systems people use, then keep them running.",
-  scrollCue: "Scroll to take one apart: SQB, an exam platform I built and run.",
-  overview: "SQB, taken apart. Five layers, every one written and operated by me.",
-  outro: "That was one system. Here are the others.",
+  scrollCue: "Scroll to watch one get built: SQB, an exam platform I run.",
+  outro: "That is SQB, built and run by me. Here are the other systems.",
   layers: [
     {
-      name: "Interface",
-      role: "What people see",
-      kind: "image",
-      image: "sqb",
-      note: "smle-question-bank.com",
-      step: {
-        title: "The interface",
-        text: "React 19 and Vite. Every public page is prerendered, so search engines read real content instead of an empty shell.",
-        facts: ["Google-indexed pages went from 5 to 468 between 30 Aug and 16 Sep 2026", "1,001 visitors and 4,262 page views in the last 30 days"],
-      },
-    },
-    {
-      name: "Apps and bots",
-      role: "Other ways in",
-      kind: "rows",
-      rows: [
-        ["APP", "Expo / React Native, same backend"],
-        ["BOT", "Telegram: daily question, weekly summary"],
-        ["CRON", "/api/cron/telegram-daily"],
-        ["CRON", "/api/cron/telegram-weekly"],
-        ["CRON", "/api/cron/lifecycle-emails"],
-        ["CRON", "/api/cron/daily-emails"],
-      ],
-      note: "Three front doors, one backend",
-      step: {
-        title: "One backend, three front doors",
-        text: "The web app, an Expo mobile app and a Telegram bot all use the same API. Scheduled jobs post questions and send lifecycle emails.",
-        facts: ["Telegram: daily question, weekly summary, channel posts and cleanup", "9 scheduled endpoints run on cron"],
-      },
-    },
-    {
-      name: "API",
-      role: "Where the rules live",
-      kind: "rows",
-      rows: [
-        ["GET", "/api/questions"],
-        ["GET", "/api/questions/:id/explanation"],
-        ["GET", "/api/user-subscription/:userId"],
-        ["GET", "/invoice/:gatewayRef.pdf"],
-        ["POST", "/webhook"],
-        ["GET", "/admin/analytics"],
-        ["GET", "/api/public/stats"],
-      ],
-      note: "150 route handlers in one Express app",
-      step: {
-        title: "150 route handlers",
-        text: "Auth, quizzes, explanations, subscriptions, invoices, admin analytics and cron, in one Express app on Vercel.",
-        facts: ["Payment webhooks confirm and activate subscriptions", "A PDF invoice is generated for each payment"],
-      },
-    },
-    {
-      name: "Database",
+      name: "Data",
       role: "What is remembered",
-      kind: "rows",
+      visual: "vault",
       rows: [
+        ["DB", "PostgreSQL, 31 tables"],
         ["TABLE", "user_question_progress"],
         ["TABLE", "payment_events"],
         ["TABLE", "funnel_events"],
         ["TABLE", "page_engagement"],
         ["TABLE", "login_history"],
-        ["TABLE", "subscription_groups"],
-        ["TABLE", "group_seats"],
-        ["TABLE", "trial_grants"],
+        ["TABLE", "subscription_groups, group_seats, trial_grants"],
+        ["SCHEMA", "Created idempotently at cold start, safe to re-run"],
       ],
-      note: "31 tables, built to be re-run safely",
+      note: "The medicine and nursing tracks are kept strictly separate",
       step: {
-        title: "31 tables, safe to re-run",
-        text: "PostgreSQL. The schema is created idempotently at cold start, so a fresh database and a live one end up identical.",
-        facts: ["Progress, payments, funnel events and logins are tracked per user", "The medicine and nursing tracks are kept strictly separate"],
+        title: "It starts with the data",
+        text: "Thousands of exam questions, every student's progress and every payment live in one database, designed so a brand-new copy and the live one always match.",
+        facts: ["7,000+ questions, each with a written explanation (7,115 on 17 Sep 2026)", "Medicine and nursing kept strictly apart"],
+      },
+    },
+    {
+      name: "Engine",
+      role: "Where the rules live",
+      visual: "engine",
+      rows: [
+        ["API", "One Express app, 150 route handlers"],
+        ["GET", "/api/questions"],
+        ["GET", "/api/questions/:id/explanation"],
+        ["GET", "/api/user-subscription/:userId"],
+        ["GET", "/admin/analytics"],
+        ["APP", "Expo / React Native, same backend"],
+        ["BOT", "Telegram: daily question, weekly summary"],
+        ["CRON", "9 scheduled endpoints (Telegram, lifecycle and daily emails)"],
+      ],
+      note: "Vercel serverless functions and cron",
+      step: {
+        title: "One brain, three front doors",
+        text: "The website, a mobile app and a Telegram bot all talk to the same backend, so a rule is written once and holds everywhere. Scheduled jobs post a daily question and send reminders.",
+        facts: ["Web, Expo mobile app and Telegram bot share one API", "Telegram gets a daily question and a weekly summary"],
       },
     },
     {
       name: "Money and messages",
       role: "Built once, reused",
-      kind: "rows",
+      visual: "money",
       rows: [
-        ["PAY", "Moyasar: Apple Pay, webhooks, VAT invoices"],
-        ["MAIL", "Shared email gateway, Gmail fallback"],
+        ["PAY", "Moyasar: Apple Pay, webhooks"],
+        ["POST", "/webhook confirms and activates the subscription"],
+        ["GET", "/invoice/:gatewayRef.pdf (VAT invoice)"],
+        ["MAIL", "Shared email gateway, Gmail SMTP fallback"],
         ["BOT", "Telegram Bot API"],
-        ["HOST", "Vercel serverless functions and cron"],
       ],
-      note: "One gateway serves four projects",
+      note: "One email gateway serves four projects",
       step: {
-        title: "Payments and email, built once",
-        text: "Moyasar handles payments. Email goes through a gateway I wrote that four of my projects share, with a fallback when the daily quota runs out.",
-        facts: ["Five plans: monthly, four-month, annual, and group plans for 3 and 5 seats", "The gateway has 35 automated tests"],
+        title: "Payments and email, handled",
+        text: "When a student pays, Moyasar confirms it, the subscription switches on and a VAT invoice is generated as a PDF. Email goes out through a gateway I built that four of my projects share.",
+        facts: ["Five plans: monthly, four-month, annual, and group plans for 3 and 5 seats", "The email gateway has 35 automated tests"],
+      },
+    },
+    {
+      name: "Search",
+      role: "Being found",
+      visual: "search",
+      rows: [
+        ["BUILD", "Public pages prerendered so crawlers read real content"],
+        ["GSC", "468 indexed pages on 16 Sep 2026, from 5 on 30 Aug"],
+        ["GSC", "734 clicks and 13.1K impressions in 90 days"],
+      ],
+      note: "Source: Google Search Console",
+      step: {
+        title: "Found by search engines",
+        text: "The public pages are prerendered, so Google reads real content instead of an empty shell. Every lit page is one Google now knows about.",
+        facts: ["Indexed pages went from 5 to 468 between 30 Aug and 16 Sep 2026", "734 clicks from Google search in 90 days"],
+      },
+    },
+    {
+      name: "Interface",
+      role: "What people see",
+      visual: "screen",
+      image: "sqb",
+      rows: [
+        ["UI", "React 19 and Vite, right-to-left Arabic"],
+        ["URL", "smle-question-bank.com"],
+      ],
+      note: "",
+      step: {
+        title: "And finally, what students see",
+        text: "The finished product: a React 19 interface built right-to-left for Arabic, with practice questions, explanations and a plan for each student.",
+        facts: ["1,001 visitors and 4,262 page views in the last 30 days", "Live at smle-question-bank.com"],
       },
     },
   ],
@@ -178,6 +183,7 @@ export const PROJECTS = [
       "Prerendered public pages took Google-indexed pages from 5 to 468.",
     ],
     stack: ["React 19", "Vite", "Express", "PostgreSQL", "Moyasar", "Expo", "Resend"],
+    image: "sqb",
     layers: null, // uses HERO.layers
     meta: { role: "Design and build, solo", period: "Feb 2025 to now", status: "Live" },
     href: "https://www.smle-question-bank.com",
@@ -185,6 +191,7 @@ export const PROJECTS = [
   {
     id: "hr",
     group: "prod",
+    diagram: "branches",
     title: "Multi-branch HR platform",
     subtitle: "Employee records, payroll, absence and documents for a healthcare company",
     summary:
@@ -199,7 +206,6 @@ export const PROJECTS = [
       {
         name: "Interface",
         role: "What staff use",
-        kind: "rows",
         rows: [
           ["PAGE", "Dashboard and branch statistics"],
           ["PAGE", "Employee file and expiry tracking"],
@@ -212,7 +218,6 @@ export const PROJECTS = [
       {
         name: "API",
         role: "18 route modules",
-        kind: "rows",
         rows: [
           ["MODULE", "employees, employee-file, employee-expiry"],
           ["MODULE", "payroll-absences, bus-transportation"],
@@ -225,7 +230,6 @@ export const PROJECTS = [
       {
         name: "Access",
         role: "Who can do what",
-        kind: "rows",
         rows: [
           ["AUTH", "JWT sessions"],
           ["ROLES", "Role-based access across 25+ branches"],
@@ -237,7 +241,6 @@ export const PROJECTS = [
       {
         name: "Data",
         role: "Storage and reports",
-        kind: "rows",
         rows: [
           ["DB", "PostgreSQL with migrations"],
           ["CACHE", "Redis, per-route expiry"],
@@ -254,6 +257,7 @@ export const PROJECTS = [
   {
     id: "shoghli",
     group: "prod",
+    diagram: "nearby",
     title: "Shoghli",
     subtitle: "Location-based job marketplace for Syria",
     summary:
@@ -268,7 +272,6 @@ export const PROJECTS = [
       {
         name: "Employer website",
         role: "React 18 + Vite",
-        kind: "rows",
         rows: [
           ["FLOW", "Register and pay through Sham Cash"],
           ["FLOW", "Upload the payment receipt"],
@@ -280,7 +283,6 @@ export const PROJECTS = [
       {
         name: "Worker app",
         role: "React Native + Expo Router",
-        kind: "rows",
         rows: [
           ["FLOW", "Register from the Android app, free"],
           ["FLOW", "Finish onboarding"],
@@ -292,7 +294,6 @@ export const PROJECTS = [
       {
         name: "API",
         role: "13 modules, 54 handlers",
-        kind: "rows",
         rows: [
           ["MODULE", "auth, users, workers"],
           ["MODULE", "jobs, categories, locations"],
@@ -305,7 +306,6 @@ export const PROJECTS = [
       {
         name: "Database",
         role: "PostgreSQL + PostGIS",
-        kind: "rows",
         rows: [
           ["GEO", "governorates, districts, subdistricts, villages"],
           ["DATA", "job_posts, job_categories"],
@@ -322,6 +322,7 @@ export const PROJECTS = [
   {
     id: "email",
     group: "prod",
+    diagram: "gateway",
     title: "Shared email gateway",
     subtitle: "One email service for four production projects",
     summary:
@@ -336,7 +337,6 @@ export const PROJECTS = [
       {
         name: "Public API",
         role: "What projects call",
-        kind: "rows",
         rows: [
           ["POST", "/api/v1/send"],
           ["POST", "/api/v1/send/bulk"],
@@ -349,7 +349,6 @@ export const PROJECTS = [
       {
         name: "Quota",
         role: "Fair share",
-        kind: "rows",
         rows: [
           ["QUOTA", "Splits Resend's 100 a day across projects"],
           ["FALLBACK", "Gmail SMTP when the day's quota is spent"],
@@ -360,7 +359,6 @@ export const PROJECTS = [
       {
         name: "Suppression",
         role: "Keeping the reputation",
-        kind: "rows",
         rows: [
           ["HOOK", "POST /api/webhooks/resend"],
           ["SIG", "Signed by Svix"],
@@ -372,7 +370,6 @@ export const PROJECTS = [
       {
         name: "Tests",
         role: "35 in total",
-        kind: "rows",
         rows: [
           ["TEST", "client.test.ts, 8"],
           ["TEST", "origin.test.ts, 6"],
@@ -387,36 +384,18 @@ export const PROJECTS = [
     private: "Internal infrastructure. Its admin panel shows real users' data, so there is no public link.",
   },
   {
-    id: "kernel",
-    group: "sites",
-    title: "Kernel",
-    subtitle: "Laptop finder for computer-science students in Saudi Arabia",
-    summary:
-      "Tell it your study track, your budget in riyals and what you will not give up, and it matches you against 40 laptops sold by 5 Saudi retailers and explains each trade-off. Its hero shows a laptop taken apart in 3D.",
-    facts: ["A react-three-fiber scene with GSAP motion and Lenis smooth scrolling.", "6 study tracks, 40 laptops, 5 retailers."],
-    stack: ["React", "TypeScript", "Three.js", "react-three-fiber", "GSAP", "Zustand"],
-    layers: [
-      { name: "Interface", role: "What visitors see", kind: "image", image: "kernel", note: "kernel-laptop-finder.vercel.app" },
-      { name: "3D scene", role: "react-three-fiber", kind: "rows", rows: [["R3F", "react-three-fiber and drei"], ["3D", "A laptop shown exploded"]], note: "Three.js" },
-      { name: "Motion", role: "How it moves", kind: "rows", rows: [["GSAP", "Timelines"], ["LENIS", "Smooth scrolling"]], note: "" },
-      { name: "State and data", role: "What it knows", kind: "rows", rows: [["STATE", "Zustand"], ["DATA", "40 laptops"], ["DATA", "5 retailers"], ["DATA", "6 study tracks"]], note: "" },
-    ],
-    meta: { role: "Design and build", period: "2026", status: "Live" },
-    href: "https://kernel-laptop-finder.vercel.app",
-  },
-  {
     id: "law",
     group: "sites",
+    image: "law",
     title: "Al-Haysoni Law Firm",
     subtitle: "Website for a law firm",
     summary: "A professional presence for a law firm, with an interactive 3D scene, a contact form that emails the office, and structured data for search engines. Freelance work, July to August 2025.",
     facts: ["React 19 and Three.js.", "Schema.org structured data, sitemap and robots.txt."],
     stack: ["React 19", "Three.js", "Vite", "Express"],
     layers: [
-      { name: "Interface", role: "What visitors see", kind: "image", image: "law", note: "alhisony.com" },
-      { name: "3D scene", role: "Three.js", kind: "rows", rows: [["3D", "Interactive scene on the home page"]], note: "" },
-      { name: "Contact", role: "Reaches the office", kind: "rows", rows: [["FORM", "Contact form"], ["API", "Express endpoint that sends the email"]], note: "" },
-      { name: "Search", role: "Being found", kind: "rows", rows: [["LD", "Schema.org structured data"], ["MAP", "sitemap.xml and robots.txt"]], note: "" },
+      { name: "3D scene", role: "Three.js", rows: [["3D", "Interactive scene on the home page"]], note: "" },
+      { name: "Contact", role: "Reaches the office", rows: [["FORM", "Contact form"], ["API", "Express endpoint that sends the email"]], note: "" },
+      { name: "Search", role: "Being found", rows: [["LD", "Schema.org structured data"], ["MAP", "sitemap.xml and robots.txt"]], note: "" },
     ],
     meta: { role: "Freelance", period: "Jul to Aug 2025", status: "Live" },
     href: "https://www.alhisony.com",
@@ -424,16 +403,16 @@ export const PROJECTS = [
   {
     id: "erth",
     group: "sites",
+    image: "erth",
     title: "Erth Environmental Services",
     subtitle: "Website for an environmental consultancy",
     summary: "A bilingual (Arabic and English) site for an environmental consultancy, with Google Maps and automated intake of consultation requests. Freelance work, May to June 2025.",
     facts: ["Arabic and English interface.", "Google Maps integration and an Express API for requests."],
     stack: ["React", "Express", "Google Maps API", "Framer Motion"],
     layers: [
-      { name: "Interface", role: "What visitors see", kind: "image", image: "erth", note: "erthfc.com" },
-      { name: "Languages", role: "Two of them", kind: "rows", rows: [["I18N", "Arabic and English, switchable"]], note: "" },
-      { name: "Maps", role: "Where the clients are", kind: "rows", rows: [["API", "Google Maps"]], note: "" },
-      { name: "Requests", role: "Consultation intake", kind: "rows", rows: [["API", "Express endpoint for consultation requests"]], note: "" },
+      { name: "Languages", role: "Two of them", rows: [["I18N", "Arabic and English, switchable"]], note: "" },
+      { name: "Maps", role: "Where the clients are", rows: [["API", "Google Maps"]], note: "" },
+      { name: "Requests", role: "Consultation intake", rows: [["API", "Express endpoint for consultation requests"]], note: "" },
     ],
     meta: { role: "Freelance", period: "May to Jun 2025", status: "Live" },
     href: "https://erthfc.com",
@@ -447,8 +426,7 @@ export const NEUROLINK = {
   intro:
     "NeuroLink is a prototype for early behavioural screening support in primary-care visits. A child plays a 3 minute 5 second game while a webcam measures behavioural indicators. The doctor sees only what today's session showed that the record does not already contain. The doctor decides.",
   context: "Built for Let's Pitch It 2026 (GDG Qassim). It is a prototype, not a medical device, and it has not been clinically validated.",
-  scrollCue: "Scroll to follow one frame through it.",
-  overview: "Five stages, from the camera to the doctor.",
+  scrollCue: "Scroll to watch it get built, part by part.",
   outro: "The repository is private. I demo it live in an interview or a call.",
   facts: [
     { value: "478", label: "face landmarks per frame, including both irises" },
@@ -457,46 +435,60 @@ export const NEUROLINK = {
   ],
   layers: [
     {
-      name: "Camera and landmarks",
+      name: "Camera",
       role: "What the camera sees",
-      kind: "rows",
+      visual: "webcam",
       rows: [
         ["CAM", "One getUserMedia call site"],
-        ["FACE", "478 landmarks with irises"],
-        ["HAND", "21 landmarks per hand"],
         ["RUN", "MediaPipe WASM, on the device"],
         ["FALLBACK", "GPU first, then CPU"],
+        ["PIN", "Model files pinned to MediaPipe 0.10.18"],
       ],
-      note: "Pinned to MediaPipe 0.10.18",
+      note: "A build check fails if anything but one file touches the camera",
       step: {
-        title: "The camera stays on the device",
-        text: "Face and hand landmarks are extracted in the browser with MediaPipe. A build check fails if anything except one file touches the camera.",
-        facts: ["Model files are pinned because the 'latest' path changes in place", "Virtual cameras are detected and avoided"],
+        title: "It starts with a webcam",
+        text: "A child plays a short game while the webcam watches. The video never leaves the device: face and hand tracking run in the browser.",
+        facts: ["Runs on the device with MediaPipe", "A build check fails if anything except one file touches the camera"],
       },
     },
     {
-      name: "Features",
-      role: "One typed frame per video frame",
-      kind: "rows",
+      name: "Hands",
+      role: "21 points per hand",
+      visual: "hand",
       rows: [
-        ["HEAD", "headYaw, headPitch, headRoll"],
-        ["GAZE", "gazeRegion, gazeConf"],
-        ["EYES", "blinkLeft, blinkRight, eyesOpen"],
-        ["FACE", "jawOpen, smile, browRaise"],
+        ["HAND", "21 landmarks per hand"],
         ["HANDS", "extended[5], isPoint, bearing"],
         ["STATE", "pointing, onTask, distanceCm"],
       ],
       note: "features.ts",
       step: {
-        title: "A small typed frame",
-        text: "Raw landmarks become one small object: head pose, gaze region, blinks, smile and brow, and per-finger extension with pointing.",
-        facts: ["Rolling session stats: attention stability, look-away count, blink count"],
+        title: "Hands: 21 points each",
+        text: "Every frame the browser finds 21 landmarks on the hand, enough to tell an open hand from a point, a wave or a fist.",
+        facts: ["Pointing and waving are checked against what the game asked for"],
       },
     },
     {
-      name: "Protocol",
+      name: "Face",
+      role: "478 points",
+      visual: "face",
+      rows: [
+        ["FACE", "478 landmarks with irises"],
+        ["HEAD", "headYaw, headPitch, headRoll"],
+        ["GAZE", "gazeRegion, gazeConf"],
+        ["EYES", "blinkLeft, blinkRight, eyesOpen"],
+        ["FACE", "jawOpen, smile, browRaise"],
+      ],
+      note: "features.ts",
+      step: {
+        title: "Faces: 478 points",
+        text: "478 landmarks, including both irises, give the head turn, where the child is looking, blinks and expression, all condensed into one small record per frame.",
+        facts: ["Head pose, gaze region, blinks, smile and brow raise"],
+      },
+    },
+    {
+      name: "The game",
       role: "Fixed timing, on purpose",
-      kind: "rows",
+      visual: "protocol",
       rows: [
         ["B0", "calib, 20 s"],
         ["B1", "social, 40 s"],
@@ -508,43 +500,26 @@ export const NEUROLINK = {
       note: "3 min 5 s in total",
       step: {
         title: "A game built as an instrument",
-        text: "Six blocks with fixed timing, so every measure is defined against a timestamped stimulus and old sessions stay comparable.",
-        facts: ["Block B1 approximates a published paradigm with a webcam and does not claim the original's validation"],
+        text: "Six timed blocks, 3 minutes 5 seconds in total. Every measure is tied to a timestamped moment, so sessions stay comparable with each other.",
+        facts: ["The social-attention block approximates a published paradigm with a webcam and does not claim the original's validation"],
       },
     },
     {
-      name: "Scoring",
-      role: "Every number has a source",
-      kind: "rows",
+      name: "The doctor",
+      role: "The doctor decides",
+      visual: "physician",
       rows: [
         ["API", "FastAPI and SQLite engine"],
         ["NORMS", "norms_v1.json, age norms"],
         ["RULE", "Each field records its provenance"],
-        ["UI", "The interface must show the source"],
+        ["ACT", "Add to record, Request referral, Dismiss"],
+        ["NEVER", "Diagnose or name a condition"],
       ],
       note: "analysis/thresholds.ts, engine/app/norms",
       step: {
-        title: "Every number shows where it came from",
-        text: "Thresholds live in a norms file where each field records its provenance. The scoring layer must echo the source it used, and the interface must render it.",
-        facts: ["A number whose origin the software will not show is a number it must not show"],
-      },
-    },
-    {
-      name: "Physician view",
-      role: "The doctor decides",
-      kind: "rows",
-      rows: [
-        ["SHOWS", "Only the difference from the record"],
-        ["ACT", "Add to record"],
-        ["ACT", "Request referral"],
-        ["ACT", "Dismiss"],
-        ["NEVER", "Diagnose or name a condition"],
-      ],
-      note: "The physician's decision is final",
-      step: {
-        title: "It does not diagnose",
-        text: "The physician sees what today's session showed that the record does not already contain, as one notification with three choices.",
-        facts: ["A build check fails if the bundle contains condition-naming vocabulary"],
+        title: "The doctor decides",
+        text: "The physician sees only what today's session showed that the record does not already contain, as one notification with three choices: add to the record, request a referral, or dismiss. It never diagnoses.",
+        facts: ["Every number shows where it came from", "A build check fails if the code contains condition-naming vocabulary"],
       },
     },
   ],
@@ -595,8 +570,8 @@ export const EXPERIENCE = [
 ];
 
 export const SKILLS = [
-  { group: "Languages", items: [["JavaScript", "Every project"], ["TypeScript", "Email gateway, NeuroLink, Kernel"], ["Python", "NeuroLink engine (FastAPI)"], ["SQL", "PostgreSQL in SQB, HR, Shoghli"]] },
-  { group: "Front end", items: [["React 18 and 19", "Every project"], ["Three.js, react-three-fiber", "This site, Kernel, Al-Haysoni"], ["GSAP", "Kernel"], ["Right-to-left layouts", "SQB, HR, Shoghli"]] },
+  { group: "Languages", items: [["JavaScript", "Every project"], ["TypeScript", "Email gateway, NeuroLink"], ["Python", "NeuroLink engine (FastAPI)"], ["SQL", "PostgreSQL in SQB, HR, Shoghli"]] },
+  { group: "Front end", items: [["React 18 and 19", "Every project"], ["Three.js, react-three-fiber", "This site, Al-Haysoni"], ["Scroll-driven 3D animation", "This site"], ["Right-to-left layouts", "SQB, HR, Shoghli"]] },
   { group: "Back end", items: [["Node.js, Express", "SQB, HR, Shoghli"], ["FastAPI", "NeuroLink"], ["PostgreSQL, PostGIS", "SQB, HR, Shoghli"], ["Redis", "HR"]] },
   { group: "Mobile and integrations", items: [["React Native, Expo", "SQB, Shoghli"], ["Moyasar payments", "SQB"], ["Resend, Nodemailer, Svix", "Email gateway"], ["MediaPipe", "NeuroLink"]] },
   { group: "Operating", items: [["Git", "573 commits in SQB alone"], ["Vercel", "18 projects"], ["SEO and Search Console", "SQB: 5 to 468 indexed pages"], ["Automated tests", "Email gateway: 35"]] },

@@ -1,20 +1,15 @@
 import { NEUROLINK } from "../../data/content";
-import TeardownStage from "../Teardown/TeardownStage";
+import AssemblyStage from "../Assembly/AssemblyStage";
 import "./NeuroLink.css";
-
-// Plate 0 gets a 21-landmark hand, plate 1 a head-pose rig. Both live in the lazy
-// 3D chunk; they are named here so this file never imports three.js.
-const EXTRAS = { 0: "hand", 1: "head" };
 
 export default function NeuroLink() {
   return (
     <>
-      <TeardownStage
+      <AssemblyStage
         id="neurolink"
         data={NEUROLINK}
         layers={NEUROLINK.layers}
-        label="NeuroLink, one frame through five stages"
-        extras={EXTRAS}
+        label="NeuroLink, built part by part"
         intro={
           <>
             <p className="nl-tag">{NEUROLINK.name}</p>
@@ -30,7 +25,7 @@ export default function NeuroLink() {
           </a>
         }
       />
-      <div className="nl-after on-dark">
+      <div className="nl-after">
         <div className="wrap">
           <dl className="nl-facts">
             {NEUROLINK.facts.map((f) => (

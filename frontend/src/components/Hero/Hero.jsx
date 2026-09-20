@@ -1,16 +1,16 @@
 import { HERO, SITE } from "../../data/content";
-import TeardownStage from "../Teardown/TeardownStage";
+import AssemblyStage from "../Assembly/AssemblyStage";
 import "./Hero.css";
 
 const RESUME = "/Mahmoud_Ahmed%20El-Sharaky_Resume.pdf";
 
 export default function Hero() {
   return (
-    <TeardownStage
+    <AssemblyStage
       id="top"
       data={HERO}
       layers={HERO.layers}
-      label="SQB, taken apart layer by layer"
+      label="SQB, built layer by layer"
       intro={
         <>
           <p className="hero-status">

@@ -1,12 +1,12 @@
 .proof {
-  background: var(--paper);
-  border-block: 1px solid var(--rule);
+  background: var(--surface);
+  border-block: 1px solid var(--line);
 }
 
 .proof-headline {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-block: 1.5px solid var(--ink);
+  border-block: 1px solid var(--line);
 }
 
 .proof-headline li {
@@ -14,7 +14,7 @@
   align-content: start;
   gap: var(--s2);
   padding: var(--s6) var(--s5);
-  border-inline-start: 1px solid var(--rule);
+  border-inline-start: 1px solid var(--line);
 }
 
 .proof-headline li:first-child {
@@ -26,7 +26,11 @@
   font-family: var(--font-head);
   font-weight: 700;
   font-size: clamp(3rem, 6vw, 4.5rem);
-  line-height: 1;
+  line-height: 1.05;
+  background: linear-gradient(120deg, #fff 10%, var(--accent-hi) 45%, var(--accent) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   font-variant-numeric: tabular-nums;
   direction: ltr;
   text-align: start;
@@ -41,13 +45,13 @@
 }
 
 .proof-detail {
-  color: var(--ink-2);
+  color: var(--text-2);
   font-size: var(--fs-1);
 }
 
 .proof-source {
   margin-block-start: var(--s2);
-  color: var(--ink-3);
+  color: var(--muted);
   font-size: var(--fs-0);
   line-height: 1.55;
 }
@@ -73,14 +77,14 @@
 .proof-table th,
 .proof-table td {
   padding: var(--s3) var(--s4);
-  border-block-end: 1px solid var(--rule);
+  border-block-end: 1px solid var(--line);
   text-align: start;
   vertical-align: top;
 }
 
 .proof-table thead th {
-  border-block-end: 1.5px solid var(--ink);
-  color: var(--ink-2);
+  border-block-end: 1px solid var(--line-2);
+  color: var(--text-2);
   font-weight: 500;
   font-size: var(--fs-0);
 }
@@ -91,13 +95,13 @@
 
 .proof-table tbody th span {
   display: block;
-  color: var(--ink-3);
+  color: var(--muted);
   font-size: var(--fs-0);
   font-weight: 400;
 }
 
 .proof-note {
-  color: var(--ink-3);
+  color: var(--muted);
   font-size: var(--fs-0);
 }
 
@@ -118,7 +122,7 @@
 
 .proof-scale dd {
   margin: var(--s1) 0 0;
-  color: var(--ink-2);
+  color: var(--text-2);
   font-size: var(--fs-1);
   line-height: 1.55;
 }
@@ -126,7 +130,7 @@
 .proof-scale dd span {
   display: block;
   margin-block-start: var(--s1);
-  color: var(--ink-3);
+  color: var(--muted);
   font-size: var(--fs-0);
 }
 
@@ -139,7 +143,7 @@
   .proof-headline li:first-child {
     padding: var(--s5) 0;
     border-inline-start: 0;
-    border-block-end: 1px solid var(--rule);
+    border-block-end: 1px solid var(--line);
   }
 
   .proof-headline li:last-child {
@@ -166,7 +170,7 @@
 
   .proof-table tr {
     padding-block: var(--s3);
-    border-block-end: 1px solid var(--rule);
+    border-block-end: 1px solid var(--line);
   }
 
   .proof-table th,
@@ -177,7 +181,7 @@
 
   .proof-table td::before {
     content: attr(data-label) ": ";
-    color: var(--ink-3);
+    color: var(--muted);
     font-size: var(--fs-0);
   }
 }
