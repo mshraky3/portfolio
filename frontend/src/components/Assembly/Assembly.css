@@ -1,8 +1,47 @@
 .as {
   --nav: 64px;
   position: relative;
-  height: calc((var(--n) * 0.85 + 2.7) * (100svh - var(--nav)));
+  --per: 0.75;
+  --pad: 2.2;
+  height: calc((var(--n) * var(--per) + var(--pad)) * (100svh - var(--nav)));
   background: var(--bg);
+}
+
+/* Project chapters and the small sites get less scroll per part than the hero. */
+.as[data-size="chapter"] {
+  --per: 0.65;
+  --pad: 1.3;
+}
+
+.as[data-size="compact"] {
+  --per: 0.6;
+  --pad: 1.2;
+}
+
+/* Consecutive chapters: a hairline and a little breathing room between them. */
+.as[data-size="chapter"],
+.as[data-size="compact"] {
+  border-block-start: 1px solid var(--line);
+}
+
+.as-badge {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-0);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.as-badge::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
 }
 
 .as-sticky {

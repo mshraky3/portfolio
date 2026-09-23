@@ -4,6 +4,7 @@ import cors from "cors";
 import nodemailer from "nodemailer"
 import { getJobs, buildDigestHtml, buildCheckinHtml, esc } from "./jobs.js";
 import { createEmailClient } from "./email-client.js";
+import { visitorsRouter } from "./visitors.js";
 
 const app = express()
 
@@ -85,18 +86,51 @@ function rateLimit(max, windowMs) {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^\+?[0-9][0-9\s-]{6,19}$/;
+
+// Anonymous visitor data and the "How did it land?" reactions (visitors.js).
+// A one-line note left there is emailed to me through the gateway.
+const INTENT_LABEL = { hiring: "Hiring", project: "Has a project", looking: "Just looking", friend: "Knows me" };
+app.use(
+    "/v",
+    visitorsRouter(rateLimit, ({ note, country, reaction }) => {
+        const bits = [
+            country ? `from ${country}` : null,
+            reaction?.score != null ? `reaction ${reaction.score}/100` : null,
+            reaction?.intent ? INTENT_LABEL[reaction.intent] : null,
+        ].filter(Boolean).join(" · ");
+        return sendMail({
+            event: "portfolio.owner.visitor_note",
+            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
+            to: OWNER_EMAIL,
+            subject: "💬 A visitor left you a note",
+            text: `${note}\n\n${bits}`,
+            html: `
+              <div style="font-family:Segoe UI,system-ui,sans-serif;max-width:640px;margin:0 auto;">
+                <h2 style="color:#6a1b9a;margin:8px 0;">💬 A visitor left you a note</h2>
+                <div style="border:1px solid #e5e0ee;border-left:4px solid #C147E9;border-radius:10px;padding:14px 16px;white-space:pre-wrap;">${esc(note)}</div>
+                <p style="color:#6a5f7a;margin-top:10px;">${esc(bits || "anonymous")}</p>
+              </div>`,
+        });
+    }),
+);
 
 app.post("/send-email", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
     const data = req.body || {};
 
     // ---- validation ----
-    const firstName = String(data.firstName || "").trim();
-    const email = String(data.email || "").trim();
-    const subject = String(data.subject || "").trim();
+    // The quick form sends a message and one way to reply: an email or a phone
+    // number (answered on WhatsApp). Name and subject are optional.
+    const firstName = String(data.firstName || "").trim() || "Portfolio visitor";
+    const reply = String(data.email || data.reply || "").trim();
+    const subject = String(data.subject || "").trim() || "Quick note from the portfolio";
     const message = String(data.message || "").trim();
-    if (!firstName || firstName.length > 100) return res.status(400).json({ error: "Invalid name" });
-    if (!EMAIL_RE.test(email) || email.length > 200) return res.status(400).json({ error: "Invalid email" });
-    if (!subject || subject.length > 200) return res.status(400).json({ error: "Invalid subject" });
+    const isEmail = EMAIL_RE.test(reply);
+    const isPhone = PHONE_RE.test(reply);
+    const email = isEmail ? reply : "";
+    if (firstName.length > 100) return res.status(400).json({ error: "Invalid name" });
+    if ((!isEmail && !isPhone) || reply.length > 200) return res.status(400).json({ error: "Invalid email or phone" });
+    if (subject.length > 200) return res.status(400).json({ error: "Invalid subject" });
     if (!message || message.length > 5000) return res.status(400).json({ error: "Invalid message" });
 
     try {
@@ -105,13 +139,13 @@ app.post("/send-email", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
             sourceOrigin: req.headers.referer || req.headers.origin,
             from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
-            replyTo: email, // hit "Reply" in Gmail → goes straight to the sender
+            replyTo: email || undefined, // hit "Reply" in Gmail → goes straight to the sender
             subject: `📬 ${subject} — from ${firstName}`,
-            text: `Message from ${firstName} (${email}):\n\n${message}`,
+            text: `Message from ${firstName} (${reply}${isPhone ? ", phone" : ""}):\n\n${message}`,
             html: `
               <div style="font-family:Segoe UI,system-ui,sans-serif;max-width:640px;margin:0 auto;">
                 <h2 style="color:#6a1b9a;margin:8px 0;">📬 New contact message</h2>
-                <p style="margin:4px 0;"><strong>From:</strong> ${esc(firstName)} &lt;${esc(email)}&gt;</p>
+                <p style="margin:4px 0;"><strong>From:</strong> ${esc(firstName)} &lt;${esc(reply)}&gt;${isPhone ? " (phone: reply on WhatsApp)" : ""}</p>
                 <p style="margin:4px 0;"><strong>Subject:</strong> ${esc(subject)}</p>
                 <div style="border:1px solid #e5e0ee;border-left:4px solid #C147E9;border-radius:10px;padding:14px 16px;margin-top:12px;white-space:pre-wrap;">${esc(message)}</div>
               </div>`,

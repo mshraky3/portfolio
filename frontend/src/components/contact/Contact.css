@@ -1,14 +1,13 @@
 .contact-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--s8);
-  align-items: start;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: var(--s7) var(--s8);
+  align-items: center;
 }
 
 .contact-info {
   display: grid;
   gap: var(--s5);
-  justify-items: start;
 }
 
 .contact-info h2 {
@@ -20,96 +19,143 @@
   color: var(--text-2);
 }
 
-.contact-list {
+/* One-tap ways to reach me */
+.ways {
   display: grid;
-  gap: 0;
-  width: 100%;
-  margin: 0;
-  border-block-start: 1px solid var(--line-2);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s3);
 }
 
-.contact-list > div {
-  display: grid;
-  grid-template-columns: 9rem 1fr;
-  gap: var(--s4);
-  padding-block: var(--s3);
-  border-block-end: 1px solid var(--line);
+.way {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: 64px;
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.15s, background-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 
-.contact-list dt {
+.way:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+.way[data-primary] {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(193, 71, 233, 0.28), rgba(106, 27, 154, 0.18));
+  box-shadow: var(--glow);
+}
+
+.way-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-hi);
+}
+
+.way-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.way-text {
+  display: grid;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.way-text strong {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: var(--fs-1);
+}
+
+.way-text span {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--fs-0);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-meta {
   color: var(--muted);
   font-size: var(--fs-1);
 }
 
-.contact-list dd {
-  margin: 0;
-  font-family: var(--font-head);
-  font-weight: 500;
-  font-size: var(--fs-1);
-  overflow-wrap: anywhere;
-}
-
-.form {
+/* The quick note */
+.note {
   display: grid;
-  gap: var(--s4);
+  gap: var(--s3);
   padding: var(--s5);
   border: 1px solid var(--line-2);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--glow);
 }
 
-.form label {
+.note h3 {
+  font-size: var(--fs-2);
+}
+
+.note-field {
   display: grid;
-  gap: var(--s1);
+  min-width: 0;
 }
 
-.form label span {
-  font-size: var(--fs-1);
-  font-weight: 500;
-}
-
-.form input,
-.form textarea {
+.note textarea,
+.note input {
   width: 100%;
   min-height: 48px;
   padding: var(--s3) var(--s4);
   border: 1.5px solid var(--line);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: var(--bg-2);
   transition: border-color 0.15s;
 }
 
-.form textarea {
+.note textarea {
   resize: vertical;
-  min-height: 140px;
+  min-height: 92px;
 }
 
-.form input:hover,
-.form textarea:hover {
-  border-color: var(--muted);
+.note textarea::placeholder,
+.note input::placeholder {
+  color: var(--muted);
 }
 
-.form input:focus-visible,
-.form textarea:focus-visible {
+.note textarea:focus-visible,
+.note input:focus-visible {
   border-color: var(--accent);
   outline-offset: 1px;
 }
 
-.form .btn {
-  justify-self: start;
+.note-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s3);
 }
 
-.form-status {
-  min-height: 1.75em;
-  font-size: var(--fs-1);
+.note-status {
+  min-height: 1.4em;
+  font-size: var(--fs-0);
 }
 
-.form-status[data-state="sent"] {
+.note-status[data-state="sent"] {
   color: var(--ok);
 }
 
-.form-status[data-state="error"] {
+.note-status[data-state="error"] {
   color: var(--err);
 }
 
@@ -123,17 +169,15 @@
 @media (max-width: 860px) {
   .contact-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--s7);
   }
 }
 
-@media (max-width: 480px) {
-  .contact-list > div {
+@media (max-width: 420px) {
+  .ways {
     grid-template-columns: minmax(0, 1fr);
-    gap: 0;
   }
 
-  .form {
-    padding: var(--s4);
+  .note-row {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

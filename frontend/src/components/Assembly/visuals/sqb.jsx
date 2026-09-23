@@ -343,11 +343,11 @@ export function Search({ mod }) {
 }
 
 // ─── Interface: the real site on a screen that powers up ─────────
-export function Screen({ mod, image }) {
+export function Screen({ mod, image, w = 4.1, base = 0.62 }) {
   const tex = useTexture(IMAGES[image]);
   const face = useRef();
   const halo = useRef();
-  const W = 4.1;
+  const W = w;
   const aspect = tex.image ? tex.image.width / tex.image.height : 1.6;
   const Hh = W / aspect;
 
@@ -364,14 +364,14 @@ export function Screen({ mod, image }) {
     if (halo.current) halo.current.material.opacity = 0.05 + 0.4 * on;
   });
 
-  const y = 0.62 + Hh / 2;
+  const y = base + Hh / 2;
   return (
     <group>
       <mesh position={[0, 0.06, -0.15]} material={M.body2}>
         <boxGeometry args={[1.9, 0.08, 1.0]} />
       </mesh>
-      <mesh position={[0, 0.4, -0.55]} material={M.body}>
-        <boxGeometry args={[0.28, 0.75, 0.14]} />
+      <mesh position={[0, (base + 0.13) / 2, -0.55]} material={M.body}>
+        <boxGeometry args={[0.28, base + 0.13, 0.14]} />
       </mesh>
       <group position={[0, y, -0.4]} rotation={[-0.09, 0, 0]}>
         <Glow ref={halo} size={7} opacity={0.3} position={[0, 0, -0.3]} />

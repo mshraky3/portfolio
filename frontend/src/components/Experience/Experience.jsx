@@ -7,7 +7,7 @@ export default function Experience() {
       <div className="wrap">
         <div className="section-head">
           <h2 id="exp-title">Experience</h2>
-          <p>Two ongoing roles and two freelance projects. In each I built and ran the system myself, from design to deployment and upkeep.</p>
+          <p>Two ongoing roles and two freelance sites.</p>
         </div>
 
         <ol className="exp-list">

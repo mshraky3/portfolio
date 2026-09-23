@@ -1,8 +1,10 @@
 # Portfolio — Mahmoud Alshraky
 
-English-only React portfolio. Scrolling builds a real system: its parts fly in and snap together (WebGL), and each part plays a small visual story of what it does. Routes, tables and files are kept in a collapsed "Technical details" panel, never in the 3D scene. It also carries dated real traffic numbers and a case study of a browser face and hand tracking prototype. A small Express API behind it handles the contact form.
+English-only React portfolio. Scrolling builds a system: the hero shows how I build any system (plan, data, rules, access, interface, keeping it running), then each of four systems (SQB, the HR platform, NeuroLink, the email gateway) and the client sites gets its own shorter scroll chapter. Parts fly in and snap together (WebGL), and each plays a small visual story of what it does. Routes, tables and files are kept in a collapsed "Technical details" panel, never in the 3D scene. It also carries dated real traffic numbers and a case study of a browser face and hand tracking prototype. A small Express API behind it handles the contact form.
 
 **Live:** [web-dev-seven-iota.vercel.app](https://web-dev-seven-iota.vercel.app)
+
+> **Ops (2026-09-20).** Frontend = Vercel `web-dev`; API = Vercel `portfolio-api` (`portfolio-api-rose.vercel.app`, mail via the email gateway, crons `/job-digest` 05:00 UTC and `/evening-checkin` 16:00 UTC); no database. Hosting map: working-projects `INFRASTRUCTURE.md`; rules: `project-rules/PORTFOLIO.md`. `job-hunt/` is private and git-ignored.
 
 ---
 
@@ -26,7 +28,7 @@ frontend/
   src/
     data/content.js  every claim on the page, with its source and date
     data/images.js   image keys used by content.js
-    components/      Nav, Hero, Proof, Work, NeuroLink, Experience, About, contact,
+    components/      Nav, Hero, Proof, Systems, Sites, Experience, About, contact, Reactions,
                      Assembly (the scroll-driven 3D engine), Tracker (private /hq, lazy-loaded)
     utils/           capabilities.js: WebGL, low-power and reduced-motion checks
   public/            résumé PDFs, og.png (1200x630), robots.txt, sitemap.xml
@@ -40,9 +42,12 @@ job-hunt/            private notes (git-ignored)
 - **No number without a source.** Add it to `src/data/content.js` with where it came from and the date. Traffic figures come from Google Search Console and Vercel Web Analytics; re-read them and update `METRICS_AS_OF` when you refresh them.
 - The résumé generator (`resume-src/gen_resume.py`) carries the same facts. Change both, then regenerate the PDFs (command below).
 - **English only.** No Arabic text, fonts or screenshots of Arabic interfaces on the public site. Screenshots come from the English mode of each product (`src/assets/shots`). The private `/hq` tool is lazy-loaded so its data never ships in the public bundle.
-- **How the 3D works.** `components/Assembly/timeline.js` maps scroll progress to a build clock: each module lands on the stack, then plays its story (`components/Assembly/visuals/*`: data vault, engine, payment gate, search grid, screen, and for NeuroLink a webcam, hand, face, protocol timeline and physician view). `AssemblyScene.jsx` places the trays and drives the camera. Everything is a pure function of scroll, so nothing moves on its own and it behaves the same under the OS reduced-motion setting. Without WebGL (or on low-powered devices) the section falls back to plain captions plus the technical details.
+- **How the 3D works.** One engine, `components/Assembly`, drives every scroll section; a **rig** (`rigs.js`) decides how that section moves: `stack` (hero: parts fly in and snap onto a tower), `path` (SQB: stations along a road, the camera follows a glowing student), `orbit` (HR: tools revolve round a globe of 25 branches), `tunnel` (NeuroLink: a flight through lens rings), `explode` (email: a closed machine folds open into an exploded view and shuts again), `gallery` (client sites: screens that turn as you pass). Scenery per rig is in `decor.jsx`; per-module scenes in `visuals/` (`general.jsx`, `sqb.jsx`, `hr.jsx`, `neurolink.jsx`, `email.jsx`, `site.jsx`, registered in `visuals/index.js`). `timeline.js` maps scroll to a build clock; `AssemblyStage` takes `size` (`full`, `chapter`, `compact`) and `rig`. The canvas only exists near the viewport (at most two WebGL contexts). Everything is a pure function of scroll, so it behaves the same under the OS reduced-motion setting; without WebGL each section falls back to plain captions.
+- **"Your turn" section and visitor data.** `components/Reactions` ends the page for visitors arriving from social media: an emoji slider (how did it land, 0 to 100, with the live average), a one-tap "what brought you here", a one-line note that is emailed to me and never shown, and the latest reactions (flag and emoji only). `backend/visitors.js` stores anonymous visits, events, reactions and notes in the `portfolio` schema (`backend/schema.sql`) through `DATABASE_URL`; no names, emails or IPs. Without `DATABASE_URL` the routes answer 503 and the page hides the shared numbers. Instagram link: `/?from=ig#react`.
+- **Performance.** 3D canvases render on demand (only while scrolling or easing; a still page draws nothing), start at a pixel ratio of at most 1.5 on touch devices and 1.75 elsewhere, and step down by 0.25 while frames run under 40 fps. The About logo is an exploded view in plain CSS 3D (`public/about/logo-*.webp`, layers cut from `logo.png`).
+- **Screenshots** (`src/assets/shots`) are captured from the live sites at 2x in headless Chrome and saved as 2048 px WebP; Erth is its dark theme (Arabic only since its Sep 2026 redesign).
 - **Palette.** Near-black with magenta (`#0a0a0c`, `#c147e9`, deep purple `#6a1b9a`), the same as the original portfolio. Do not add a light theme or other accent colours.
-- To add a system, add it to `PROJECTS` in `content.js` with `image` or `diagram`, and `layers` (rows are `[tag, text]`, real routes, tables or features shown only under Technical details).
+- To add a system, add it to `PROJECTS` in `content.js` with `group: "prod"` and `layers`: each layer has a `visual` key, a plain-language `step` and `rows` (`[tag, text]`, real routes, tables or features shown only under Technical details; `extraTech` holds rows without a scene). Shoghli was taken off the site on 2026-09-23; the email gateway serves three projects (SQB, HR, this portfolio).
 
 ## Routes
 

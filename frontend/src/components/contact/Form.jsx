@@ -1,53 +1,65 @@
 import { useState } from "react";
-import axios from "axios";
+import { sendNote, track } from "../../utils/api";
 
-const API_URL = "https://portfolio-api-rose.vercel.app";
-const EMPTY = { firstName: "", email: "", subject: "", message: "" };
-
+// A two-field note: what you want to say, and how to reply (email or phone).
 export default function Form() {
-  const [values, setValues] = useState(EMPTY);
+  const [message, setMessage] = useState("");
+  const [reply, setReply] = useState("");
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
-
-  const onChange = (e) => setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
 
   async function onSubmit(e) {
     e.preventDefault();
     setStatus("sending");
     try {
-      await axios.post(`${API_URL}/send-email`, values);
+      await sendNote(message.trim(), reply.trim());
+      track("contact", "note");
       setStatus("sent");
-      setValues(EMPTY);
+      setMessage("");
+      setReply("");
     } catch {
       setStatus("error");
     }
   }
 
   return (
-    <form className="form" onSubmit={onSubmit}>
-      <label>
-        <span>Name</span>
-        <input name="firstName" type="text" autoComplete="name" maxLength={100} required value={values.firstName} onChange={onChange} />
+    <form className="note" onSubmit={onSubmit} aria-labelledby="note-title">
+      <h3 id="note-title">Or leave a quick note</h3>
+      <label className="note-field">
+        <span className="visually-hidden">Your message</span>
+        <textarea
+          name="message"
+          rows={3}
+          maxLength={5000}
+          required
+          placeholder="Hi Mahmoud, I'd like to talk about..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
       </label>
-      <label>
-        <span>Email</span>
-        <input name="email" type="email" autoComplete="email" required value={values.email} onChange={onChange} />
-      </label>
-      <label>
-        <span>Subject</span>
-        <input name="subject" type="text" maxLength={200} required value={values.subject} onChange={onChange} />
-      </label>
-      <label>
-        <span>Message</span>
-        <textarea name="message" rows={5} maxLength={5000} required value={values.message} onChange={onChange} />
-      </label>
-
-      <button className="btn btn-primary" type="submit" disabled={status === "sending"}>
-        {status === "sending" ? "Sending..." : "Send message"}
-      </button>
-
-      <p className="form-status" role="status" data-state={status}>
-        {status === "sent" && "Thanks, your message arrived. I will reply to your email soon."}
-        {status === "error" && "The message did not send. Try again, or email me directly at the address on this page."}
+      <div className="note-row">
+        <label className="note-field">
+          <span className="visually-hidden">Your email or WhatsApp number</span>
+          <input
+            name="reply"
+            type="text"
+            inputMode="email"
+            autoComplete="email"
+            maxLength={200}
+            required
+            pattern="^([^\s@]+@[^\s@]+\.[^\s@]+|\+?[0-9][0-9\s\-]{6,19})$"
+            title="An email address or a phone number"
+            placeholder="Your email or WhatsApp number"
+            value={reply}
+            onChange={(e) => setReply(e.target.value)}
+          />
+        </label>
+        <button className="btn btn-primary" type="submit" disabled={status === "sending"}>
+          {status === "sending" ? "Sending..." : "Send"}
+        </button>
+      </div>
+      <p className="note-status" role="status" data-state={status}>
+        {status === "sent" && "Got it. I'll get back to you soon."}
+        {status === "error" && "That didn't send. Try WhatsApp or email instead."}
       </p>
     </form>
   );

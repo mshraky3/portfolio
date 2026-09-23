@@ -4,7 +4,7 @@ import { phaseAt } from "./timeline";
 // Scroll progress of a tall section, 0 when its top meets the viewport and 1
 // when its bottom does. Writes a ref (read every frame by the 3D scene) and
 // reports the caption phase to React only when it changes.
-export function useScrollProgress(sectionRef, n, onPhase) {
+export function useScrollProgress(sectionRef, n, onPhase, timing) {
   const progress = useRef(0);
   const last = useRef("");
 
@@ -19,7 +19,7 @@ export function useScrollProgress(sectionRef, n, onPhase) {
       const p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
       progress.current = p;
       el.style.setProperty("--p", p.toFixed(4));
-      const phase = phaseAt(p, n);
+      const phase = phaseAt(p, n, timing);
       if (phase.key !== last.current) {
         last.current = phase.key;
         onPhase(phase);
@@ -36,7 +36,7 @@ export function useScrollProgress(sectionRef, n, onPhase) {
       window.removeEventListener("resize", schedule);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [sectionRef, n, onPhase]);
+  }, [sectionRef, n, onPhase, timing]);
 
   return progress;
 }

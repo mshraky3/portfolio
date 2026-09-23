@@ -12,8 +12,14 @@
 // Before the build (hero) all modules float apart. After the last module the
 // camera pulls back and the finished stack separates a little, so all layers show.
 
-export const H = 0.07; // hero dwell, before the build starts
-export const B = 0.86; // build ends, the outro starts
+// H: scroll share spent on the intro before the build starts. B: where the build
+// ends and the outro starts. Chapters are shorter sections, so their intro and
+// outro take a larger share of their (smaller) scroll length.
+export const TIMING = {
+  full: { H: 0.07, B: 0.86 },
+  chapter: { H: 0.12, B: 0.84 },
+  compact: { H: 0.14, B: 0.82 },
+};
 
 export const clamp01 = (x) => Math.min(1, Math.max(0, x));
 export const lerp = (a, b, t) => a + (b - a) * t;
@@ -25,8 +31,8 @@ export const easeOut = (t) => 1 - Math.pow(1 - clamp01(t), 3);
 export const easeIn = (t) => Math.pow(clamp01(t), 2.2);
 
 // Build clock: -0.5 in the hero, n when the last module is done.
-export function clockAt(p, n) {
-  return lerp(-0.5, n, clamp01((p - H) / (B - H)));
+export function clockAt(p, n, t = TIMING.full) {
+  return lerp(-0.5, n, clamp01((p - t.H) / (t.B - t.H)));
 }
 
 export const landAt = (T, i) => smooth(i - 0.42, i - 0.02, T);
@@ -56,10 +62,10 @@ export function overviewAt(T, n) {
 }
 
 // After the build: 0 to 1 while the finished stack separates.
-export const outroAt = (p) => smooth(B, 1, p);
+export const outroAt = (p, t = TIMING.full) => smooth(t.B, 1, p);
 
-export function phaseAt(p, n) {
-  const T = clockAt(p, n);
+export function phaseAt(p, n, t = TIMING.full) {
+  const T = clockAt(p, n, t);
   if (T < -0.3) return { key: "intro", i: -1 };
   if (T >= n - 0.12) return { key: "outro", i: -1 };
   const i = Math.min(n - 1, Math.max(0, Math.round(focusAt(T, n))));
@@ -67,6 +73,6 @@ export function phaseAt(p, n) {
 }
 
 // Scroll position (0..1) that lands on a module's story.
-export function progressForLayer(i, n) {
-  return H + ((i + 0.35 + 0.5) / (n + 0.5)) * (B - H);
+export function progressForLayer(i, n, t = TIMING.full) {
+  return t.H + ((i + 0.35 + 0.5) / (n + 0.5)) * (t.B - t.H);
 }

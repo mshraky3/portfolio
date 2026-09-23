@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import * as THREE from "three";
-import { CONNECTIONS, POSES, lerpCurl, poseHand } from "../../NeuroLink/handPose";
+import { CONNECTIONS, POSES, lerpCurl, poseHand } from "./handPose";
 import { clamp01, lerp, smooth } from "../timeline";
 import { Block, C, Glow, M } from "./common";
 

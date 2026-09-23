@@ -1,5 +1,6 @@
 import { HERO, SITE } from "../../data/content";
 import AssemblyStage from "../Assembly/AssemblyStage";
+import { track } from "../../utils/api";
 import "./Hero.css";
 
 const RESUME = "/Mahmoud_Ahmed%20El-Sharaky_Resume.pdf";
@@ -10,7 +11,8 @@ export default function Hero() {
       id="top"
       data={HERO}
       layers={HERO.layers}
-      label="SQB, built layer by layer"
+      label="How I build a system, part by part"
+      tech={false}
       intro={
         <>
           <p className="hero-status">
@@ -26,7 +28,7 @@ export default function Hero() {
             <a className="btn btn-primary" href="#work">
               See the systems
             </a>
-            <a className="btn" href={RESUME} download="Mahmoud_Alshraky_Resume.pdf">
+            <a className="btn" href={RESUME} download="Mahmoud_Alshraky_Resume.pdf" onClick={() => track("cv", "hero")}>
               Download CV
             </a>
           </div>
@@ -35,7 +37,7 @@ export default function Hero() {
       }
       outroAction={
         <a className="btn btn-primary" href="#work">
-          See the other systems
+          See the systems
         </a>
       }
     />

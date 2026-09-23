@@ -21,6 +21,7 @@ export const M = {
   hi: new THREE.MeshBasicMaterial({ color: C.hi }),
   deep: new THREE.MeshBasicMaterial({ color: C.deep }),
   text: new THREE.MeshBasicMaterial({ color: C.text }),
+  ink: new THREE.MeshBasicMaterial({ color: C.bg }),
   glass: new THREE.MeshBasicMaterial({ color: C.accent, transparent: true, opacity: 0.16, depthWrite: false }),
   wire: new THREE.MeshBasicMaterial({ color: C.accent, wireframe: true, transparent: true, opacity: 0.55 }),
 };
@@ -68,3 +69,37 @@ export function Block({ size = [1, 1, 1], radius = 0.04, edge = true, material =
 
 export const TRAY = 4.7;
 export const TRAY_T = 0.14;
+
+// An envelope: a graphite card with a magenta flap. Used wherever email moves.
+export function Envelope({ material = M.body, flap = M.accent, ...props }) {
+  return (
+    <group {...props}>
+      <Block size={[0.46, 0.3, 0.04]} material={material} />
+      <mesh position={[0, 0.06, 0.025]} rotation={[0, 0, Math.PI]} material={flap}>
+        <coneGeometry args={[0.2, 0.13, 3]} />
+      </mesh>
+    </group>
+  );
+}
+
+// A flat frame of four bars (a doorway, a gate, a picture frame).
+export function Frame({ w, h, t = 0.08, material = M.accent, ...props }) {
+  return (
+    <group {...props}>
+      <mesh position={[-w / 2, h / 2, 0]} material={material}>
+        <boxGeometry args={[t, h, t]} />
+      </mesh>
+      <mesh position={[w / 2, h / 2, 0]} material={material}>
+        <boxGeometry args={[t, h, t]} />
+      </mesh>
+      <mesh position={[0, h, 0]} material={material}>
+        <boxGeometry args={[w + t, t, t]} />
+      </mesh>
+    </group>
+  );
+}
+
+// Colours for per-object materials that change while scrolling.
+export const basic = (color, extra = {}) => new THREE.MeshBasicMaterial({ color, ...extra });
+export const MID = "#8a2fb0"; // between accent and deep, for a third series
+export const OFF = "#26262f"; // an unlit cell

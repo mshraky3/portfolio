@@ -14,7 +14,7 @@ function siteHtml() {
     async transformIndexHtml(html) {
       const file = fileURLToPath(new URL('./src/data/content.js', import.meta.url))
       const c = await import(`${file.startsWith('/') ? 'file://' : 'file:///'}${file.replace(/\\/g, '/')}?v=${Date.now()}`)
-      const { SITE, TITLE, DESCRIPTION, HERO, PROJECTS, NEUROLINK, EXPERIENCE, HEADLINE_METRICS, METRICS_AS_OF, ABOUT } = c
+      const { SITE, TITLE, DESCRIPTION, HERO, PROJECTS, SITES, EXPERIENCE, HEADLINE_METRICS, METRICS_AS_OF, ABOUT } = c
 
       const image = `${SITE.url}/og.png`
       const person = {
@@ -64,27 +64,29 @@ function siteHtml() {
       ].join('\n    ')
 
       const list = (items) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`
-      const layerText = (layers) =>
+      const steps = (layers) => layers.map((l) => `<h4>${esc(l.step.title)}</h4><p>${esc(l.step.text)}</p>${list(l.step.facts)}`).join('')
+      const rows = (layers) =>
         layers
-          .map((l) => `<li><strong>${esc(l.name)}</strong>: ${esc(l.role)}. ${esc((l.rows || []).map((r) => r.join(' ')).join('; '))}</li>`)
+          .filter((l) => l.rows && l.rows.length)
+          .map((l) => `<li><strong>${esc(l.name)}</strong>: ${esc(l.rows.map((r) => r.join(' ')).join('; '))}</li>`)
           .join('')
+      const link = (p) => (p.href ? `<p><a href="${esc(p.href)}">${esc(p.href)}</a></p>` : `<p>${esc(p.private || '')}</p>`)
       const crawl = `<div class="crawl">
 <h1>${esc(SITE.name)}</h1>
 <p>${esc(HERO.headline)} ${esc(DESCRIPTION)}</p>
-<h2>SQB, built layer by layer</h2>
+<h2>How I build a system</h2>
 ${HERO.layers.map((l) => `<h3>${esc(l.step.title)}</h3><p>${esc(l.step.text)}</p>${list(l.step.facts)}`).join('\n')}
 <h2>Numbers (${esc(METRICS_AS_OF)})</h2>
 ${list(HEADLINE_METRICS.map((m) => `${m.value} ${m.label}. ${m.detail} Source: ${m.source.by}, ${m.source.site}, ${m.source.when}`))}
-<h2>Systems and sites</h2>
-${PROJECTS.map(
-  (p) => `<article><h3>${esc(p.title)}: ${esc(p.subtitle)}</h3><p>${esc(p.summary)}</p>${list(p.facts)}<ul>${layerText(p.layers || HERO.layers)}</ul><p>${esc(p.stack.join(', '))}</p>${
-    p.href ? `<p><a href="${esc(p.href)}">${esc(p.href)}</a></p>` : ''
-  }</article>`,
+<h2>Systems in production</h2>
+${PROJECTS.filter((p) => p.group === 'prod').map(
+  (p) => `<article><h3>${esc(p.title)}: ${esc(p.subtitle)}</h3><p>${esc(p.summary)}</p>${p.note ? `<p>${esc(p.note)}</p>` : ''}${list(p.facts)}${steps(p.layers)}<ul>${rows([...(p.extraTech || []), ...p.layers])}</ul><p>${esc(p.stack.join(', '))}</p>${link(p)}</article>`,
 ).join('\n')}
-<h2>${esc(NEUROLINK.name)}</h2>
-<p>${esc(NEUROLINK.headline)} ${esc(NEUROLINK.intro)}</p>
-<p>${esc(NEUROLINK.context)}</p>
-${NEUROLINK.layers.map((l) => `<h3>${esc(l.step.title)}</h3><p>${esc(l.step.text)}</p>${list(l.step.facts)}`).join('\n')}
+<h2>${esc(SITES.title)}</h2>
+<p>${esc(SITES.lead)}</p>
+${PROJECTS.filter((p) => p.group === 'sites').map(
+  (p) => `<article><h3>${esc(p.title)}: ${esc(p.subtitle)}</h3><p>${esc(p.summary)}</p>${list(p.facts)}<p>${esc(p.stack.join(', '))}</p>${link(p)}</article>`,
+).join('\n')}
 <h2>Experience</h2>
 ${EXPERIENCE.map((j) => `<article><h3>${esc(j.role)}, ${esc(j.org)}</h3><p>${esc(j.dates)}</p>${list(j.items)}</article>`).join('\n')}
 <h2>About</h2>

@@ -4,10 +4,11 @@ import "./Nav.css";
 
 const LINKS = [
   ["#work", "Systems"],
-  ["#neurolink", "NeuroLink"],
+  ["#sites", "Sites"],
   ["#experience", "Experience"],
   ["#about", "About"],
   ["#contact", "Contact"],
+  ["#react", "Your turn"],
 ];
 
 export default function Nav() {

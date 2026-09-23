@@ -1,0 +1,121 @@
+.site-cards {
+  padding-block: var(--s7) var(--s9);
+  background: var(--bg-2);
+  border-block-start: 1px solid var(--line);
+}
+
+.site-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s8);
+}
+
+.site-card {
+  display: grid;
+  align-content: start;
+  gap: var(--s6);
+  min-width: 0;
+  perspective: 1400px;
+}
+
+.site-text {
+  display: grid;
+  align-content: start;
+  gap: var(--s3);
+  min-width: 0;
+}
+
+.site-text h3 {
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  line-height: 1.15;
+}
+
+.site-summary {
+  color: var(--text-2);
+}
+
+/* A screenshot on a small stack of panels */
+.shot {
+  position: relative;
+  margin-inline-end: 36px;
+  margin-block-start: 36px;
+  transform: rotateY(-8deg) rotateX(4deg);
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--ease);
+}
+
+.shot:hover {
+  transform: none;
+}
+
+.shot img {
+  position: relative;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius);
+  box-shadow: var(--glow);
+  background: var(--surface);
+}
+
+.shot-back {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, rgba(193, 71, 233, 0.16), rgba(193, 71, 233, 0.02));
+}
+
+.shot-back-1 {
+  transform: translate3d(18px, -18px, -40px);
+  opacity: 0.8;
+}
+
+.shot-back-2 {
+  transform: translate3d(36px, -36px, -80px);
+  opacity: 0.5;
+}
+
+/* Where supported, the panels open out as the card scrolls into view. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .shot {
+      animation: shot-open linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+      transition: none;
+    }
+
+    @keyframes shot-open {
+      from {
+        transform: rotateY(-26deg) rotateX(10deg) scale(0.92);
+        opacity: 0.4;
+      }
+      to {
+        transform: rotateY(-8deg) rotateX(4deg) scale(1);
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .site-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shot {
+    transform: none;
+    animation: none;
+    margin-inline-end: 24px;
+    margin-block-start: 24px;
+  }
+
+  .shot-back-1 {
+    transform: translate(12px, -12px);
+  }
+
+  .shot-back-2 {
+    transform: translate(24px, -24px);
+  }
+}
