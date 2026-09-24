@@ -50,6 +50,64 @@
   line-height: 1.5;
 }
 
+/* Client sites sit in the same index, after the systems: a screenshot and a link */
+.sys-site {
+  grid-column: span 2;
+}
+
+.sys-site a {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  grid-template-areas:
+    "thumb num"
+    "thumb name"
+    "thumb sub"
+    "thumb visit";
+  column-gap: var(--s4);
+}
+
+.sys-thumb {
+  grid-area: thumb;
+  align-self: center;
+  overflow: hidden;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius);
+  transform: perspective(700px) rotateY(-10deg);
+  transition: transform 0.4s var(--ease);
+}
+
+.sys-site a:hover .sys-thumb {
+  transform: none;
+}
+
+.sys-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sys-site .sys-num {
+  grid-area: num;
+}
+
+.sys-site .sys-name {
+  grid-area: name;
+}
+
+.sys-site .sys-sub {
+  grid-area: sub;
+}
+
+.sys-visit {
+  grid-area: visit;
+  color: var(--accent-hi);
+  font-size: var(--fs-0);
+}
+
+.sys-visit .mono {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .sys-parts {
   margin-block-start: var(--s2);
   padding-block-start: var(--s3);
@@ -249,6 +307,23 @@
 @media (max-width: 1000px) {
   .sys-index {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .sys-site {
+    grid-column: auto;
+  }
+
+  .sys-site a {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "thumb"
+      "num"
+      "name"
+      "sub"
+      "visit";
+    row-gap: var(--s2);
   }
 }
 

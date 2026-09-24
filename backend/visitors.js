@@ -12,11 +12,23 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pg from "pg";
+import crypto from "node:crypto";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export const INTENTS = ["hiring", "project", "looking", "friend"];
-const EVENTS = new Set(["section", "cv", "contact", "react", "share"]);
+const EVENTS = new Set(["section", "cv", "contact", "react", "share"]); // "lock" is written by /unlock only
+
+// The lock: a number only one person knows, set on Vercel as SPECIAL_NUMBER
+// (digits only) with an optional SPECIAL_MESSAGE shown when it opens. Neither
+// ever reaches the browser; the page only learns how many digits to show.
+const secret = () => String(process.env.SPECIAL_NUMBER || "").replace(/\D/g, "");
+function matches(code) {
+  const want = secret();
+  const got = String(code || "").replace(/\D/g, "");
+  if (!want || got.length !== want.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(got), Buffer.from(want));
+}
 
 let pool = null;
 function db() {
@@ -73,7 +85,7 @@ function inAppOf(ua) {
 // Everything the section shows: counts, the average reaction, why people came,
 // and the latest reactions (score and country only).
 async function summary(client, vid) {
-  const [visits, avg, intents, recent, mine] = await Promise.all([
+  const [visits, avg, intents, recent, mine, tries] = await Promise.all([
     client.query(`select count(distinct vid)::int visitors,
                          count(distinct vid) filter (where source = 'instagram')::int instagram,
                          count(distinct country)::int countries
@@ -83,13 +95,17 @@ async function summary(client, vid) {
     client.query(`select score, country, extract(epoch from now() - updated_at)::int ago
                   from portfolio.reactions where score is not null order by updated_at desc limit 14`),
     vid ? client.query("select score, intent from portfolio.reactions where vid = $1", [vid]) : { rows: [] },
+    client.query("select count(*)::int n from portfolio.events where kind = 'lock'"),
   ]);
   const split = Object.fromEntries(INTENTS.map((k) => [k, 0]));
   for (const r of intents.rows) if (r.intent in split) split[r.intent] = r.n;
-  return { ...visits.rows[0], ...avg.rows[0], intents: split, recent: recent.rows, mine: mine.rows[0] || null };
+  const lock = { digits: secret().length || 4, tries: tries.rows[0].n };
+  return { ...visits.rows[0], ...avg.rows[0], intents: split, recent: recent.rows, mine: mine.rows[0] || null, lock };
 }
 
-// `notify(text)` sends a note to the owner's inbox (wired in api.js).
+// `notify({ kind, ... })` emails the owner (wired in api.js): kind is "note"
+// (a visitor's one-liner), "unlock" (someone opened the lock) or "reply"
+// (their message back).
 export function visitorsRouter(rateLimit, notify = async () => {}) {
   const r = express.Router();
 
@@ -187,11 +203,56 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
     try {
       await db().query("insert into portfolio.notes (vid, note, country) values ($1, $2, $3)", [b.vid, note, country]);
       const mine = await db().query("select score, intent from portfolio.reactions where vid = $1", [b.vid]);
-      notify({ note, country, reaction: mine.rows[0] || null }).catch((e) => console.warn("[visitors] notify", e.message));
+      notify({ kind: "note", note, country, reaction: mine.rows[0] || null }).catch((e) => console.warn("[visitors] notify", e.message));
       res.status(204).end();
     } catch (e) {
       console.warn("[visitors] note", e.message);
       res.status(500).json({ error: "not saved" });
+    }
+  });
+
+  // Try the lock. Only whether it opened is stored, never the digits tried.
+  // Slow on purpose: 8 tries per 15 minutes, so the number cannot be guessed
+  // by brute force.
+  r.post("/unlock", rateLimit(8, 15 * 60 * 1000), async (req, res) => {
+    const b = req.body || {};
+    if (!UUID.test(b.vid || "")) return res.status(400).json({ error: "bad id" });
+    // A global brake as well, since a visitor id is easy to change.
+    try {
+      const recent = await db().query("select count(*)::int n from portfolio.events where kind = 'lock' and created_at > now() - interval '1 minute'");
+      if (recent.rows[0].n >= 30) return res.status(429).json({ error: "slow down" });
+    } catch (e) {
+      console.warn("[visitors] lock brake", e.message);
+    }
+    const open = matches(b.code);
+    const country = countryOf(req);
+    try {
+      await db().query("insert into portfolio.events (vid, kind, detail) values ($1, 'lock', $2)", [b.vid, open ? "open" : "miss"]);
+    } catch (e) {
+      console.warn("[visitors] lock", e.message);
+    }
+    if (!open) return res.json({ open: false });
+    notify({ kind: "unlock", country }).catch((e) => console.warn("[visitors] notify", e.message));
+    res.json({ open: true, message: process.env.SPECIAL_MESSAGE || "You remembered." });
+  });
+
+  // A message back, only for someone who opened the lock (the code is checked again).
+  r.post("/unlock/reply", rateLimit(4, 15 * 60 * 1000), async (req, res) => {
+    const b = req.body || {};
+    const message = String(b.message || "").trim().slice(0, 1000);
+    if (!UUID.test(b.vid || "") || !message || !matches(b.code)) return res.status(400).json({ error: "bad reply" });
+    const country = countryOf(req);
+    try {
+      await db().query("insert into portfolio.notes (vid, note, country) values ($1, $2, $3)", [b.vid, `[lock] ${message}`.slice(0, 280), country]);
+    } catch (e) {
+      console.warn("[visitors] reply", e.message);
+    }
+    try {
+      await notify({ kind: "reply", note: message, country });
+      res.status(204).end();
+    } catch (e) {
+      console.warn("[visitors] reply notify", e.message);
+      res.status(502).json({ error: "not sent" });
     }
   });
 

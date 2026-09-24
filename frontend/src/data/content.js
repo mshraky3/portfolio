@@ -564,45 +564,6 @@ export const PROJECTS = [
   },
 ];
 
-// ─── Client sites: one short, simple chapter for both ────────────
-export const SITES = {
-  short: "Sites",
-  title: "Sites for clients",
-  lead: "Smaller builds with one job each: make a business look right, and make it easy to reach.",
-  outro: "Two client sites, both live. Visit them below.",
-  layers: [
-    {
-      name: "Al-Haysoni",
-      visual: "sitescreen",
-      image: "law",
-      step: {
-        title: "A law firm, in 3D",
-        text: "Al-Haysoni Law Firm's site opens on an interactive Three.js scene, with structured data so search engines understand who the firm is.",
-        facts: ["Freelance, Jul to Aug 2025", "Live at alhisony.com"],
-      },
-    },
-    {
-      name: "Erth",
-      visual: "sitescreen",
-      image: "erth",
-      step: {
-        title: "A consultancy, on a globe",
-        text: "Redesigned in September 2026: a dark site for an environmental consultancy that opens on an interactive 3D globe.",
-        facts: ["132 visitors in the 30 days to 19 Sep 2026 (Vercel)", "Live at erthfc.com"],
-      },
-    },
-    {
-      name: "Reach",
-      visual: "reach",
-      step: {
-        title: "Built to be reached",
-        text: "A small site has one job: turn a visitor into a message. A contact form that reaches the office, a map where it helps, and the structured data search engines read.",
-        facts: ["Al-Haysoni: Schema.org data, sitemap and robots.txt", "Erth: a consultation form and a Google Maps link"],
-      },
-    },
-  ],
-};
-
 // ─── Experience, skills, about ───────────────────────────────────
 export const EXPERIENCE = [
   {

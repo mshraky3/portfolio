@@ -1,9 +1,11 @@
 import { PROJECTS } from "../../data/content";
 import AssemblyStage from "../Assembly/AssemblyStage";
 import TechDetails from "../Assembly/TechDetails";
+import { IMAGES } from "../../data/images";
 import "./Systems.css";
 
 const SYSTEMS = PROJECTS.filter((p) => p.group === "prod");
+const SITES = PROJECTS.filter((p) => p.group === "sites");
 const pad = (k) => String(k).padStart(2, "0");
 const hostOf = (href) => href.replace(/^https?:\/\/(www\.)?/, "");
 
@@ -112,19 +114,36 @@ export default function Systems() {
       <section className="section systems" id="work" aria-labelledby="work-title">
         <div className="wrap">
           <div className="section-head">
-            <h2 id="work-title">Systems in production</h2>
-            <p>
-              Four systems, each shown its own way. The engineering is folded under each one.
-            </p>
+            <h2 id="work-title">Everything I've built</h2>
+            <p>Four systems in production, each shown below its own way, and the client sites I delivered alongside them.</p>
           </div>
           <ol className="sys-index">
             {SYSTEMS.map((p, i) => (
               <li key={p.id}>
                 <a href={`#sys-${p.id}`}>
-                  <span className="sys-num">{pad(i + 1)}</span>
+                  <span className="sys-num">
+                    {pad(i + 1)} · System
+                  </span>
                   <span className="sys-name">{p.title}</span>
                   <span className="sys-sub">{p.subtitle}</span>
                   <span className="sys-parts">{p.layers.map((l) => l.name).join(" · ")}</span>
+                </a>
+              </li>
+            ))}
+            {SITES.map((p, i) => (
+              <li key={p.id} className="sys-site">
+                <a href={p.href} target="_blank" rel="noopener noreferrer">
+                  <span className="sys-thumb" aria-hidden="true">
+                    <img src={IMAGES[p.image]} alt="" loading="lazy" width="1280" height="800" />
+                  </span>
+                  <span className="sys-num">
+                    {pad(SYSTEMS.length + i + 1)} · Client site
+                  </span>
+                  <span className="sys-name">{p.title}</span>
+                  <span className="sys-sub">{p.summary}</span>
+                  <span className="sys-visit">
+                    Visit <span className="mono">{hostOf(p.href)}</span> ↗
+                  </span>
                 </a>
               </li>
             ))}

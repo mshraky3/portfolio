@@ -4,7 +4,6 @@ import "./Nav.css";
 
 const LINKS = [
   ["#work", "Systems"],
-  ["#sites", "Sites"],
   ["#experience", "Experience"],
   ["#about", "About"],
   ["#contact", "Contact"],

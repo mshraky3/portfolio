@@ -10,7 +10,6 @@ import { clamp01, landAt, lerp, smooth } from "./timeline";
 //   orbit    HR: modules gather round a globe of branches and revolve past
 //   tunnel   NeuroLink: a flight through lens rings, one module per ring
 //   explode  email: a closed machine opens into an exploded view, then shuts
-//   gallery  client sites: a row of screens that turn as you pass
 //
 // Every rig answers the same questions each frame:
 //   land(T, i, st)          0..1, how far module i has arrived
@@ -262,39 +261,4 @@ const explode = {
   },
 };
 
-// ─── gallery: a row of screens; each turns to face you as you pass ──
-const GS = 8.5;
-const gallery = {
-  platform: () => "tray",
-  floor: -0.35,
-  fog: [26, 100],
-  extras: "rail",
-  setup(n, { turn }) {
-    const half = ((n - 1) * GS) / 2;
-    return { xs: Array.from({ length: n }, (_, i) => i * GS - half), turn };
-  },
-  // The screens already stand in a row; they turn to face you as you pass.
-  land: () => 1,
-  place(i, st, ctx, g) {
-    const m = st.mods[i];
-    const L = clamp01(m.land);
-    const d = (st.f - i) * (1 - st.ov);
-    g.position.set(ctx.xs[i], lerp(-2.2, 0, easeOutBack(L)), 0);
-    g.rotation.set(0, Math.max(-1.1, Math.min(1.1, -d * 1.2)) + (1 - L) * -1.2, 0);
-    g.scale.setScalar(Math.max(0.0001, lerp(0.5, 1, L)));
-    g.visible = L > 0.01;
-    return 0;
-  },
-  camera(st, ctx, H) {
-    const { n, cys, wide } = H;
-    const [a, b, fr] = span(st.f, n);
-    v1.set(lerp(ctx.xs[a], ctx.xs[b], ease(fr)), lerp(cys[a], cys[b], fr), 0);
-    orbitAt(v1, VIEW_AZ, VIEW_EL, H.distFor(wide ? 12.6 : 8.6, wide ? 8.4 : 7.8), H.pos);
-    H.look.copy(v1);
-    v2.set(-3.5, 1.2, 0);
-    orbitAt(v2, 0.15 + ctx.turn + st.outro * 0.25, 0.36, H.distFor(((n - 1) * GS + 9) * 1.3, 10), H.ovPos);
-    H.ovLook.copy(v2);
-  },
-};
-
-export const RIGS = { stack, path, orbit, tunnel, explode, gallery };
+export const RIGS = { stack, path, orbit, tunnel, explode };

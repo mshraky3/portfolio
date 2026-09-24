@@ -1,7 +1,6 @@
 import "dotenv/config";
 import express from "express"
 import cors from "cors";
-import nodemailer from "nodemailer"
 import { getJobs, buildDigestHtml, buildCheckinHtml, esc } from "./jobs.js";
 import { createEmailClient } from "./email-client.js";
 import { visitorsRouter } from "./visitors.js";
@@ -10,32 +9,27 @@ const app = express()
 
 const OWNER_EMAIL = "alshraky3@gmail.com";
 
-// ── central email gateway (added 2026-08-01) ────────────────────────────────
+// ── central email gateway ───────────────────────────────────────────────────
 //
-// Every email this backend sends goes to ONE recipient: me. That makes all of
-// it `audience: 'owner'` on the gateway, which routes it over Gmail — the same
-// transport as before — so it costs ZERO of the shared Resend budget while
-// still being logged, rationed and digested alongside every other project.
+// Every email this backend sends goes through the shared email gateway
+// (email-system), and only through it: there is no SMTP or nodemailer here any
+// more. All of it is mail to me, so it is `audience: 'owner'`, which the gateway
+// routes over its Gmail transport: it is logged with every other project's mail
+// and costs none of the shared Resend budget.
 //
-// The contact form and resume pings now fold into a daily digest instead of
-// arriving one at a time. The two cron emails stay immediate.
-//
-// EMAIL_GATEWAY_MODE: off | shadow | on. Rollback is one env var.
+// Needs EMAIL_GATEWAY_URL and EMAIL_GATEWAY_KEY on Vercel `portfolio-api`.
 const gateway = createEmailClient({
   baseUrl: process.env.EMAIL_GATEWAY_URL,
   apiKey: process.env.EMAIL_GATEWAY_KEY,
-  mode: process.env.EMAIL_GATEWAY_MODE || "off",
-  legacy: (p) => Email.sendMail(p),
+  mode: "on",
   log: (m, e) => console.warn("[gateway]", m, e ?? ""),
 });
 
-/**
- * Drop-in for Email.sendMail. Keeps the exact same argument shape so the five
- * call sites below did not have to change, and adds the gateway's routing
- * fields on top.
- */
-function sendMail(opts) {
-  return gateway.send(opts);
+/** Sends one email to me through the gateway. Returns the gateway's outcome. */
+async function sendMail(opts) {
+  const res = await gateway.send({ fromName: "Portfolio", audience: "owner", ...opts });
+  if (res?.status && res.status !== "sent") console.warn("[gateway] not sent:", res.status, opts.event);
+  return res;
 }
 const SITE_URL = "https://web-dev-seven-iota.vercel.app";
 
@@ -53,20 +47,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "32kb" }));
-
-// SECURITY: Credentials loaded from environment variables (set in Vercel dashboard)
-const Email = nodemailer.createTransport(
-    {
-        host: "smtp.gmail.com",
-        port: 587,
-        tls: true,
-        secure: false,
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-        }
-    }
-)
 
 // ---- light in-memory rate limiter (best-effort on serverless) ----
 const RATE = new Map();
@@ -93,7 +73,25 @@ const PHONE_RE = /^\+?[0-9][0-9\s-]{6,19}$/;
 const INTENT_LABEL = { hiring: "Hiring", project: "Has a project", looking: "Just looking", friend: "Knows me" };
 app.use(
     "/v",
-    visitorsRouter(rateLimit, ({ note, country, reaction }) => {
+    visitorsRouter(rateLimit, ({ kind, note, country, reaction }) => {
+        const when = new Date().toLocaleString("en-GB", { timeZone: "Asia/Riyadh", dateStyle: "medium", timeStyle: "short" });
+        if (kind === "unlock" || kind === "reply") {
+            const title = kind === "unlock" ? "🔓 Someone opened your lock" : "💌 A message from the person who knows the number";
+            const body = kind === "unlock" ? "The special number was entered correctly on your portfolio." : note;
+            const meta = `${country ? `From ${country} · ` : ""}${when} Riyadh time`;
+            return sendMail({
+                event: `portfolio.owner.lock_${kind}`,
+                to: OWNER_EMAIL,
+                subject: title,
+                text: `${body}\n\n${meta}`,
+                html: `
+              <div style="font-family:Segoe UI,system-ui,sans-serif;max-width:640px;margin:0 auto;">
+                <h2 style="color:#6a1b9a;margin:8px 0;">${title}</h2>
+                <div style="border:1px solid #e5e0ee;border-left:4px solid #C147E9;border-radius:10px;padding:14px 16px;white-space:pre-wrap;">${esc(body)}</div>
+                <p style="color:#6a5f7a;margin-top:10px;">${esc(meta)}</p>
+              </div>`,
+            });
+        }
         const bits = [
             country ? `from ${country}` : null,
             reaction?.score != null ? `reaction ${reaction.score}/100` : null,
@@ -101,7 +99,6 @@ app.use(
         ].filter(Boolean).join(" · ");
         return sendMail({
             event: "portfolio.owner.visitor_note",
-            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             subject: "💬 A visitor left you a note",
             text: `${note}\n\n${bits}`,
@@ -136,8 +133,6 @@ app.post("/send-email", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
     try {
         const result = await sendMail({
             event: "portfolio.owner.contact_form",
-            sourceOrigin: req.headers.referer || req.headers.origin,
-            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             replyTo: email || undefined, // hit "Reply" in Gmail → goes straight to the sender
             subject: `📬 ${subject} — from ${firstName}`,
@@ -151,7 +146,7 @@ app.post("/send-email", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
               </div>`,
         });
 
-        console.log("Email sent:", result.messageId);
+        console.log("Contact note:", result?.status, result?.id);
         res.status(200).json({ message: "Email sent successfully" });
     } catch (error) {
         console.error("Error sending email:", error);
@@ -166,7 +161,6 @@ app.post("/resume-downloaded", rateLimit(10, 15 * 60 * 1000), async (req, res) =
         await sendMail({
             event: "portfolio.owner.resume_download",
             dedupeKey: "portfolio.resume",
-            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             subject: "📄 Someone downloaded your Resume!",
             text: `Your resume was downloaded.\n\nTime: ${timestamp || new Date().toISOString()}`,
@@ -212,7 +206,6 @@ app.get("/job-digest", async (req, res) => {
         const { jobs } = await getJobs({ limit: 12 });
         await sendMail({
             event: "portfolio.owner.job_digest",
-            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             subject: `🔴 ${jobs.length} fresh remote jobs — daily digest`,
             html: buildDigestHtml(jobs, { siteUrl: SITE_URL }),
@@ -241,7 +234,6 @@ app.get("/evening-checkin", async (req, res) => {
             .slice(0, 3);
         await sendMail({
             event: "portfolio.owner.evening_checkin",
-            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             subject: "🌙 Evening check-in — did today count?",
             html: buildCheckinHtml(newest, { siteUrl: SITE_URL }),
@@ -262,7 +254,6 @@ app.post("/email-jobs", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
         const { jobs } = await getJobs({ q, limit: 15 });
         await sendMail({
             event: "portfolio.owner.email_jobs",
-            from: process.env.EMAIL_USER || "smle.sqb@gmail.com",
             to: OWNER_EMAIL,
             subject: `✉️ ${jobs.length} remote jobs${q ? ` matching “${q}”` : ""} — sent from HQ`,
             html: buildDigestHtml(jobs, { siteUrl: SITE_URL }),

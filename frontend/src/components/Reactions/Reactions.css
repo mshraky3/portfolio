@@ -381,3 +381,253 @@
     display: none;
   }
 }
+
+/* ─── The lock ─────────────────────────────────────────────────── */
+.lock-card {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--s5);
+  padding: var(--s7) var(--s5) var(--s6);
+  overflow: hidden;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 50% 38%, rgba(193, 71, 233, 0.22), transparent 58%),
+    linear-gradient(180deg, #120d17, #0c0b0f);
+  box-shadow: var(--glow);
+  text-align: center;
+}
+
+.lock-head {
+  display: grid;
+  gap: var(--s2);
+  max-width: 34rem;
+}
+
+.lock-head .eyebrow {
+  justify-self: center;
+}
+
+.lock-title {
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.lock-sub {
+  color: var(--text-2);
+}
+
+.lock-body {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding-block-start: 64px;
+}
+
+/* the shackle: a thick U above the case, lifting when the lock opens */
+.lock-shackle {
+  position: absolute;
+  inset-block-start: 0;
+  width: 58%;
+  max-width: 220px;
+  height: 120px;
+  border: 16px solid #2a2a33;
+  border-block-end: 0;
+  border-radius: 110px 110px 0 0;
+  box-shadow: inset 0 0 0 2px rgba(238, 176, 255, 0.18), 0 0 0 1px rgba(193, 71, 233, 0.3);
+  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.6s;
+}
+
+.lock-card[data-state="open"] .lock-shackle {
+  transform: translateY(-44px) rotate(-14deg);
+  transform-origin: 90% 100%;
+  border-color: var(--accent);
+}
+
+.lock-case {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: var(--s4);
+  padding: var(--s5) var(--s5) var(--s4);
+  border: 1px solid var(--accent-line);
+  border-radius: 22px;
+  background: linear-gradient(180deg, #1d1724, #121016);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 20px 50px -20px rgba(0, 0, 0, 0.8);
+}
+
+.dials {
+  display: flex;
+  gap: var(--s2);
+}
+
+.dials[data-miss] {
+  animation: lock-shake 0.45s;
+}
+
+@keyframes lock-shake {
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
+}
+
+.dial {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+
+.dial-arrow {
+  width: 44px;
+  height: 30px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.dial-arrow:hover:not(:disabled) {
+  color: var(--accent-hi);
+}
+
+.dial-window {
+  position: relative;
+  width: 58px;
+  height: 64px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #0a090c;
+  box-shadow: inset 0 0 0 1px var(--accent-line), inset 0 10px 14px -6px #000, inset 0 -10px 14px -6px #000;
+  perspective: 420px;
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.dial-window:focus-visible {
+  outline: 3px solid var(--accent-hi);
+  outline-offset: 3px;
+}
+
+.dial-drum {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.dial-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  backface-visibility: hidden;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.lock-card[data-state="open"] .dial-face {
+  color: var(--accent-hi);
+  text-shadow: 0 0 14px var(--accent);
+}
+
+.lock-go {
+  min-width: 10rem;
+}
+
+.lock-status {
+  min-height: 1.4em;
+  color: var(--muted);
+  font-size: var(--fs-1);
+}
+
+.lock-card[data-state="miss"] > .lock-status {
+  color: var(--accent-hi);
+}
+
+.lock-open {
+  display: grid;
+  gap: var(--s5);
+  width: min(100%, 34rem);
+  animation: lock-reveal 0.8s var(--ease);
+}
+
+@keyframes lock-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.lock-message {
+  font-family: var(--font-head);
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.lock-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  margin-inline-start: 3px;
+  vertical-align: -0.15em;
+  background: var(--accent-hi);
+  animation: lock-blink 1s steps(1) infinite;
+}
+
+@keyframes lock-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.lock-reply {
+  display: grid;
+  gap: var(--s2);
+  text-align: start;
+}
+
+.lock-reply label {
+  color: var(--text-2);
+  font-size: var(--fs-1);
+}
+
+.lock-reply textarea {
+  width: 100%;
+  min-height: 96px;
+  padding: var(--s3) var(--s4);
+  border: 1.5px solid var(--line-2);
+  border-radius: var(--radius);
+  background: var(--bg-2);
+  resize: vertical;
+}
+
+.lock-reply textarea:focus-visible {
+  border-color: var(--accent);
+  outline-offset: 1px;
+}
+
+.lock-reply .btn {
+  justify-self: start;
+}
+
+@media (max-width: 420px) {
+  .dial-window {
+    width: 50px;
+  }
+
+  .dials {
+    gap: 6px;
+  }
+}

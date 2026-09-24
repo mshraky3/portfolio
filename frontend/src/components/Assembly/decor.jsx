@@ -7,7 +7,7 @@ import { RIGS, TUNNEL_D } from "./rigs";
 import { C, Glow, M } from "./visuals/common";
 
 // The scenery each rig adds around its modules: the road, the orbit, the lens
-// rings, the machine's shell, the gallery rail. Modules report their world
+// rings, the machine's shell. Modules report their world
 // positions in state.current.groups, so scenery can point at them.
 
 const col = new THREE.Color();
@@ -269,22 +269,4 @@ function Machine({ state, n }) {
   );
 }
 
-// ─── Sites: a rail under the row of screens ───────────────────────
-function Rail({ ctx }) {
-  const len = ctx.xs.length > 1 ? ctx.xs[ctx.xs.length - 1] - ctx.xs[0] + 10 : 10;
-  return (
-    <group>
-      <mesh position={[0, -0.25, 2.7]} material={M.body2}>
-        <boxGeometry args={[len, 0.08, 0.3]} />
-      </mesh>
-      <mesh position={[0, -0.2, 2.7]} material={M.accent}>
-        <boxGeometry args={[len, 0.02, 0.05]} />
-      </mesh>
-      {ctx.xs.map((x) => (
-        <Glow key={x} position={[x, 0, 2.7]} size={2} opacity={0.35} />
-      ))}
-    </group>
-  );
-}
-
-export const DECOR = { road: Road, orbit: Orbit, tunnel: Tunnel, machine: Machine, rail: Rail };
+export const DECOR = { road: Road, orbit: Orbit, tunnel: Tunnel, machine: Machine };

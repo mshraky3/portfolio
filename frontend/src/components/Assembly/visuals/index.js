@@ -3,7 +3,6 @@ import { Face, Hand, Physician, Protocol, Webcam } from "./neurolink";
 import { Blueprint, Gate, Pulse, Sorter, Wireframe } from "./general";
 import { Expiry, Globe, Payroll, Reports } from "./hr";
 import { Quota, Sources, Suppress, Tests } from "./email";
-import { Reach, SiteScreen } from "./site";
 
 // `cy` is the height of the visual's centre above its tray: where the camera looks.
 export const VISUALS = {
@@ -35,7 +34,4 @@ export const VISUALS = {
   quota: { Component: Quota, cy: 0.95 },
   suppress: { Component: Suppress, cy: 0.9 },
   tests: { Component: Tests, cy: 1.2 },
-  // Client sites
-  sitescreen: { Component: SiteScreen, cy: 1.1 },
-  reach: { Component: Reach, cy: 0.95 },
 };

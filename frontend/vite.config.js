@@ -14,7 +14,7 @@ function siteHtml() {
     async transformIndexHtml(html) {
       const file = fileURLToPath(new URL('./src/data/content.js', import.meta.url))
       const c = await import(`${file.startsWith('/') ? 'file://' : 'file:///'}${file.replace(/\\/g, '/')}?v=${Date.now()}`)
-      const { SITE, TITLE, DESCRIPTION, HERO, PROJECTS, SITES, EXPERIENCE, HEADLINE_METRICS, METRICS_AS_OF, ABOUT } = c
+      const { SITE, TITLE, DESCRIPTION, HERO, PROJECTS, EXPERIENCE, HEADLINE_METRICS, METRICS_AS_OF, ABOUT } = c
 
       const image = `${SITE.url}/og.png`
       const person = {
@@ -82,8 +82,7 @@ ${list(HEADLINE_METRICS.map((m) => `${m.value} ${m.label}. ${m.detail} Source: $
 ${PROJECTS.filter((p) => p.group === 'prod').map(
   (p) => `<article><h3>${esc(p.title)}: ${esc(p.subtitle)}</h3><p>${esc(p.summary)}</p>${p.note ? `<p>${esc(p.note)}</p>` : ''}${list(p.facts)}${steps(p.layers)}<ul>${rows([...(p.extraTech || []), ...p.layers])}</ul><p>${esc(p.stack.join(', '))}</p>${link(p)}</article>`,
 ).join('\n')}
-<h2>${esc(SITES.title)}</h2>
-<p>${esc(SITES.lead)}</p>
+<h2>Client sites</h2>
 ${PROJECTS.filter((p) => p.group === 'sites').map(
   (p) => `<article><h3>${esc(p.title)}: ${esc(p.subtitle)}</h3><p>${esc(p.summary)}</p>${list(p.facts)}<p>${esc(p.stack.join(', '))}</p>${link(p)}</article>`,
 ).join('\n')}

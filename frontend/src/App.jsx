@@ -3,7 +3,6 @@ import Nav from "./components/Nav/Nav";
 import Hero from "./components/Hero/Hero";
 import Proof from "./components/Proof/Proof";
 import Systems from "./components/Systems/Systems";
-import Sites from "./components/Sites/Sites";
 import Experience from "./components/Experience/Experience";
 import About from "./components/About/About";
 import Contact, { Footer } from "./components/contact/Contact";
@@ -31,7 +30,6 @@ export default function App() {
         <Hero />
         <Proof />
         <Systems />
-        <Sites />
         <Experience />
         <About />
         <Contact />
