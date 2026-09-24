@@ -32,7 +32,7 @@ export default function Nav() {
     <header className={`nav ${scrolled ? "nav-scrolled" : ""}`}>
       <div className="wrap nav-row">
         <a className="nav-brand" href="#top" aria-label={`${SITE.name}, back to top`}>
-          <img src="/logo.png" alt="" width="32" height="32" />
+          <img src="/logo-64.webp" alt="" width="32" height="32" />
           <span>{SITE.name}</span>
         </a>
 
