@@ -23,9 +23,15 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
     </noscript>
 
+    <script>document.documentElement.classList.add("js")</script>
     <style>
       body { margin: 0; background: #0a0a0c; color: #f2f2f5; font-family: "Bricolage Grotesque", system-ui, sans-serif; line-height: 1.6; }
       .crawl { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
+      /* With JavaScript on, the crawler copy shows only the name, sized like the
+         hero's, until the app replaces it: a calm first paint, no text flash. */
+      .js .crawl { min-height: 100vh; padding: 0 clamp(16px, 4vw, 40px); display: grid; align-content: center; max-width: 1180px; }
+      .js .crawl > :not(h1) { display: none; }
+      .js .crawl h1 { margin: 0; font-size: clamp(2.9rem, 6.6vw, 5.4rem); line-height: 1.02; letter-spacing: -0.02em; font-weight: 700; }
     </style>
 
     <!--seo-->
