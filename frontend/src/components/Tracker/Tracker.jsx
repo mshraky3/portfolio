@@ -163,7 +163,7 @@ const ME = {
   name: "Mahmoud Alshraky",
   email: "alshraky3@gmail.com",
   phone: "+966 58 261 9119",
-  portfolio: "https://web-dev-seven-iota.vercel.app",
+  portfolio: "https://alshraky.xyz",
   github: "https://github.com/mshraky3",
   linkedin: "https://www.linkedin.com/in/mahmoud-alshraky",
 };

@@ -5,7 +5,7 @@
 // crawler HTML, so it stays plain data: images are keys resolved in images.js.
 
 export const SITE = {
-  url: "https://web-dev-seven-iota.vercel.app",
+  url: "https://alshraky.xyz",
   name: "Mahmoud Alshraky",
   role: "Software engineer",
   email: "alshraky3@gmail.com",

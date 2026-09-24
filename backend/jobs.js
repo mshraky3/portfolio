@@ -307,7 +307,7 @@ export async function getJobs({ q = "", limit = 60 } = {}) {
 const esc = (s = "") =>
     String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-const SITE_URL_DEFAULT = "https://web-dev-seven-iota.vercel.app";
+const SITE_URL_DEFAULT = "https://alshraky.xyz";
 
 // One line a day, rotating — written for Mahmoud's exact situation.
 const MOTIVATION = [

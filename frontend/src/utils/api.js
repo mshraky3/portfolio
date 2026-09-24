@@ -61,5 +61,4 @@ export const getSummary = () => call(`/v/summary?vid=${visitorId()}`);
 export const sendReaction = (fields) => call("/v/react", { vid: visitorId(), ...fields });
 export const sendWhisper = (note) => call("/v/note", { vid: visitorId(), note });
 export const sendNote = (message, reply) => call("/send-email", { message, reply });
-export const tryLock = (code) => call("/v/unlock", { vid: visitorId(), code });
-export const replyLock = (code, message) => call("/v/unlock/reply", { vid: visitorId(), code, message });
+export const sendShare = ({ image, link, caption }) => call("/v/share", { vid: visitorId(), image, link, caption });

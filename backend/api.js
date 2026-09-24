@@ -31,12 +31,14 @@ async function sendMail(opts) {
   if (res?.status && res.status !== "sent") console.warn("[gateway] not sent:", res.status, opts.event);
   return res;
 }
-const SITE_URL = "https://web-dev-seven-iota.vercel.app";
+const SITE_URL = "https://alshraky.xyz";
 
 // SECURITY: Restrict CORS to your actual domains
 const corsOptions = {
     origin: [
-        'https://web-dev-seven-iota.vercel.app',
+        'https://alshraky.xyz',
+        'https://www.alshraky.xyz',
+        'https://web-dev-seven-iota.vercel.app', // the Vercel address keeps working
         'https://alshraky.com',
         'http://localhost:5173', // local dev
         process.env.ALLOWED_ORIGIN,
@@ -46,7 +48,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json({ limit: "32kb" }));
+// Small bodies everywhere, except the "share your work" route, which parses its own.
+const smallJson = express.json({ limit: "32kb" });
+app.use((req, res, next) => (req.path === "/v/share" ? next() : smallJson(req, res, next)));
 
 // ---- light in-memory rate limiter (best-effort on serverless) ----
 const RATE = new Map();
@@ -73,23 +77,26 @@ const PHONE_RE = /^\+?[0-9][0-9\s-]{6,19}$/;
 const INTENT_LABEL = { hiring: "Hiring", project: "Has a project", looking: "Just looking", friend: "Knows me" };
 app.use(
     "/v",
-    visitorsRouter(rateLimit, ({ kind, note, country, reaction }) => {
+    visitorsRouter(rateLimit, ({ kind, note, country, reaction, image, link }) => {
         const when = new Date().toLocaleString("en-GB", { timeZone: "Asia/Riyadh", dateStyle: "medium", timeStyle: "short" });
-        if (kind === "unlock" || kind === "reply") {
-            const title = kind === "unlock" ? "🔓 Someone cracked your code" : "💌 Someone cracked your code and left a message";
-            const body = kind === "unlock" ? "The code was entered correctly on your portfolio." : note;
+        if (kind === "share") {
             const meta = `${country ? `From ${country} · ` : ""}${when} Riyadh time`;
+            const what = [image ? "a photo" : null, link ? "a link" : null].filter(Boolean).join(" and ");
             return sendMail({
-                event: `portfolio.owner.lock_${kind}`,
+                event: "portfolio.owner.visitor_share",
                 to: OWNER_EMAIL,
-                subject: title,
-                text: `${body}\n\n${meta}`,
+                subject: `📎 Someone shared ${what} with you`,
+                text: [note, link, meta].filter(Boolean).join("\n\n"),
                 html: `
               <div style="font-family:Segoe UI,system-ui,sans-serif;max-width:640px;margin:0 auto;">
-                <h2 style="color:#6a1b9a;margin:8px 0;">${title}</h2>
-                <div style="border:1px solid #e5e0ee;border-left:4px solid #C147E9;border-radius:10px;padding:14px 16px;white-space:pre-wrap;">${esc(body)}</div>
-                <p style="color:#6a5f7a;margin-top:10px;">${esc(meta)}</p>
+                <h2 style="color:#6a1b9a;margin:8px 0;">📎 Someone shared ${what} with you</h2>
+                ${note ? `<div style="border:1px solid #e5e0ee;border-left:4px solid #C147E9;border-radius:10px;padding:14px 16px;white-space:pre-wrap;">${esc(note)}</div>` : ""}
+                ${link ? `<p style="margin:12px 0;"><a href="${esc(link)}" style="color:#6a1b9a;font-weight:600;">${esc(link)}</a></p>` : ""}
+                <p style="color:#6a5f7a;margin-top:10px;">${esc(meta)}${image ? " · the photo is attached" : ""}</p>
               </div>`,
+                attachments: image
+                    ? [{ filename: `shared.${image.type.split("/")[1].replace("jpeg", "jpg")}`, content: image.base64, content_type: image.type }]
+                    : undefined,
             });
         }
         const bits = [

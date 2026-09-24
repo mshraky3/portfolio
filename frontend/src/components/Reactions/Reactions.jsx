@@ -1,16 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { getSummary, sendReaction, sendWhisper, track } from "../../utils/api";
-import Lock from "./Lock";
+import { getSummary, sendReaction, sendShare, sendWhisper, track } from "../../utils/api";
 import "./Reactions.css";
 
 // The end of the page is for the visitor, especially one arriving from a
-// social-media story: drag an emoji to react, try to crack the code, tap what
-// brought you here, leave me a line. Quick touches, no sign-up.
-
-const FACES = ["😐", "🙂", "😊", "😍", "🔥"];
-const faceFor = (v) => FACES[Math.min(FACES.length - 1, Math.floor(v / 20))];
-const WORDS = ["Meh", "Nice", "Really good", "Love it", "On fire"];
-const wordFor = (v) => WORDS[Math.min(WORDS.length - 1, Math.floor(v / 20))];
+// social-media story: tap what brought you here, tell me one thing, or share
+// your work (an image or a link). Everything reaches only me.
 
 const INTENTS = [
   { id: "hiring", icon: "💼", label: "I'm hiring" },
@@ -18,109 +12,6 @@ const INTENTS = [
   { id: "looking", icon: "👀", label: "Just looking" },
   { id: "friend", icon: "👋", label: "I know you" },
 ];
-
-// Two-letter country code to its flag emoji.
-const flag = (cc) => (cc && /^[A-Z]{2}$/.test(cc) ? String.fromCodePoint(...[...cc].map((c) => 0x1f1a5 + c.charCodeAt(0))) : "🌍");
-function ago(s) {
-  if (s < 60) return "just now";
-  if (s < 3600) return `${Math.floor(s / 60)}m ago`;
-  if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
-  return `${Math.floor(s / 86400)}d ago`;
-}
-
-function Slider({ summary, onSaved }) {
-  const [value, setValue] = useState(70);
-  const [dragging, setDragging] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [bursts, setBursts] = useState([]);
-  const timer = useRef(0);
-  const touched = useRef(false);
-
-  // Show the visitor's earlier reaction if they come back.
-  useEffect(() => {
-    if (!touched.current && summary?.mine?.score != null) {
-      setValue(summary.mine.score);
-      setSent(true);
-    }
-  }, [summary]);
-
-  const submit = (v) => {
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(async () => {
-      setSent(true);
-      setBursts((b) => [...b.slice(-3), { id: Date.now(), v }]);
-      track("react", "slider", { value: v });
-      try {
-        onSaved(await sendReaction({ score: v }));
-      } catch {
-        // no database: the reaction still shows locally
-      }
-    }, 450);
-  };
-
-  const onInput = (e) => {
-    touched.current = true;
-    const v = Number(e.target.value);
-    setValue(v);
-    submit(v);
-  };
-
-  const avg = summary?.reactions ? summary.average : null;
-  return (
-    <div className="rx-slider-card">
-      <p className="rx-q">How did this portfolio land?</p>
-      <div className="rx-slider" data-dragging={dragging || undefined} style={{ "--v": value / 100 }}>
-        <div className="rx-track" aria-hidden="true">
-          <span className="rx-fill" />
-          {avg != null && sent ? (
-            <span className="rx-avg" style={{ "--a": avg / 100 }}>
-              <span>{faceFor(avg)}</span>
-            </span>
-          ) : null}
-        </div>
-        <span className="rx-thumb" aria-hidden="true">
-          {faceFor(value)}
-          {bursts.map((b) => (
-            <span key={b.id} className="rx-burst">
-              {[0, 1, 2, 3, 4, 5].map((k) => (
-                <span key={k} style={{ "--k": k }}>
-                  {faceFor(b.v)}
-                </span>
-              ))}
-            </span>
-          ))}
-        </span>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={value}
-          onChange={onInput}
-          onPointerDown={() => setDragging(true)}
-          onPointerUp={() => setDragging(false)}
-          onPointerCancel={() => setDragging(false)}
-          aria-label="Your reaction, from meh to on fire"
-          aria-valuetext={wordFor(value)}
-        />
-      </div>
-      <p className="rx-word" aria-live="polite">
-        {sent ? (
-          <>
-            You: <strong>{wordFor(value)}</strong>
-            {avg != null ? (
-              <>
-                {" "}
-                · Everyone: <strong>{wordFor(avg)} {faceFor(avg)}</strong> from {summary.reactions} {summary.reactions === 1 ? "person" : "people"}
-              </>
-            ) : null}
-          </>
-        ) : (
-          "Drag the emoji. Let go to send."
-        )}
-      </p>
-    </div>
-  );
-}
 
 function Intent({ summary, onSaved }) {
   const [picked, setPicked] = useState(null);
@@ -186,16 +77,149 @@ function Whisper() {
       <label className="rx-q" htmlFor="rx-note">
         Tell me one thing
       </label>
-      <p className="rx-hint">A tip, a question, a hello. Only I see it.</p>
-      <div className="rx-note-row">
-        <input id="rx-note" maxLength={280} placeholder="Type it here..." value={note} onChange={(e) => setNote(e.target.value)} />
-        <button className="btn btn-primary" type="submit" disabled={state === "sending" || !note.trim()}>
-          {state === "sending" ? "..." : "Send"}
-        </button>
-      </div>
+      <p className="rx-hint">Something you did today, a tip, a hello. Only I see it.</p>
+      <textarea id="rx-note" rows={3} maxLength={280} placeholder="Type it here..." value={note} onChange={(e) => setNote(e.target.value)} />
+      <button className="btn btn-primary" type="submit" disabled={state === "sending" || !note.trim()}>
+        {state === "sending" ? "Sending..." : "Send"}
+      </button>
       <p className="rx-hint" role="status" data-state={state}>
-        {state === "sent" && "Sent. Thank you!"}
+        {state === "sent" && "Got it. Thank you!"}
         {state === "error" && "Didn't send. WhatsApp works too."}
+      </p>
+    </form>
+  );
+}
+
+// Shrinks a photo in the browser (longest side 1280 px, JPEG) before it is sent,
+// so it uploads fast on a phone and stays well under the email size limit.
+async function shrink(file) {
+  const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+  const scale = Math.min(1, 1280 / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close?.();
+  return canvas.toDataURL("image/jpeg", 0.8);
+}
+
+const isLink = (v) => {
+  try {
+    const u = new URL(v.trim());
+    return u.protocol === "https:" || u.protocol === "http:";
+  } catch {
+    return false;
+  }
+};
+
+// "Share your work with me": a photo (camera or upload) and/or a link to
+// something worth watching, with a line about it.
+function Share() {
+  const camera = useRef(null);
+  const library = useRef(null);
+  const [image, setImage] = useState(null);
+  const [showLink, setShowLink] = useState(false);
+  const [link, setLink] = useState("");
+  const [caption, setCaption] = useState("");
+  const [state, setState] = useState("idle"); // idle | reading | sending | sent | error | unreadable
+
+  async function onFile(e) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setState("reading");
+    try {
+      setImage(await shrink(file));
+      setState("idle");
+    } catch {
+      setState("unreadable");
+    }
+  }
+
+  const linkOk = link.trim() === "" || isLink(link);
+  const ready = (image || isLink(link)) && linkOk;
+
+  async function onSend(e) {
+    e.preventDefault();
+    if (!ready) return;
+    setState("sending");
+    try {
+      await sendShare({ image, link: link.trim() || undefined, caption: caption.trim() });
+      track("share", image && link.trim() ? "photo+link" : image ? "photo" : "link");
+      setState("sent");
+      setImage(null);
+      setLink("");
+      setShowLink(false);
+      setCaption("");
+    } catch {
+      setState("error");
+    }
+  }
+
+  const hintState = state === "sent" ? "sent" : state === "error" || state === "unreadable" ? "error" : undefined;
+  return (
+    <form className="rx-card rx-share" onSubmit={onSend}>
+      <p className="rx-q">Share your work with me</p>
+      <p className="rx-hint">A project, a design, a demo you want me to see. It comes straight to me.</p>
+
+      <input ref={camera} type="file" accept="image/*" capture="environment" hidden onChange={onFile} />
+      <input ref={library} type="file" accept="image/*" hidden onChange={onFile} />
+
+      {image ? (
+        <div className="rx-preview">
+          <img src={image} alt="The image you are about to share" />
+          <button type="button" className="rx-remove" onClick={() => setImage(null)} aria-label="Remove this image">
+            ✕
+          </button>
+        </div>
+      ) : null}
+
+      <div className="rx-pick">
+        {!image ? (
+          <>
+            <button type="button" className="rx-pick-btn" onClick={() => camera.current?.click()}>
+              <span aria-hidden="true">📷</span> Open camera
+            </button>
+            <button type="button" className="rx-pick-btn" onClick={() => library.current?.click()}>
+              <span aria-hidden="true">🖼️</span> Upload an image
+            </button>
+          </>
+        ) : null}
+        {!showLink ? (
+          <button type="button" className="rx-pick-btn" onClick={() => setShowLink(true)}>
+            <span aria-hidden="true">🔗</span> Add a link
+          </button>
+        ) : null}
+      </div>
+
+      {showLink ? (
+        <input
+          className="rx-caption"
+          type="url"
+          inputMode="url"
+          placeholder="https://... (a repo, a demo, a video)"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          aria-label="Link to your work"
+          aria-invalid={!linkOk || undefined}
+        />
+      ) : null}
+
+      {image || showLink ? (
+        <>
+          <textarea className="rx-caption" rows={2} maxLength={500} placeholder="What should I look at? (optional)" value={caption} onChange={(e) => setCaption(e.target.value)} aria-label="A line about it" />
+          <button className="btn btn-primary" type="submit" disabled={state === "sending" || !ready}>
+            {state === "sending" ? "Sending..." : "Share"}
+          </button>
+        </>
+      ) : null}
+
+      <p className="rx-hint" role="status" data-state={hintState}>
+        {state === "reading" && "Getting it ready..."}
+        {state === "sent" && "Got it. I'll take a look."}
+        {state === "error" && "Didn't send. Try again in a minute."}
+        {state === "unreadable" && "Couldn't read that image. Try another one."}
+        {state !== "sent" && !linkOk && "That link doesn't look right. Start it with https://"}
       </p>
     </form>
   );
@@ -220,51 +244,27 @@ export default function Reactions() {
   }, [near, summary]);
 
   const online = Boolean(summary && !summary.error);
-  const recent = online ? summary.recent || [] : [];
 
   return (
     <section className="section rx" id="react" ref={ref} aria-labelledby="rx-title">
-      {recent.length ? (
-        <div className="rx-float" aria-hidden="true">
-          {recent.map((r, i) => (
-            <span key={i} style={{ "--i": i, "--x": `${(i * 37) % 100}%` }}>
-              {faceFor(r.score)}
-            </span>
-          ))}
-        </div>
-      ) : null}
       <div className="wrap rx-in">
         <div className="section-head">
           <p className="eyebrow">Before you go</p>
           <h2 id="rx-title">Your turn</h2>
-          <p>Slide, tap, done. No sign-up, nothing personal stored.</p>
+          <p>A tap, a line, or something you made. No sign-up, and it only reaches me.</p>
         </div>
-
-        <Slider summary={online ? summary : null} onSaved={setSummary} />
-
-        <Lock digits={summary?.lock?.digits || 4} tries={summary?.lock?.tries || 0} online={online} />
 
         <div className="rx-grid">
           <Intent summary={online ? summary : null} onSaved={setSummary} />
           <Whisper />
+          <Share />
         </div>
 
         {online ? (
-          <div className="rx-live">
-            <p className="rx-stats">
-              <strong>{summary.visitors}</strong> visitors · <strong>{summary.instagram}</strong> from Instagram · <strong>{summary.countries}</strong>{" "}
-              {summary.countries === 1 ? "country" : "countries"}
-            </p>
-            {recent.length ? (
-              <ul className="rx-recent" aria-label="Latest reactions">
-                {recent.slice(0, 8).map((r, i) => (
-                  <li key={i}>
-                    <span aria-hidden="true">{flag(r.country)}</span> {faceFor(r.score)} <span className="rx-ago">{ago(r.ago)}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
+          <p className="rx-stats">
+            <strong>{summary.visitors}</strong> visitors · <strong>{summary.instagram}</strong> from Instagram · <strong>{summary.countries}</strong>{" "}
+            {summary.countries === 1 ? "country" : "countries"}
+          </p>
         ) : null}
       </div>
     </section>
