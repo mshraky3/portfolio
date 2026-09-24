@@ -46,28 +46,41 @@ function span(f, n) {
 }
 
 // ─── stack ───────────────────────────────────────────────────────
+// The hero opens on an exploded tower: every part hangs above the next, each
+// turned a little further, drifting gently while the page sits at the top.
+// Scrolling brings them down one by one and they snap into the finished stack.
+const EXPLODE_GAP = 2.95; // spacing of the floating tower (wide screens)
+const EXPLODE_GAP_NARROW = 2.3; // a phone has less height to spare
+const gapOf = (st) => (st.narrow ? EXPLODE_GAP_NARROW : EXPLODE_GAP);
+const heroOf = (st) => 1 - smooth(-0.45, -0.05, st.T);
+
 const stack = {
   platform: () => "tray",
   floor: -1.4,
-  fog: [22, 70],
+  fog: [26, 80],
   extras: "stack",
   setup(n, { turn }) {
-    const scatter = Array.from({ length: n }, (_, i) => {
-      const a = 0.9 + turn + (i / n) * Math.PI * 1.7;
-      const r = 6.2 - (i % 2) * 1.2;
-      return new THREE.Vector3(Math.cos(a) * r, 2.2 + (i % 3) * 0.7, Math.sin(a) * r * 0.7 - 1);
-    });
-    return { scatter, turn };
+    const hover = Array.from({ length: n }, (_, i) => ({
+      pos: new THREE.Vector3(Math.sin(i * 1.3) * 0.7, 0, Math.cos(i * 1.3) * 0.45),
+      yaw: -0.9 + i * 0.36,
+    }));
+    return { hover, turn };
   },
   land: (T, i) => landAt(T, i),
+  // Keep drawing while the intro drifts (unless the visitor asked for less motion).
+  idle: (st) => !st.reduced && heroOf(st) > 0.02,
   place(i, st, ctx, g) {
     const m = st.mods[i];
     const L = easeOutBack(m.land);
     const slot = i * GAP * st.gs;
-    const sc = ctx.scatter[i];
-    g.position.set(lerp(sc.x, 0, L), lerp(sc.y + slot * 0.45, slot, L), lerp(sc.z, 0, L));
-    g.rotation.set((1 - L) * 0.5, (1 - L) * 1.1, (1 - L) * -0.3);
-    g.scale.setScalar(Math.max(0.0001, lerp(0.62, 1, m.land) * m.show));
+    const h = ctx.hover[i];
+    const hero = heroOf(st);
+    const drift = st.reduced ? 0 : hero;
+    const bob = Math.sin(st.time * 0.9 + i * 0.8) * 0.16 * drift;
+    const sway = Math.sin(st.time * 0.35 + i * 0.5) * 0.12 * drift;
+    g.position.set(lerp(h.pos.x, 0, L), lerp(0.9 + i * gapOf(st), slot, L) + bob, lerp(h.pos.z, 0, L));
+    g.rotation.set((1 - L) * 0.1 * Math.sin(i * 2.1), (1 - L) * h.yaw + sway, (1 - L) * 0.07 * Math.cos(i * 1.7));
+    g.scale.setScalar(Math.max(0.0001, lerp(0.9, 1, m.land) * m.show));
     g.visible = m.show > 0.01;
     return i * AZ_STEP;
   },
@@ -81,9 +94,15 @@ const stack = {
     v1.set(0, lerp(y0, y1, n > 1 ? fr : 0), 0);
     orbitAt(v1, VIEW_AZ + f * AZ_STEP, VIEW_EL, H.distFor(wide ? 12.6 : 8.4, wide ? 8.4 : 7.6), H.pos);
     H.look.copy(v1);
-    const heroW = 1 - smooth(-0.45, -0.05, st.T);
-    v2.set(0, lerp(((n - 1) * GAP * st.gs) / 2 + 1.7, 3.5, heroW), 0);
-    orbitAt(v2, 0.6 + ctx.turn + st.outro * 0.55, 0.4, H.distFor(wide ? 22 : 13, (wide ? 14 : 13) + 8.5 * st.outro), H.ovPos);
+    // The overview: the floating tower at the start, the finished stack at the end.
+    const hero = heroOf(st);
+    const towerH = (n - 1) * gapOf(st);
+    // On a phone the text covers the lower half, so the tower sits higher.
+    const towerMid = 0.9 + towerH / 2 + (wide ? 0.8 : 0.2);
+    v2.set(0, lerp(((n - 1) * GAP * st.gs) / 2 + 1.7, towerMid, hero), 0);
+    const needW = lerp(wide ? 22 : 13, wide ? 15 : 10.5, hero);
+    const needH = lerp((wide ? 14 : 13) + 8.5 * st.outro, towerH + (wide ? 6.5 : 16), hero);
+    orbitAt(v2, 0.6 + ctx.turn + st.outro * 0.55, lerp(0.4, 0.2, hero), H.distFor(needW, needH), H.ovPos);
     H.ovLook.copy(v2);
   },
 };

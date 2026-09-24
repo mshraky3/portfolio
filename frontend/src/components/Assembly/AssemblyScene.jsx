@@ -2,11 +2,12 @@ import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Line, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
-import { clockAt, focusAt, outroAt, overviewAt, playAt, showAt } from "./timeline";
+import { clockAt, focusAt, outroAt, overviewAt, playAt, showAt, smooth } from "./timeline";
 import { GAP, RIGS } from "./rigs";
 import { DECOR } from "./decor";
 import { C, M, TRAY, TRAY_T } from "./visuals/common";
 import { VISUALS } from "./visuals";
+import { prefersReducedMotion } from "../../utils/capabilities";
 
 const FOV = 35;
 const H = {
@@ -69,6 +70,9 @@ function Driver({ progress, state, n, cys, timing, rig, ctx }) {
     }
     const p = eased.current;
     const st = state.current;
+    st.time = three.clock.elapsedTime;
+    // Some rigs drift on their own at rest (the hero's floating tower).
+    if (rig.idle && rig.idle(st)) three.invalidate();
     const T = clockAt(p, n, timing);
     st.p = p;
     st.T = T;
@@ -91,6 +95,7 @@ function Driver({ progress, state, n, cys, timing, rig, ctx }) {
     H.n = n;
     H.cys = cys;
     H.wide = wide;
+    st.narrow = !wide;
     H.distFor = (needW, needH) => Math.max(needW / (2 * tanH * asp), needH / (2 * tanH));
     rig.camera(st, ctx, H);
 
@@ -251,7 +256,8 @@ function Ghosts({ n, state }) {
     lines.current.forEach((g, i) => {
       if (!g) return;
       g.position.y = i * GAP * st.gs;
-      const vis = (1 - st.mods[i].land) * 0.9;
+      // Only the outline of the part that is about to land, not all of them.
+      const vis = (1 - st.mods[i].land) * smooth(i - 0.85, i - 0.45, st.T) * 0.9;
       g.visible = vis > 0.03;
       g.children[0].material.opacity = vis * 0.6;
     });
@@ -279,6 +285,8 @@ export default function AssemblyScene({ layers, progress, visible, timing, turn 
     f: 0,
     ov: 1,
     outro: 0,
+    time: 0,
+    reduced: prefersReducedMotion(),
     groups: [],
     mods: Array.from({ length: n }, () => ({ land: 0, s: 0, show: 1, active: 0 })),
   });
