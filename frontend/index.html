@@ -11,13 +11,20 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://portfolio-api-rose.vercel.app" crossorigin />
+    <!-- Fonts load without blocking the first paint; the page shows in the system font until they arrive. -->
     <link
-      rel="stylesheet"
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+    </noscript>
 
     <style>
-      body { margin: 0; background: #edf1f5; color: #0e1a2b; font-family: "Bricolage Grotesque", system-ui, sans-serif; line-height: 1.6; }
+      body { margin: 0; background: #0a0a0c; color: #f2f2f5; font-family: "Bricolage Grotesque", system-ui, sans-serif; line-height: 1.6; }
       .crawl { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
     </style>
 

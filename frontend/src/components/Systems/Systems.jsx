@@ -1,7 +1,7 @@
 import { PROJECTS } from "../../data/content";
 import AssemblyStage from "../Assembly/AssemblyStage";
 import TechDetails from "../Assembly/TechDetails";
-import { IMAGES } from "../../data/images";
+import { THUMBS } from "../../data/images";
 import "./Systems.css";
 
 const SYSTEMS = PROJECTS.filter((p) => p.group === "prod");
@@ -115,38 +115,47 @@ export default function Systems() {
         <div className="wrap">
           <div className="section-head">
             <h2 id="work-title">Everything I've built</h2>
-            <p>Four systems in production, each shown below its own way, and the client sites I delivered alongside them.</p>
+            <p>Four systems in production, the client sites I delivered, and what I am building next.</p>
           </div>
           <ol className="sys-index">
             {SYSTEMS.map((p, i) => (
               <li key={p.id}>
                 <a href={`#sys-${p.id}`}>
-                  <span className="sys-num">
-                    {pad(i + 1)} · System
+                  <span className="sys-thumb" aria-hidden="true">
+                    <img src={THUMBS[p.id]} alt="" loading="lazy" decoding="async" width="800" height="500" />
                   </span>
+                  <span className="sys-num">{pad(i + 1)} · System</span>
                   <span className="sys-name">{p.title}</span>
                   <span className="sys-sub">{p.subtitle}</span>
-                  <span className="sys-parts">{p.layers.map((l) => l.name).join(" · ")}</span>
+                  <span className="sys-more">See how it works ↓</span>
                 </a>
               </li>
             ))}
             {SITES.map((p, i) => (
-              <li key={p.id} className="sys-site">
+              <li key={p.id}>
                 <a href={p.href} target="_blank" rel="noopener noreferrer">
                   <span className="sys-thumb" aria-hidden="true">
-                    <img src={IMAGES[p.image]} alt="" loading="lazy" width="1280" height="800" />
+                    <img src={THUMBS[p.id]} alt="" loading="lazy" decoding="async" width="800" height="500" />
                   </span>
-                  <span className="sys-num">
-                    {pad(SYSTEMS.length + i + 1)} · Client site
-                  </span>
+                  <span className="sys-num">{pad(SYSTEMS.length + i + 1)} · Client site</span>
                   <span className="sys-name">{p.title}</span>
-                  <span className="sys-sub">{p.summary}</span>
-                  <span className="sys-visit">
+                  <span className="sys-sub">{p.subtitle}</span>
+                  <span className="sys-more">
                     Visit <span className="mono">{hostOf(p.href)}</span> ↗
                   </span>
                 </a>
               </li>
             ))}
+            <li className="sys-next">
+              <div>
+                <span className="sys-thumb sys-thumb-empty" aria-hidden="true">
+                  <span>+</span>
+                </span>
+                <span className="sys-num">{pad(SYSTEMS.length + SITES.length + 1)} · In the works</span>
+                <span className="sys-name">The next one</span>
+                <span className="sys-sub">Being built right now. This slot fills when it ships.</span>
+              </div>
+            </li>
           </ol>
         </div>
       </section>

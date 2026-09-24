@@ -9,9 +9,14 @@
   gap: var(--s3);
 }
 
-.sys-index a {
+.sys-index > li {
   display: grid;
-  align-content: start;
+}
+
+.sys-index a {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   gap: var(--s2);
   height: 100%;
   padding: var(--s5);
@@ -50,62 +55,76 @@
   line-height: 1.5;
 }
 
-/* Client sites sit in the same index, after the systems: a screenshot and a link */
-.sys-site {
-  grid-column: span 2;
-}
-
-.sys-site a {
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
-  grid-template-areas:
-    "thumb num"
-    "thumb name"
-    "thumb sub"
-    "thumb visit";
-  column-gap: var(--s4);
-}
-
 .sys-thumb {
-  grid-area: thumb;
-  align-self: center;
+  display: block;
   overflow: hidden;
-  border: 1px solid var(--accent-line);
-  border-radius: var(--radius);
-  transform: perspective(700px) rotateY(-10deg);
-  transition: transform 0.4s var(--ease);
-}
-
-.sys-site a:hover .sys-thumb {
-  transform: none;
+  aspect-ratio: 16 / 10;
+  margin: calc(-1 * var(--s5)) calc(-1 * var(--s5)) var(--s2);
+  border-block-end: 1px solid var(--line);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--bg);
 }
 
 .sys-thumb img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease);
 }
 
-.sys-site .sys-num {
-  grid-area: num;
+.sys-index a:hover .sys-thumb img {
+  transform: scale(1.04);
 }
 
-.sys-site .sys-name {
-  grid-area: name;
-}
-
-.sys-site .sys-sub {
-  grid-area: sub;
-}
-
-.sys-visit {
-  grid-area: visit;
+.sys-more {
+  margin-block-start: auto;
+  padding-block-start: var(--s2);
   color: var(--accent-hi);
   font-size: var(--fs-0);
 }
 
-.sys-visit .mono {
+.sys-more .mono {
   white-space: normal;
   overflow-wrap: anywhere;
+}
+
+/* The empty slot: what is being built next */
+.sys-next > div {
+  display: grid;
+  align-content: start;
+  gap: var(--s2);
+  height: 100%;
+  padding: var(--s5);
+  border: 1.5px dashed var(--accent-line);
+  border-radius: var(--radius-lg);
+  background: repeating-linear-gradient(135deg, rgba(193, 71, 233, 0.04) 0 12px, transparent 12px 24px);
+}
+
+.sys-thumb-empty {
+  display: grid;
+  place-items: center;
+  border-block-end: 1.5px dashed var(--accent-line);
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-head);
+  font-size: 2.6rem;
+  font-weight: 300;
+}
+
+.sys-thumb-empty span {
+  animation: sys-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes sys-pulse {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+}
+
+.sys-next .sys-name {
+  color: var(--text-2);
 }
 
 .sys-parts {
@@ -307,23 +326,6 @@
 @media (max-width: 1000px) {
   .sys-index {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  .sys-site {
-    grid-column: auto;
-  }
-
-  .sys-site a {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "thumb"
-      "num"
-      "name"
-      "sub"
-      "visit";
-    row-gap: var(--s2);
   }
 }
 

@@ -29,3 +29,19 @@ export function isLowPower() {
 export function canRun3D() {
   return hasWebGL() && !isLowPower();
 }
+
+// Resolves once the page has loaded and the browser has a quiet moment, so the
+// 3D engine (the heaviest download) never competes with the first paint.
+let idle = null;
+export function whenIdle() {
+  if (idle) return idle;
+  idle = new Promise((resolve) => {
+    const go = () => {
+      if ("requestIdleCallback" in window) window.requestIdleCallback(() => resolve(), { timeout: 1500 });
+      else window.setTimeout(resolve, 300);
+    };
+    if (document.readyState === "complete") go();
+    else window.addEventListener("load", go, { once: true });
+  });
+  return idle;
+}

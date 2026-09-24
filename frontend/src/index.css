@@ -280,3 +280,12 @@ bdi,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Sections far below the fold skip rendering work until they come near. */
+.experience,
+.about,
+.contact,
+.rx {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}

@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { canRun3D } from "../../utils/capabilities";
+import { canRun3D, whenIdle } from "../../utils/capabilities";
 import { useScrollProgress } from "./useScrollProgress";
 import { progressForLayer, TIMING } from "./timeline";
 import TechDetails from "./TechDetails";
@@ -24,6 +24,7 @@ export default function AssemblyStage({ id, data, layers, intro, outroAction, la
   const [use3D] = useState(() => canRun3D());
   const [phase, setPhase] = useState({ key: "intro", i: -1 });
   const [near, setNear] = useState(false);
+  const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(false);
   const onPhase = useCallback(
     (p) => {
@@ -33,6 +34,15 @@ export default function AssemblyStage({ id, data, layers, intro, outroAction, la
     [id],
   );
   const progress = useScrollProgress(ref, n, onPhase, timing);
+
+  useEffect(() => {
+    if (!use3D) return undefined;
+    let live = true;
+    whenIdle().then(() => live && setReady(true));
+    return () => {
+      live = false;
+    };
+  }, [use3D]);
 
   useEffect(() => {
     const el = ref.current;
@@ -83,7 +93,7 @@ export default function AssemblyStage({ id, data, layers, intro, outroAction, la
       <section ref={ref} id={id} className="as" data-size={size} style={{ "--n": n }} aria-label={label}>
         <div className="as-sticky">
           <div className="as-canvas">
-            {near ? (
+            {near && ready ? (
               <Suspense fallback={<div className="as-loading">Loading 3D scene</div>}>
                 <AssemblyScene layers={layers} progress={progress} visible={visible} timing={timing} turn={turn} rig={rig} />
               </Suspense>

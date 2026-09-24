@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { replyLock, tryLock, track } from "../../utils/api";
 
-// A combination lock with a number only one person knows. Anyone can try it;
-// only the right number opens it, shows a message and lets that person write
-// back. The number is checked on the server and never ships in the page.
+// "Crack the code": a small combination-lock puzzle. Anyone can try it; the
+// right code opens it, shows a message and lets whoever opened it write back.
+// The code is checked on the server and never ships in the page.
 
 const STEP = 36; // degrees per digit on the wheel
 const FACE_H = 64; // px, height of one digit face
@@ -136,9 +136,9 @@ export default function Lock({ digits = 4, tries = 0, online }) {
   return (
     <div className="lock-card" data-state={state}>
       <div className="lock-head">
-        <p className="eyebrow">A number between us</p>
-        <h3 className="lock-title">{open ? "It opened." : "Only one person knows this number."}</h3>
-        {!open ? <p className="lock-sub">If that's you, dial it in. Everyone else is welcome to guess.</p> : null}
+        <p className="eyebrow">A small puzzle</p>
+        <h3 className="lock-title">{open ? "You cracked it." : "Crack the code"}</h3>
+        {!open ? <p className="lock-sub">{digits} digits open this lock. Swipe the dials and try your luck.</p> : null}
       </div>
 
       <form className="lock-body" onSubmit={onTry}>
@@ -158,10 +158,10 @@ export default function Lock({ digits = 4, tries = 0, online }) {
       </form>
 
       <p className="lock-status" role="status">
-        {state === "miss" && "Not this one."}
+        {state === "miss" && "Locked. Try another."}
         {state === "slow" && "Too many tries. Come back in a few minutes."}
         {state === "error" && "The lock is not answering right now."}
-        {state === "idle" && online && tries > 0 && `${tries} ${tries === 1 ? "try" : "tries"} so far.`}
+        {state === "idle" && online && tries > 0 && `${tries} ${tries === 1 ? "guess" : "guesses"} so far.`}
         {!online && "The lock wakes up in a moment."}
       </p>
 
@@ -174,7 +174,7 @@ export default function Lock({ digits = 4, tries = 0, online }) {
             </p>
           ) : null}
           <form className="lock-reply" onSubmit={onReply}>
-            <label htmlFor="lock-reply">Say something back. Only I will see it.</label>
+            <label htmlFor="lock-reply">Leave a message for me. Only I will see it.</label>
             <textarea id="lock-reply" rows={3} maxLength={1000} value={reply} onChange={(e) => setReply(e.target.value)} />
             <button className="btn btn-primary" type="submit" disabled={sent === "sending" || !reply.trim()}>
               {sent === "sending" ? "Sending..." : "Send"}

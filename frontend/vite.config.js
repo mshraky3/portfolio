@@ -106,9 +106,11 @@ export default defineConfig({
     // Better chunk splitting for caching
     rollupOptions: {
       output: {
+        // Only React is split out by hand. three.js and its helpers are left to
+        // Rollup, so only the parts the 3D scenes import get bundled (naming
+        // @react-three/drei here used to pull the whole library in).
         manualChunks: {
-          vendor: ['react', 'react-dom'],
-          three: ['three', '@react-three/fiber', '@react-three/drei'],
+          vendor: ['react', 'react-dom', 'react-dom/client'],
         },
       },
     },

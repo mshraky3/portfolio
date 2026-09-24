@@ -76,8 +76,8 @@ app.use(
     visitorsRouter(rateLimit, ({ kind, note, country, reaction }) => {
         const when = new Date().toLocaleString("en-GB", { timeZone: "Asia/Riyadh", dateStyle: "medium", timeStyle: "short" });
         if (kind === "unlock" || kind === "reply") {
-            const title = kind === "unlock" ? "🔓 Someone opened your lock" : "💌 A message from the person who knows the number";
-            const body = kind === "unlock" ? "The special number was entered correctly on your portfolio." : note;
+            const title = kind === "unlock" ? "🔓 Someone cracked your code" : "💌 Someone cracked your code and left a message";
+            const body = kind === "unlock" ? "The code was entered correctly on your portfolio." : note;
             const meta = `${country ? `From ${country} · ` : ""}${when} Riyadh time`;
             return sendMail({
                 event: `portfolio.owner.lock_${kind}`,

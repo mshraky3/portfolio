@@ -5,10 +5,8 @@
   align-items: center;
 }
 
-/* The logo as an exploded view: flat when closed, layers lifted when open */
+/* The logo assembles: exploded while out of view, flat and whole in view */
 .about-logo {
-  --px: 0;
-  --py: 0;
   position: relative;
   display: grid;
   place-items: center;
@@ -18,15 +16,11 @@
 
 .logo-stack {
   position: relative;
-  width: 92%;
+  width: 90%;
   aspect-ratio: 512 / 417;
   transform-style: preserve-3d;
-  transform: rotateX(calc(var(--py) * -10deg)) rotateY(calc(var(--px) * 14deg));
-  transition: transform 1.2s var(--ease);
-}
-
-.about-logo[data-open="true"] .logo-stack {
-  transform: rotateX(calc(38deg + var(--py) * -10deg)) rotateZ(calc(-16deg + var(--px) * 16deg)) translateY(-6%);
+  transform: rotateX(38deg) rotateZ(-16deg) translateY(-4%);
+  transition: transform 1.4s var(--ease);
 }
 
 .logo-layer {
@@ -34,28 +28,45 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  transform: translateZ(0);
-  transition: transform 1.2s var(--ease), opacity 1.2s var(--ease);
-  transition-delay: calc(var(--z, 0) * 70ms);
-}
-
-.about-logo[data-open="true"] .logo-layer {
-  transform: translateZ(calc(var(--z, 0) * 72px));
+  transform: translateZ(calc(var(--z, 0) * 80px)) translateX(calc(var(--z, 0) * 14px));
+  opacity: 0.85;
+  transition: transform 1.4s var(--ease), opacity 1.4s var(--ease);
+  transition-delay: calc((3 - var(--z, 0)) * 90ms);
 }
 
 .logo-plate {
-  opacity: 0;
+  opacity: 0.7;
 }
 
 .logo-plate polygon {
-  fill: rgba(193, 71, 233, 0.07);
+  fill: rgba(193, 71, 233, 0.06);
   stroke: var(--accent-line);
   stroke-width: 2;
   stroke-dasharray: 10 8;
 }
 
-.about-logo[data-open="true"] .logo-plate {
+.about-logo[data-together="true"] .logo-stack {
+  transform: none;
+}
+
+.about-logo[data-together="true"] .logo-layer {
+  transform: none;
   opacity: 1;
+}
+
+.about-logo[data-together="true"] .logo-plate {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-stack,
+  .logo-layer {
+    transform: none;
+  }
+
+  .logo-plate {
+    opacity: 0;
+  }
 }
 
 .about-text {

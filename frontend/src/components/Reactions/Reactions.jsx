@@ -3,10 +3,9 @@ import { getSummary, sendReaction, sendWhisper, track } from "../../utils/api";
 import Lock from "./Lock";
 import "./Reactions.css";
 
-// The end of the page is for the visitor: a lock with a number only one person
-// knows, then drag an emoji to react, tap what brought you here, leave me one
-// line if you like. Built for
-// people arriving from a social-media story: three quick touches, no sign-up.
+// The end of the page is for the visitor, especially one arriving from a
+// social-media story: drag an emoji to react, try to crack the code, tap what
+// brought you here, leave me a line. Quick touches, no sign-up.
 
 const FACES = ["😐", "🙂", "😊", "😍", "🔥"];
 const faceFor = (v) => FACES[Math.min(FACES.length - 1, Math.floor(v / 20))];
@@ -241,9 +240,9 @@ export default function Reactions() {
           <p>Slide, tap, done. No sign-up, nothing personal stored.</p>
         </div>
 
-        <Lock digits={summary?.lock?.digits || 4} tries={summary?.lock?.tries || 0} online={online} />
-
         <Slider summary={online ? summary : null} onSaved={setSummary} />
+
+        <Lock digits={summary?.lock?.digits || 4} tries={summary?.lock?.tries || 0} online={online} />
 
         <div className="rx-grid">
           <Intent summary={online ? summary : null} onSaved={setSummary} />

@@ -203,7 +203,14 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
     try {
       await db().query("insert into portfolio.notes (vid, note, country) values ($1, $2, $3)", [b.vid, note, country]);
       const mine = await db().query("select score, intent from portfolio.reactions where vid = $1", [b.vid]);
-      notify({ kind: "note", note, country, reaction: mine.rows[0] || null }).catch((e) => console.warn("[visitors] notify", e.message));
+      // Awaited: on Vercel the function is frozen once the response is sent, so
+      // an email started after that never leaves.
+      try {
+        await notify({ kind: "note", note, country, reaction: mine.rows[0] || null });
+      } catch (e) {
+        console.warn("[visitors] notify", e.message);
+        return res.status(502).json({ error: "not sent" });
+      }
       res.status(204).end();
     } catch (e) {
       console.warn("[visitors] note", e.message);
@@ -232,8 +239,12 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
       console.warn("[visitors] lock", e.message);
     }
     if (!open) return res.json({ open: false });
-    notify({ kind: "unlock", country }).catch((e) => console.warn("[visitors] notify", e.message));
-    res.json({ open: true, message: process.env.SPECIAL_MESSAGE || "You remembered." });
+    try {
+      await notify({ kind: "unlock", country });
+    } catch (e) {
+      console.warn("[visitors] notify", e.message);
+    }
+    res.json({ open: true, message: process.env.SPECIAL_MESSAGE || "Well done. You found the way in." });
   });
 
   // A message back, only for someone who opened the lock (the code is checked again).
