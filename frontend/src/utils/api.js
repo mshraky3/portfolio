@@ -60,5 +60,5 @@ export function track(kind, detail, { value, once = false } = {}) {
 export const getSummary = () => call(`/v/summary?vid=${visitorId()}`);
 export const sendReaction = (fields) => call("/v/react", { vid: visitorId(), ...fields });
 export const sendWhisper = (note) => call("/v/note", { vid: visitorId(), note });
-export const sendNote = (message, reply) => call("/send-email", { message, reply });
+export const sendNote = (message, reply) => call("/send-email", { message, reply, vid: visitorId() });
 export const sendShare = ({ image, link, caption }) => call("/v/share", { vid: visitorId(), image, link, caption });

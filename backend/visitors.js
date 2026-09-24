@@ -70,6 +70,67 @@ function inAppOf(ua) {
   return null;
 }
 
+function osOf(ua) {
+  if (/iphone|ipad|ipod/i.test(ua)) return "iOS";
+  if (/android/i.test(ua)) return "Android";
+  if (/windows/i.test(ua)) return "Windows";
+  if (/mac os x|macintosh/i.test(ua)) return "macOS";
+  if (/linux/i.test(ua)) return "Linux";
+  return "other";
+}
+
+// Where the request came from, as Vercel reports it (city-level, from its own
+// geolocation; the IP address itself is never read or kept).
+function placeOf(req) {
+  const dec = (h) => {
+    try {
+      return decodeURIComponent(String(req.headers[h] || "")) || null;
+    } catch {
+      return null;
+    }
+  };
+  return { city: dec("x-vercel-ip-city"), region: dec("x-vercel-ip-country-region"), country: countryOf(req) };
+}
+
+// Everything known about one visitor, for the owner's notification emails:
+// a running visitor number, where they are and on what, where they came from,
+// how often they visited and which systems they scrolled through.
+export async function profileOf(vid, req) {
+  const pool = db();
+  if (!pool || !UUID.test(vid || "")) return null;
+  const [v, reach, mine] = await Promise.all([
+    pool.query(
+      `select count(*)::int visits, min(created_at) first_seen, max(created_at) last_seen,
+              (array_agg(source order by created_at))[1] source,
+              (array_agg(referrer order by created_at))[1] referrer,
+              (array_agg(device order by created_at desc))[1] device,
+              (array_agg(browser order by created_at desc))[1] browser,
+              (array_agg(in_app order by created_at desc))[1] in_app,
+              (array_agg(lang order by created_at desc))[1] lang,
+              (array_agg(screen_w order by created_at desc))[1] screen_w
+         from portfolio.visits where vid = $1`,
+      [vid],
+    ),
+    pool.query("select coalesce(array_agg(distinct detail), '{}') sections from portfolio.events where vid = $1 and kind = 'section'", [vid]),
+    pool.query("select intent from portfolio.reactions where vid = $1", [vid]),
+  ]);
+  const row = v.rows[0];
+  let number = null;
+  if (row.first_seen) {
+    const n = await pool.query("select count(*)::int n from (select min(created_at) m from portfolio.visits group by vid) t where m <= $1", [row.first_seen]);
+    number = n.rows[0].n;
+  }
+  return {
+    number,
+    tag: vid.slice(0, 4),
+    ...row,
+    os: osOf(String(req.headers["user-agent"] || "")),
+    ...placeOf(req),
+    sections: reach.rows[0].sections,
+    intent: mine.rows[0]?.intent || null,
+  };
+}
+
 // Everything the section shows: counts, the average reaction, why people came,
 // and the latest reactions (score and country only).
 async function summary(client, vid) {
@@ -89,8 +150,8 @@ async function summary(client, vid) {
   return { ...visits.rows[0], ...avg.rows[0], intents: split, recent: recent.rows, mine: mine.rows[0] || null };
 }
 
-// `notify({ kind, ... })` emails the owner (wired in api.js): kind is "note"
-// (a visitor's one-liner) or "share" (a photo and/or a link, with a caption).
+// `notify({ kind, profile, ... })` emails the owner (wired in api.js). kind:
+// visit-new, visit-back, intent, contact (a contact button), cv, note, share.
 export function visitorsRouter(rateLimit, notify = async () => {}) {
   const r = express.Router();
 
@@ -98,6 +159,17 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
     if (!db()) return res.status(503).json({ enabled: false });
     next();
   });
+
+  // Emails the owner about an interaction, with the visitor's profile. Awaited
+  // (Vercel freezes the function after the response), but never fails the
+  // visitor's request.
+  async function tell(kind, req, vid, extra = {}) {
+    try {
+      await notify({ kind, profile: await profileOf(vid, req), ...extra });
+    } catch (e) {
+      console.warn("[visitors] notify", kind, e.message);
+    }
+  }
 
   // One row per page load.
   r.post("/visit", rateLimit(30, 15 * 60 * 1000), async (req, res) => {
@@ -112,6 +184,8 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
     }
     const inApp = inAppOf(ua);
     try {
+      const prev = await db().query("select max(created_at) last from portfolio.visits where vid = $1", [b.vid]);
+      const last = prev.rows[0].last;
       await db().query(
         `insert into portfolio.visits (vid, source, referrer, country, device, browser, in_app, lang, screen_w)
          values ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
@@ -127,6 +201,10 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
           Number.isFinite(b.w) ? Math.max(0, Math.min(10000, Math.round(b.w))) : null,
         ],
       );
+      // An email for a new visitor, and for one coming back after 6 hours or
+      // more; a refresh does not send anything.
+      if (!last) await tell("visit-new", req, b.vid);
+      else if (Date.now() - new Date(last).getTime() > 6 * 3600 * 1000) await tell("visit-back", req, b.vid);
       res.status(204).end();
     } catch (e) {
       console.warn("[visitors] visit", e.message);
@@ -145,6 +223,8 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
         clip(b.detail, 60),
         Number.isFinite(b.value) ? Math.round(b.value) : null,
       ]);
+      if (b.kind === "cv") await tell("cv", req, b.vid, { detail: clip(b.detail, 60) });
+      if (b.kind === "contact" && b.detail !== "note") await tell("contact", req, b.vid, { detail: clip(b.detail, 60) });
       res.status(204).end();
     } catch (e) {
       console.warn("[visitors] event", e.message);
@@ -172,6 +252,7 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
            updated_at = now()`,
         [b.vid, score, intent, countryOf(req)],
       );
+      if (intent) await tell("intent", req, b.vid, { intent });
       res.json(await summary(db(), b.vid));
     } catch (e) {
       console.warn("[visitors] react", e.message);
@@ -187,11 +268,10 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
     const country = countryOf(req);
     try {
       await db().query("insert into portfolio.notes (vid, note, country) values ($1, $2, $3)", [b.vid, note, country]);
-      const mine = await db().query("select score, intent from portfolio.reactions where vid = $1", [b.vid]);
       // Awaited: on Vercel the function is frozen once the response is sent, so
       // an email started after that never leaves.
       try {
-        await notify({ kind: "note", note, country, reaction: mine.rows[0] || null });
+        await notify({ kind: "note", note, profile: await profileOf(b.vid, req) });
       } catch (e) {
         console.warn("[visitors] notify", e.message);
         return res.status(502).json({ error: "not sent" });
@@ -240,7 +320,7 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
       console.warn("[visitors] share row", e.message);
     }
     try {
-      await notify({ kind: "share", note: caption, country, image, link });
+      await notify({ kind: "share", note: caption, image, link, profile: await profileOf(b.vid, req) });
       res.status(204).end();
     } catch (e) {
       console.warn("[visitors] share notify", e.message);

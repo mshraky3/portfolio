@@ -61,7 +61,6 @@ export const SCALE_FACTS = [
 // language caption; each fact names the project it comes from and is sourced
 // elsewhere in this file. The hero is general, so it has no technical rows.
 export const HERO = {
-  eyebrow: "Open to full-time roles and freelance work",
   headline: "I build systems people use, then keep them running.",
   scrollCue: "Scroll to watch how I build a system, part by part.",
   outro: "That is how I build. Here are four systems built that way.",

@@ -1,19 +1,13 @@
 import { SITE } from "../../data/content";
-import { API_URL, track } from "../../utils/api";
+import { track } from "../../utils/api";
 import Form from "./Form";
 import "./Contact.css";
 
 const RESUME = "/Mahmoud_Ahmed%20El-Sharaky_Resume.pdf";
 
-// Tells the backend someone opened the CV. Never blocks the download.
+// Counts a CV download (and emails me who it was, see backend/visitors.js).
 function pingResume() {
   track("cv", "contact");
-  fetch(`${API_URL}/resume-downloaded`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ timestamp: new Date().toISOString() }),
-    keepalive: true,
-  }).catch(() => {});
 }
 
 const Icon = {

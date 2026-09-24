@@ -15,10 +15,6 @@ export default function Hero() {
       tech={false}
       intro={
         <>
-          <p className="hero-status">
-            <span className="hero-dot" aria-hidden="true" />
-            {HERO.eyebrow}
-          </p>
           <h1 className="hero-name">{SITE.name}</h1>
           <p className="hero-line">{HERO.headline}</p>
           <p className="hero-meta">

@@ -260,12 +260,6 @@ export default function Reactions() {
           <Share />
         </div>
 
-        {online ? (
-          <p className="rx-stats">
-            <strong>{summary.visitors}</strong> visitors · <strong>{summary.instagram}</strong> from Instagram · <strong>{summary.countries}</strong>{" "}
-            {summary.countries === 1 ? "country" : "countries"}
-          </p>
-        ) : null}
       </div>
     </section>
   );

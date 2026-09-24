@@ -3,7 +3,7 @@ import express from "express"
 import cors from "cors";
 import { getJobs, buildDigestHtml, buildCheckinHtml, esc } from "./jobs.js";
 import { createEmailClient } from "./email-client.js";
-import { visitorsRouter } from "./visitors.js";
+import { profileOf, visitorsRouter } from "./visitors.js";
 
 const app = express()
 
@@ -72,50 +72,93 @@ function rateLimit(max, windowMs) {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?[0-9][0-9\s-]{6,19}$/;
 
-// Anonymous visitor data and the "How did it land?" reactions (visitors.js).
-// A one-line note left there is emailed to me through the gateway.
-const INTENT_LABEL = { hiring: "Hiring", project: "Has a project", looking: "Just looking", friend: "Knows me" };
+// ── visitor notifications ───────────────────────────────────────────────────
+// Every interaction on the site emails me (visitors.js calls this): who it
+// was as far as the site can tell (a running visitor number, city and country,
+// device, app or browser, where they came from, how often they visited, which
+// systems they scrolled through) and what they did.
+const INTENT_LABEL = { hiring: "💼 is hiring", project: "💡 has a project", looking: "👀 is just looking", friend: "👋 knows you" };
+const CONTACT_LABEL = { whatsapp: "WhatsApp", mail: "Email", linkedin: "LinkedIn", github: "GitHub" };
+const SECTION_LABEL = { top: "How I build", "sys-sqb": "SQB", "sys-hr": "HR", "sys-neurolink": "NeuroLink", "sys-email": "Email gateway" };
+const flagOf = (cc) => (cc && /^[A-Z]{2}$/.test(cc) ? String.fromCodePoint(...[...cc].map((c) => 0x1f1a5 + c.charCodeAt(0))) : "🌍");
+
+function whoLine(p) {
+    if (!p) return "A visitor";
+    const place = [p.city, p.country].filter(Boolean).join(", ");
+    return `Visitor #${p.number ?? "?"}${place ? ` from ${place}` : ""}`;
+}
+
+function profileRows(p) {
+    if (!p) return [];
+    const when = (d) => (d ? new Date(d).toLocaleString("en-GB", { timeZone: "Asia/Riyadh", dateStyle: "medium", timeStyle: "short" }) : "");
+    const app = p.in_app ? `${p.in_app} in-app browser` : p.browser;
+    const came = [p.source, p.referrer && p.referrer !== p.source ? `(${p.referrer})` : null].filter(Boolean).join(" ");
+    return [
+        ["Visitor", `#${p.number ?? "?"} · id ${p.tag}`],
+        ["Where", `${flagOf(p.country)} ${[p.city, p.region, p.country].filter(Boolean).join(", ") || "unknown"}`],
+        ["Device", [p.device, p.os, app].filter(Boolean).join(" · ")],
+        ["Came from", came || "direct"],
+        ["Language", p.lang || "?"],
+        ["Screen width", p.screen_w ? `${p.screen_w}px` : "?"],
+        ["Visits", `${p.visits} (first ${when(p.first_seen)} Riyadh time)`],
+        ["Why here", p.intent ? INTENT_LABEL[p.intent].replace(/^\S+ /, "") : "not said"],
+        ["Scrolled through", p.sections?.length ? p.sections.map((s) => SECTION_LABEL[s] || s).join(", ") : "nothing yet"],
+    ];
+}
+
+function visitorMail({ event, subject, title, body = "", text = "", profile, attachments }) {
+    const rows = profileRows(profile);
+    return sendMail({
+        event,
+        to: OWNER_EMAIL,
+        subject,
+        text: [text, ...rows.map(([k, v]) => `${k}: ${v}`)].filter(Boolean).join("\n"),
+        html: `
+              <div style="font-family:Segoe UI,system-ui,sans-serif;max-width:640px;margin:0 auto;">
+                <h2 style="color:#6a1b9a;margin:8px 0;">${esc(title)}</h2>
+                ${body}
+                <table style="margin-top:14px;border-collapse:collapse;font-size:14px;width:100%;">
+                  ${rows.map(([k, v]) => `<tr><td style="padding:5px 10px 5px 0;color:#6a5f7a;white-space:nowrap;vertical-align:top;">${esc(k)}</td><td style="padding:5px 0;">${esc(v)}</td></tr>`).join("")}
+                </table>
+              </div>`,
+        attachments,
+    });
+}
+
+const quote = (s) => `<div style="border:1px solid #e5e0ee;border-left:4px solid #C147E9;border-radius:10px;padding:14px 16px;white-space:pre-wrap;">${esc(s)}</div>`;
+
 app.use(
     "/v",
-    visitorsRouter(rateLimit, ({ kind, note, country, reaction, image, link }) => {
-        const when = new Date().toLocaleString("en-GB", { timeZone: "Asia/Riyadh", dateStyle: "medium", timeStyle: "short" });
-        if (kind === "share") {
-            const meta = `${country ? `From ${country} · ` : ""}${when} Riyadh time`;
-            const what = [image ? "a photo" : null, link ? "a link" : null].filter(Boolean).join(" and ");
-            return sendMail({
-                event: "portfolio.owner.visitor_share",
-                to: OWNER_EMAIL,
-                subject: `📎 Someone shared ${what} with you`,
-                text: [note, link, meta].filter(Boolean).join("\n\n"),
-                html: `
-              <div style="font-family:Segoe UI,system-ui,sans-serif;max-width:640px;margin:0 auto;">
-                <h2 style="color:#6a1b9a;margin:8px 0;">📎 Someone shared ${what} with you</h2>
-                ${note ? `<div style="border:1px solid #e5e0ee;border-left:4px solid #C147E9;border-radius:10px;padding:14px 16px;white-space:pre-wrap;">${esc(note)}</div>` : ""}
-                ${link ? `<p style="margin:12px 0;"><a href="${esc(link)}" style="color:#6a1b9a;font-weight:600;">${esc(link)}</a></p>` : ""}
-                <p style="color:#6a5f7a;margin-top:10px;">${esc(meta)}${image ? " · the photo is attached" : ""}</p>
-              </div>`,
-                attachments: image
-                    ? [{ filename: `shared.${image.type.split("/")[1].replace("jpeg", "jpg")}`, content: image.base64, content_type: image.type }]
-                    : undefined,
-            });
+    visitorsRouter(rateLimit, ({ kind, profile, note, image, link, intent, detail }) => {
+        const who = whoLine(profile);
+        switch (kind) {
+            case "visit-new":
+                return visitorMail({ event: "portfolio.owner.visit_new", subject: `👀 New visitor: ${who.replace(/^Visitor #\d+ /, "")} · ${profile?.device || ""}${profile?.in_app ? ` · ${profile.in_app}` : ""}`, title: `👀 ${who} opened your portfolio`, profile });
+            case "visit-back":
+                return visitorMail({ event: "portfolio.owner.visit_back", subject: `🔁 ${who} came back (visit ${profile?.visits ?? ""})`, title: `🔁 ${who} came back`, profile });
+            case "intent":
+                return visitorMail({ event: "portfolio.owner.visitor_intent", subject: `🧭 ${who} ${INTENT_LABEL[intent]?.replace(/^\S+ /, "") || "answered"}`, title: `🧭 ${who} ${INTENT_LABEL[intent] || "answered"}`, profile });
+            case "contact":
+                return visitorMail({ event: "portfolio.owner.visitor_contact", subject: `📲 ${who} tapped ${CONTACT_LABEL[detail] || detail}`, title: `📲 ${who} tapped ${CONTACT_LABEL[detail] || detail}`, profile });
+            case "cv":
+                return visitorMail({ event: "portfolio.owner.visitor_cv", subject: `📄 ${who} downloaded your CV`, title: `📄 ${who} downloaded your CV`, profile });
+            case "note":
+                return visitorMail({ event: "portfolio.owner.visitor_note", subject: `💬 ${who} told you something`, title: `💬 ${who} told you something`, body: quote(note), text: note, profile });
+            case "share": {
+                const what = [image ? "an image" : null, link ? "a link" : null].filter(Boolean).join(" and ");
+                return visitorMail({
+                    event: "portfolio.owner.visitor_share",
+                    subject: `📎 ${who} shared ${what} with you`,
+                    title: `📎 ${who} shared ${what} with you`,
+                    body: `${note ? quote(note) : ""}${link ? `<p style="margin:12px 0;"><a href="${esc(link)}" style="color:#6a1b9a;font-weight:600;">${esc(link)}</a></p>` : ""}${image ? `<p style="color:#6a5f7a;">The image is attached.</p>` : ""}`,
+                    text: [note, link].filter(Boolean).join("\n"),
+                    profile,
+                    attachments: image ? [{ filename: `shared.${image.type.split("/")[1].replace("jpeg", "jpg")}`, content: image.base64, content_type: image.type }] : undefined,
+                });
+            }
+            default:
+                return Promise.resolve();
         }
-        const bits = [
-            country ? `from ${country}` : null,
-            reaction?.score != null ? `reaction ${reaction.score}/100` : null,
-            reaction?.intent ? INTENT_LABEL[reaction.intent] : null,
-        ].filter(Boolean).join(" · ");
-        return sendMail({
-            event: "portfolio.owner.visitor_note",
-            to: OWNER_EMAIL,
-            subject: "💬 A visitor left you a note",
-            text: `${note}\n\n${bits}`,
-            html: `
-              <div style="font-family:Segoe UI,system-ui,sans-serif;max-width:640px;margin:0 auto;">
-                <h2 style="color:#6a1b9a;margin:8px 0;">💬 A visitor left you a note</h2>
-                <div style="border:1px solid #e5e0ee;border-left:4px solid #C147E9;border-radius:10px;padding:14px 16px;white-space:pre-wrap;">${esc(note)}</div>
-                <p style="color:#6a5f7a;margin-top:10px;">${esc(bits || "anonymous")}</p>
-              </div>`,
-        });
     }),
 );
 
@@ -138,6 +181,8 @@ app.post("/send-email", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
     if (!message || message.length > 5000) return res.status(400).json({ error: "Invalid message" });
 
     try {
+        const profile = await profileOf(String(data.vid || ""), req).catch(() => null);
+        const rows = profile ? profileRows(profile) : [];
         const result = await sendMail({
             event: "portfolio.owner.contact_form",
             to: OWNER_EMAIL,
@@ -150,6 +195,9 @@ app.post("/send-email", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
                 <p style="margin:4px 0;"><strong>From:</strong> ${esc(firstName)} &lt;${esc(reply)}&gt;${isPhone ? " (phone: reply on WhatsApp)" : ""}</p>
                 <p style="margin:4px 0;"><strong>Subject:</strong> ${esc(subject)}</p>
                 <div style="border:1px solid #e5e0ee;border-left:4px solid #C147E9;border-radius:10px;padding:14px 16px;margin-top:12px;white-space:pre-wrap;">${esc(message)}</div>
+                <table style="margin-top:14px;border-collapse:collapse;font-size:14px;">
+                  ${rows.map(([k, v]) => `<tr><td style="padding:5px 10px 5px 0;color:#6a5f7a;white-space:nowrap;">${esc(k)}</td><td style="padding:5px 0;">${esc(v)}</td></tr>`).join("")}
+                </table>
               </div>`,
         });
 
