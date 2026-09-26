@@ -201,10 +201,12 @@ export function visitorsRouter(rateLimit, notify = async () => {}) {
           Number.isFinite(b.w) ? Math.max(0, Math.min(10000, Math.round(b.w))) : null,
         ],
       );
-      // An email for a new visitor, and for one coming back after 6 hours or
-      // more; a refresh does not send anything.
-      if (!last) await tell("visit-new", req, b.vid);
-      else if (Date.now() - new Date(last).getTime() > 6 * 3600 * 1000) await tell("visit-back", req, b.vid);
+      // Visits are recorded but not emailed (owner's choice, 2026-09-26): only
+      // real interactions send mail. Set EMAIL_VISITS=on to email them again.
+      if (process.env.EMAIL_VISITS === "on") {
+        if (!last) await tell("visit-new", req, b.vid);
+        else if (Date.now() - new Date(last).getTime() > 6 * 3600 * 1000) await tell("visit-back", req, b.vid);
+      }
       res.status(204).end();
     } catch (e) {
       console.warn("[visitors] visit", e.message);
