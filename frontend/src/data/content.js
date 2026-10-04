@@ -240,7 +240,7 @@ export const PROJECTS = [
     title: "Multi-branch HR platform",
     subtitle: "Employee records, payroll, absence and documents for a healthcare company",
     summary:
-      "A healthcare company with 25+ branches ran its staff on paper. I built its system from scratch: people, payroll, documents, buses and reports.",
+      "A healthcare company with 25+ branches and 600+ employees ran its staff on paper. I built its system from scratch: people, payroll, documents, buses and reports.",
     outro: "In use at the company, across its branches.",
     facts: [
       "Document expiry alerts fire 30, 60 and 90 days ahead.",
@@ -274,7 +274,7 @@ export const PROJECTS = [
         step: {
           title: "25+ branches, one system",
           text: "Every branch reports to one system: one set of employee records, one set of rules, and the buses that carry the students.",
-          facts: ["25+ branches of a healthcare company", "Student bus transport tracked alongside staff"],
+          facts: ["25+ branches and 600+ employees at a healthcare company", "Student bus transport tracked alongside staff"],
         },
       },
       {
@@ -572,7 +572,7 @@ export const EXPERIENCE = [
     note: "Healthcare, 25+ branches",
     dates: "Oct 2025 to now",
     items: [
-      "Designed and built an HR system from scratch for a company with 25+ branches: lifecycle, payroll, absence, documents and student transport.",
+      "Designed and built an HR system from scratch for a company with 25+ branches and 600+ employees: lifecycle, payroll, absence, documents and student transport.",
       "Automated document-expiry alerts and PDF and Excel reports with Hijri dates.",
     ],
   },
