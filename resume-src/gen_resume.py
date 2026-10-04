@@ -43,7 +43,7 @@ SUMMARY_EXTRA = {
     "agency": " Ships client work end to end &mdash; four live production sites on their own domains, delivered "
               "solo from first call to deployment, including SEO, performance, bilingual AR/EN content, and "
               "post-launch support.",
-    "health": " Healthcare is where most of that work happened: the HR platform runs a 25-branch healthcare "
+    "health": " Healthcare is where most of that work happened: the HR platform runs a 25+ branch healthcare "
               "provider, and the EdTech platform prepares physicians for the SCFHS (Saudi Prometric) licensing "
               "exam &mdash; so clinical vocabulary, staff-credential expiry rules, and Arabic reporting are "
               "already familiar ground.",
@@ -246,7 +246,7 @@ story.append(Paragraph(
     "Computer Science student (B.Sc., expected 2027) and self-taught software engineer who independently "
     "designs, builds, and deploys production systems used by real organizations. Full-stack across relational "
     "database design, REST API architecture, and React front-ends, grounded in data structures, algorithms, "
-    "and software engineering. Shipped an enterprise HR platform serving <b>600+ employees across 25 branches</b> "
+    "and software engineering. Shipped an enterprise HR platform serving <b>600+ employees across 25+ branches</b> "
     "and an EdTech platform with a <b>7,000+ question</b> bank." + SUMMARY_EXTRA[VARIANT], body_style))
 
 if VARIANT in TARGETS:
@@ -272,7 +272,7 @@ JOBS = {
         items=[
             "Architected and shipped a multi-branch HR platform (~20,000 LOC, 25 relational tables) covering "
             "employee lifecycle, payroll, attendance, documents, and transport for <b>600+ employees across "
-            "25 branches</b>.",
+            "25+ branches</b>.",
             "Implemented JWT authentication with role-based access control (RBAC), TTL-based in-memory caching, "
             "and composite database indexing - reaching <b>sub-second response times</b> and eliminating N+1 "
             "queries.",
