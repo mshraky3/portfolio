@@ -2,9 +2,9 @@
 
 English-only React portfolio. Scrolling builds a system: the hero shows how I build any system (plan, data, rules, access, interface, keeping it running), then each of four systems (SQB, the HR platform, NeuroLink, the email gateway) and the client sites gets its own shorter scroll chapter. Parts fly in and snap together (WebGL), and each plays a small visual story of what it does. Routes, tables and files are kept in a collapsed "Technical details" panel, never in the 3D scene. It also carries dated real traffic numbers and a case study of a browser face and hand tracking prototype. A small Express API behind it handles the contact form.
 
-**Live:** [alshraky.xyz](https://alshraky.xyz) (also web-dev-seven-iota.vercel.app)
+**Live:** [alshraky.xyz](https://alshraky.xyz)
 
-> **Ops (2026-09-20).** Frontend = Vercel `web-dev`; API = Vercel `portfolio-api` (`portfolio-api-rose.vercel.app`, mail via the email gateway, crons `/job-digest` 05:00 UTC and `/evening-checkin` 16:00 UTC); no database. Hosting map: working-projects `INFRASTRUCTURE.md`; rules: `project-rules/PORTFOLIO.md`. `job-hunt/` is private and git-ignored.
+> **Ops (2026-10-01).** Frontend = Vercel `web-dev` (alshraky.xyz); API = Vercel `portfolio-api` (`portfolio-api-rose.vercel.app`, mail only through the email gateway, crons `/job-digest` 05:00 UTC and `/evening-checkin` 16:00 UTC); database = schema `portfolio` on Supabase `sqb` (anonymous visitor data, `DATABASE_URL`). Hosting map: working-projects `INFRASTRUCTURE.md`; rules: `project-rules/PORTFOLIO.md`. `job-hunt/` is private and git-ignored.
 
 ---
 
@@ -13,7 +13,7 @@ English-only React portfolio. Scrolling builds a system: the hero shows how I bu
 | Layer | Tech |
 | --- | --- |
 | Frontend | React 19, Vite 6, React Router 7, plain CSS with design tokens, three.js through `@react-three/fiber` and `drei`; Bricolage Grotesque and IBM Plex Mono |
-| Backend | Node.js, Express 4, Nodemailer, deployed as a Vercel serverless function |
+| Backend | Node.js, Express 4, `pg` (visitor data), mail through the central email gateway, deployed as a Vercel serverless function |
 | Hosting | Vercel (frontend and API deployed separately) |
 | Tooling | ESLint 9 (flat config), Python + ReportLab for résumé generation |
 

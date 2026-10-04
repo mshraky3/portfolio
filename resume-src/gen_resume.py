@@ -235,7 +235,7 @@ story.append(Paragraph(
 story.append(Paragraph(
     '<link href="https://github.com/mshraky3">github.com/mshraky3</link> &nbsp;&bull;&nbsp; '
     '<link href="https://www.linkedin.com/in/mahmoud-alshraky">linkedin.com/in/mahmoud-alshraky</link> &nbsp;&bull;&nbsp; '
-    '<link href="https://web-dev-seven-iota.vercel.app">web-dev-seven-iota.vercel.app</link>',
+    '<link href="https://alshraky.xyz">alshraky.xyz</link>',
     contact_style))
 story.append(Spacer(1, 3))
 
