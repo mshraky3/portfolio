@@ -19,14 +19,14 @@ VARIANT = (sys.argv[2] if len(sys.argv) > 2 else "ksa").lower()
 
 TITLES = {
     "ksa": "Software Engineer &nbsp;|&nbsp; Computer Science Student",
-    "ireland": "Software Engineer &nbsp;|&nbsp; Full-Stack (React &middot; Node.js &middot; PostgreSQL)",
-    "remote": "Remote Full-Stack Software Engineer &nbsp;|&nbsp; React &middot; Node.js &middot; PostgreSQL",
-    "enterprise": "Software Engineer &nbsp;|&nbsp; Enterprise Systems (ERP &middot; HR &middot; Reporting)",
-    "agency": "Full-Stack Web Developer &nbsp;|&nbsp; React &middot; Node.js &middot; PostgreSQL",
+    "ireland": "Software Engineer &nbsp;|&nbsp; Full-Stack (React, Node.js, PostgreSQL)",
+    "remote": "Remote Full-Stack Software Engineer &nbsp;|&nbsp; React, Node.js, PostgreSQL",
+    "enterprise": "Software Engineer &nbsp;|&nbsp; Enterprise Systems (ERP, HR, Reporting)",
+    "agency": "Full-Stack Web Developer &nbsp;|&nbsp; React, Node.js, PostgreSQL",
     "health": "Software Engineer &nbsp;|&nbsp; Healthcare &amp; Health-Information Systems",
     "edu": "Software Engineer &nbsp;|&nbsp; EdTech &amp; Learning Platforms",
     "gov": "Software Engineer &nbsp;|&nbsp; Digital Services &amp; Arabic-First Systems",
-    "frontend": "Junior React Developer &nbsp;|&nbsp; Frontend Engineer (React &middot; Dashboards &middot; APIs)",
+    "frontend": "Junior React Developer &nbsp;|&nbsp; Frontend Engineer (React, Dashboards, APIs)",
 }
 
 SUMMARY_EXTRA = {
@@ -101,7 +101,7 @@ COMPANY_VARIANTS = {
         ["hr", "erth", "smle", "law"],
     ),
     "panorama": (
-        "Full-Stack Web Developer &nbsp;|&nbsp; React &middot; Node.js &middot; PostgreSQL",
+        "Full-Stack Web Developer &nbsp;|&nbsp; React, Node.js, PostgreSQL",
         " Delivers client work end to end &mdash; four live production sites on their own domains, taken "
         "solo from first call to deployment, including design implementation, SEO, performance, and "
         "bilingual AR/EN content.",
@@ -134,7 +134,7 @@ COMPANY_VARIANTS = {
         ["hr", "erth", "smle", "law"],
     ),
     "rossum": (
-        "Full-Stack Software Engineer &nbsp;|&nbsp; React &middot; Node.js &middot; PostgreSQL",
+        "Full-Stack Software Engineer &nbsp;|&nbsp; React, Node.js, PostgreSQL",
         " Ships production software solo: schema design, REST API, front-end, deployment, and ongoing "
         "support &mdash; four live systems currently running, none of them handed to anyone else to "
         "finish.",
@@ -160,7 +160,7 @@ COMPANY_VARIANTS = {
         ["hr", "erth", "smle", "law"],
     ),
     "radic": (
-        "Remote Full-Stack Developer &nbsp;|&nbsp; React &middot; Node.js &middot; PostgreSQL",
+        "Remote Full-Stack Developer &nbsp;|&nbsp; React, Node.js, PostgreSQL",
         " Remote-ready by default &mdash; every system below was built, deployed, and supported "
         "independently. Based in Qassim, so client meetings in Buraydah or Unaizah can be attended in "
         "person, which a fully remote agency normally cannot offer.",
@@ -169,7 +169,7 @@ COMPANY_VARIANTS = {
         ["erth", "law", "hr", "smle"],
     ),
     "sciencesoft": (
-        "Software Engineer &nbsp;|&nbsp; Full-Stack (React &middot; Node.js &middot; PostgreSQL)",
+        "Software Engineer &nbsp;|&nbsp; Full-Stack (React, Node.js, PostgreSQL)",
         " Full-stack across relational schema design, REST API architecture, and React front-ends, with "
         "four production systems currently live and in use.",
         "<b>Target role:</b> Software developer &mdash; full-stack application development.",
@@ -211,7 +211,7 @@ meta_style = S('meta', fontName='Helvetica-Oblique', fontSize=8.4, leading=11,
                textColor=GREY, spaceAfter=1)
 bullet_style = S('bullet', fontName='Helvetica', fontSize=9.0, leading=11.5,
                  textColor=GREY, alignment=TA_LEFT)
-skill_style = S('skill', fontName='Helvetica', fontSize=9.0, leading=12.5,
+skill_style = S('skill', fontName='Helvetica', fontSize=9.0, leading=11.6,
                 textColor=GREY, spaceAfter=0)
 
 def rule():
@@ -328,6 +328,16 @@ for _key, (_t, _e, _tg, _order) in COMPANY_VARIANTS.items():
 for key in ORDER.get(VARIANT, ["hr", "smle", "law", "erth"]):
     job(**JOBS[key])
 
+# PROJECTS
+story.append(Paragraph("PROJECTS", section_style))
+story.append(rule())
+story.append(bullets([
+    "<b>Mahfazati (Android, TypeScript, Expo / React Native):</b> monthly money report built from bank SMS parsed "
+    "entirely on the phone; 205 automated tests (Vitest); in Google Play closed testing.",
+    "<b>Central email gateway (Next.js 14, TypeScript, PostgreSQL):</b> one email quota shared by three production "
+    "projects, with origin gating, suppression lists and idempotency; 35 automated tests.",
+]))
+
 # EDUCATION
 story.append(Paragraph("EDUCATION", section_style))
 story.append(rule())
@@ -341,25 +351,21 @@ story.append(Paragraph(
 story.append(Paragraph("TECHNICAL SKILLS", section_style))
 story.append(rule())
 for label, val in [
-    ("Languages", "JavaScript (ES2022+), Python, SQL, HTML, CSS"),
-    ("Backend", "Node.js, Express, REST API design, JWT / RBAC authentication, Nodemailer"),
+    ("Languages", "JavaScript (ES2022+), TypeScript, Python, SQL, HTML, CSS"),
+    ("Backend", "Node.js, Express, Next.js, REST API design, JWT / RBAC authentication, Nodemailer"),
     ("Frontend", "React 19, Vite, Framer Motion, Material-UI, Three.js / React Three Fiber"),
-    ("Databases", "PostgreSQL (schema design, indexing, query optimization), Redis, Neon"),
-    ("Payments", "Moyasar integration, webhook-driven fulfillment, subscription billing, VAT invoicing"),
-    ("Mobile", "Expo, React Native"),
-    ("CS Foundations", "Data Structures &amp; Algorithms, Operating Systems, Software Engineering, Databases, Cryptography"),
-    ("Tools &amp; Cloud", "Git, GitHub, Vercel (serverless), AWS S3 / Cloudflare R2, Vercel Blob Storage, Axios, ESLint"),
+    ("Databases", "PostgreSQL (schema design, indexing, query optimization), Supabase, Neon, Redis"),
+    ("Mobile &amp; Payments", "Expo, React Native, Moyasar (webhook-driven subscription billing, VAT invoicing)"),
+    ("Tools &amp; Cloud", "Git, GitHub, GitHub Actions (CI / scheduled jobs), Vercel (serverless), AWS S3 / Cloudflare R2, Vercel Blob Storage, ESLint"),
+    ("Spoken languages", "Arabic (native), English (fluent)"),
+    ("Testing &amp; AI tooling", "Vitest, node:test (automated unit tests), AI-assisted development (Claude Code)"),
 ]:
     story.append(Paragraph(f"<b>{label}:</b> {val}", skill_style))
 
-# LANGUAGES
-story.append(Paragraph("LANGUAGES", section_style))
-story.append(rule())
-story.append(Paragraph("Arabic (Native) &nbsp;&bull;&nbsp; English (Fluent)", body_style))
 
 doc = SimpleDocTemplate(OUT, pagesize=A4,
                         leftMargin=14*mm, rightMargin=14*mm,
-                        topMargin=11*mm, bottomMargin=10*mm,
+                        topMargin=9*mm, bottomMargin=8*mm,
                         title="Mahmoud Ahmed El-Sharaky - Resume",
                         author="Mahmoud Ahmed El-Sharaky")
 doc.build(story)
