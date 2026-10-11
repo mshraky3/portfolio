@@ -299,8 +299,8 @@ JOBS = {
         org="Saleh Al-Hisouni Law Firm",
         dates="Jul 2025 - Aug 2025", loc="Qassim, SA", live="alhisony.com",
         items=[
-            "Delivered a performant, SEO-optimized website with interactive 3D (Three.js), Schema.org structured "
-            "data, and custom-domain email for formal correspondence.",
+            "Delivered a bilingual (Arabic/English) SEO-optimized website with Schema.org structured data and "
+            "WhatsApp enquiries for each practice area.",
         ]),
     "erth": dict(
         role="Web Developer (Freelance)",

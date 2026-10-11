@@ -578,12 +578,12 @@ export const PROJECTS = [
     image: "law",
     title: "Al-Haysoni Law Firm",
     subtitle: "Website for a law firm",
-    summary: "A law firm's site with an interactive 3D scene, a contact form that reaches the office, and structured data for search.",
-    facts: ["React 19 and Three.js.", "Schema.org structured data, sitemap and robots.txt."],
-    stack: ["React 19", "Three.js", "Vite", "Express"],
+    summary: "A bilingual Arabic and English site for a law firm: right-to-left by default, one-tap WhatsApp enquiries for each practice area, the office on a map, and structured data for search.",
+    facts: ["React and Vite, with all Arabic and English copy in one translations file.", "Schema.org structured data, sitemap and robots.txt; I fixed the canonical domain and added visitor analytics in October 2026."],
+    stack: ["React", "Vite", "Schema.org", "Vercel Analytics"],
     layers: [
-      { name: "3D scene", rows: [["3D", "Interactive scene on the home page"]], note: "" },
-      { name: "Contact", rows: [["FORM", "Contact form"], ["API", "Express endpoint that sends the email"]], note: "" },
+      { name: "Languages", rows: [["I18N", "Arabic (right-to-left) and English from one translations file"]], note: "" },
+      { name: "Enquiries", rows: [["LINK", "WhatsApp click-to-chat for each practice area"], ["MAP", "Office location on a map"]], note: "" },
       { name: "Search", rows: [["LD", "Schema.org structured data"], ["MAP", "sitemap.xml and robots.txt"]], note: "" },
     ],
     meta: { role: "Freelance", period: "Jul to Aug 2025", status: "Live" },
@@ -638,7 +638,7 @@ export const EXPERIENCE = [
     org: "Al-Haysoni Law Firm",
     note: "",
     dates: "Jul to Aug 2025",
-    items: ["Delivered a site with an interactive Three.js scene and Schema.org structured data."],
+    items: ["Delivered a bilingual Arabic and English site with Schema.org structured data and WhatsApp enquiries."],
   },
   {
     id: "erth",
@@ -652,7 +652,7 @@ export const EXPERIENCE = [
 
 export const SKILLS = [
   { group: "Languages", items: [["JavaScript", "Every project"], ["TypeScript", "Email gateway, NeuroLink"], ["Python", "NeuroLink engine (FastAPI)"], ["SQL", "PostgreSQL in SQB, HR and the email gateway"]] },
-  { group: "Front end", items: [["React", "Every project"], ["Three.js, react-three-fiber", "This site, Al-Haysoni, Erth"], ["Scroll-driven 3D animation", "This site"], ["Right-to-left layouts", "SQB, HR"]] },
+  { group: "Front end", items: [["React", "Every project"], ["Three.js, react-three-fiber", "This site, Erth"], ["Scroll-driven 3D animation", "This site"], ["Right-to-left layouts", "SQB, HR"]] },
   { group: "Back end", items: [["Node.js, Express", "SQB, HR"], ["FastAPI", "NeuroLink"], ["PostgreSQL", "SQB, HR, email gateway"], ["ExcelJS, PDFKit", "HR reports"]] },
   { group: "Mobile and integrations", items: [["React Native, Expo", "SQB"], ["Moyasar payments", "SQB"], ["Resend, Nodemailer, Svix", "Email gateway"], ["MediaPipe", "NeuroLink"]] },
   { group: "Operating", items: [["Git", "618 commits in SQB alone"], ["Vercel", "11 projects"], ["SEO and Search Console", "SQB: 5 to 468 indexed pages"], ["Automated tests", "Email gateway: 35"]] },
