@@ -47,9 +47,9 @@ export const HEADLINE_METRICS = [
 ];
 
 export const SCALE_FACTS = [
-  { value: "7,000+", label: "SQB questions, each explained", evidence: "SQB home page showed 7,115 on 17 Sep 2026" },
-  { value: "573", label: "commits to SQB", evidence: "git rev-list --count HEAD" },
-  { value: "150", label: "API routes in SQB", evidence: "counted in backend/app.js and backend/routes" },
+  { value: "13,000+", label: "SQB questions across three exams", evidence: "13,036 on /api/public/stats and the admin Overview, 9 Oct 2026 (medical 7,871, nursing 2,105, dental 3,060)" },
+  { value: "618", label: "commits to SQB", evidence: "git rev-list --count HEAD on 11 Oct 2026" },
+  { value: "150+", label: "API routes in SQB", evidence: "counted in backend/app.js and backend/routes, 152 on 11 Oct 2026" },
   { value: "31", label: "database tables in SQB", evidence: "CREATE TABLE IF NOT EXISTS statements" },
   { value: "25+", label: "branches on the HR system", evidence: "my CV; healthcare company" },
   { value: "35", label: "tests on the email gateway", evidence: "tests/*.test.ts" },
@@ -89,7 +89,7 @@ export const HERO = {
       step: {
         title: "Rules in one place",
         text: "Every request passes through one core that applies the rules once, so the website, the app and the bot cannot disagree. A request that breaks a rule is refused.",
-        facts: ["SQB: 150 route handlers behind one API", "The web app, the mobile app and the Telegram bot all use it"],
+        facts: ["SQB: 150+ route handlers behind one API", "The web app, the Android app and the Telegram bot all use it"],
       },
     },
     {
@@ -107,7 +107,7 @@ export const HERO = {
       step: {
         title: "Then what people see",
         text: "The interface goes on last, on top of everything underneath: the same data and rules on a laptop and on a phone, right-to-left where the users read Arabic.",
-        facts: ["SQB and HR: right-to-left Arabic interfaces", "SQB: a web app and an Expo mobile app on one backend"],
+        facts: ["SQB and HR: right-to-left Arabic interfaces", "SQB: a web app and an Expo Android app on one backend"],
       },
     },
     {
@@ -135,16 +135,16 @@ export const PROJECTS = [
     cue: "Scroll to follow a student through it.",
     turn: 0,
     title: "SQB",
-    subtitle: "Exam-prep platform for the Saudi SMLE and SNLE licensing exams",
+    subtitle: "Exam-prep platform for the Saudi SMLE, SNLE and SDLE licensing exams",
     summary:
-      "7,000+ practice questions with explanations for Saudi licensing exams. I built the web app, API, mobile app and Telegram bot, and I run it.",
+      "13,000+ practice questions for the Saudi licensing exams in medicine, nursing and dentistry. I built the web app, API, Android app and Telegram bot, and I run it.",
     outro: "SQB is live, and I still run it.",
     facts: [
-      "7,000+ questions, each with a written explanation (7,115 on 17 Sep 2026).",
-      "Two exam tracks, medicine and nursing, with content and analytics kept separate per track.",
+      "13,036 questions on 9 Oct 2026: 7,871 medical, 2,105 nursing, 3,060 dental. Many have written explanations; the recall sets do not yet.",
+      "Three exam tracks, with content and analytics kept separate per track. The dental track went live on 7 Oct 2026.",
       "Prerendered public pages took Google-indexed pages from 5 to 468.",
     ],
-    stack: ["React 19", "Vite", "Express", "PostgreSQL", "Moyasar", "Expo", "Telegram Bot API"],
+    stack: ["React 19", "Vite", "Express", "PostgreSQL", "Moyasar", "Expo SDK 57", "Telegram Bot API"],
     extraTech: [
       {
         name: "Data",
@@ -215,7 +215,7 @@ export const PROJECTS = [
           ["GET", "/api/questions/:id/explanation"],
           ["GET", "/api/user-subscription/:userId"],
           ["GET", "/admin/analytics"],
-          ["APP", "Expo / React Native, same backend"],
+          ["APP", "Expo SDK 57 Android app, same backend (rebuilt Oct 2026, 90 unit tests)"],
           ["BOT", "Telegram: daily question, weekly summary"],
           ["CRON", "9 scheduled endpoints (Telegram, lifecycle and daily emails)"],
         ],
@@ -223,7 +223,7 @@ export const PROJECTS = [
         step: {
           title: "And they come back",
           text: "The website, a mobile app and a Telegram bot all run on one backend. A daily question and reminders bring students back.",
-          facts: ["Web, Expo mobile app and Telegram bot share one API", "Telegram gets a daily question and a weekly summary"],
+          facts: ["Web, the Expo Android app and the Telegram bot share one API", "Telegram gets a daily question and a weekly summary"],
         },
       },
     ],
@@ -279,17 +279,50 @@ export const PROJECTS = [
       },
       {
         name: "Expiry",
-        visual: "expiry",
+        visual: "screen",
+        image: "hrExpiry",
         rows: [
           ["MODULE", "employees, employee-file, employee-expiry"],
           ["MODULE", "documents, archive, notifications"],
           ["ALERT", "30, 60 and 90 days before expiry"],
         ],
-        note: "Private system, so no screenshot",
+        note: "Demo data: the real system is private, so this is the same code on invented people",
         step: {
           title: "Nothing expires unnoticed",
-          text: "Every employee file carries documents with expiry dates. Alerts fire 90, 60 and 30 days before one runs out, so renewals happen before the deadline, not after.",
-          facts: ["Alerts at 90, 60 and 30 days"],
+          text: "Every employee file carries identity, residency and contract dates, in Gregorian and Hijri. The expiry page counts what is expired, due in 30 days and due in 90, and lets head office remind a branch. Alerts fire 90, 60 and 30 days ahead.",
+          facts: ["Alerts at 90, 60 and 30 days", "Screen shows demo data: every name and number is invented"],
+        },
+      },
+      {
+        name: "Follow-up",
+        visual: "screen",
+        image: "hrYearcycle",
+        rows: [
+          ["PAGE", "Year-cycle follow-up"],
+          ["MODULE", "year-cycle, tasks, terms, academic-years"],
+          ["TASK", "Head office assigns a task to a branch, with a deadline"],
+        ],
+        note: "Demo data",
+        step: {
+          title: "Every branch, every year",
+          text: "Each new school year every branch has to review its staff, documents and buses. One page shows which branches finished, which started and which have not, and what exactly is still missing in each.",
+          facts: ["Per-branch progress, missing documents and missing employee data", "Reminders and tasks sent to a branch from the same screen"],
+        },
+      },
+      {
+        name: "Staffing",
+        visual: "screen",
+        image: "hrStaffing",
+        rows: [
+          ["PAGE", "Beneficiaries and hiring requirements"],
+          ["RULE", "Staff required per role from the enrolled beneficiaries"],
+          ["MODULE", "beneficiaries, branch-statistics"],
+        ],
+        note: "Demo data",
+        step: {
+          title: "How many staff does a branch need?",
+          text: "From the number of beneficiaries and the therapies each one gets, the system works out how many therapists, nurses and support staff a branch needs, and shows the gap against who is actually employed.",
+          facts: ["Required, present and missing, per role and per branch"],
         },
       },
       {
@@ -308,24 +341,35 @@ export const PROJECTS = [
       },
       {
         name: "Reports",
-        visual: "reports",
+        visual: "screen",
+        image: "hrBranches",
         rows: [
           ["DB", "PostgreSQL with migrations"],
           ["CACHE", "Redis, per-route expiry"],
           ["INDEX", "Composite indexes on hot queries"],
           ["REPORT", "PDF and Excel, Hijri dates"],
         ],
-        note: "Built for reports people can print",
+        note: "Demo data. Built for reports people can print",
         step: {
           title: "Reports people can print",
-          text: "Payroll, absence and branch reports come out as PDF and Excel files, ready to print, sign or send on.",
+          text: "Branch statistics rank every branch by how complete and active its data is, and export to Excel. Payroll, absence and branch reports come out as PDF and Excel files, ready to print, sign or send on.",
           facts: ["PDF and Excel, with Hijri dates", "Redis caching and composite indexes keep them fast"],
         },
       },
     ],
+    gallery: {
+      title: "Screens from the HR system",
+      note: "Demo data. The real system holds employee records, so I do not publish it. These screens are the same code running on a throwaway database filled with invented people, branches and numbers (captured 11 Oct 2026).",
+      items: [
+        { image: "hrExpiry", alt: "Expired and expiring dates page of the HR system, in Arabic, showing counts by date type and a table of employees with days left", caption: "Expiry dates: expired, due in 30 and in 90 days, per branch, with Gregorian and Hijri dates." },
+        { image: "hrYearcycle", alt: "New school year follow-up page showing each branch's progress, missing employee data and missing documents", caption: "Year follow-up: which branches finished, which started, and exactly what is missing in each." },
+        { image: "hrStaffing", alt: "Beneficiaries page showing how many staff a branch needs per role, how many it has and the gap", caption: "Staffing: roles required from the beneficiaries enrolled, against who is employed." },
+        { image: "hrBranches", alt: "Branch statistics page ranking branches by data completeness, with an Excel export", caption: "Branch statistics: every branch ranked by completeness and activity, exportable to Excel." },
+      ],
+    },
     meta: { role: "Full-stack engineer", period: "Oct 2025 to now", status: "In use at the company" },
     href: "",
-    private: "Internal system with employee data, so there is no public link. I walk through it in an interview or call.",
+    private: "Internal system with employee data, so there is no public link. The screens on this page are the same code running on invented demo data. I walk through the real one in an interview or call.",
   },
   {
     id: "neurolink",
@@ -447,9 +491,9 @@ export const PROJECTS = [
     cue: "Scroll to open the machine.",
     turn: 0.2,
     title: "Shared email gateway",
-    subtitle: "One email service for three of my projects",
+    subtitle: "One email service for my projects",
     summary:
-      "SQB, the HR system and this portfolio share one free email plan of 100 a day. This gateway splits it fairly and falls back to Gmail.",
+      "SQB, the HR system and this portfolio are wired to one email service on a free plan of 100 a day. The gateway splits the quota, adds a second sending account as backup, and falls back to Gmail.",
     outro: "Quietly behind every email my projects send.",
     facts: [
       "Bounces and complaints are suppressed through a webhook signed by Svix.",
@@ -472,7 +516,7 @@ export const PROJECTS = [
         step: {
           title: "Three projects, one door",
           text: "Every project sends through the same gateway instead of carrying its own mail setup. It checks where each request comes from, and turns away mail from a source it does not know.",
-          facts: ["SQB, the HR system and this portfolio send through it", "Requests from unregistered origins are dropped"],
+          facts: ["The portfolio sends through it today; SQB and the HR system are connected and being moved over", "Requests from unregistered origins are dropped"],
         },
       },
       {
@@ -480,13 +524,14 @@ export const PROJECTS = [
         visual: "quota",
         rows: [
           ["QUOTA", "Splits Resend's 100 a day across projects"],
-          ["FALLBACK", "Gmail SMTP when the day's quota is spent"],
+          ["LANE 2", "A second Resend account takes over near the first one's limit (since 9 Oct 2026)"],
+          ["FALLBACK", "Gmail SMTP when both are spent"],
         ],
-        note: "lib/quota.ts",
+        note: "lib/quota.ts, lib/transport-choice.ts",
         step: {
           title: "A fair share of 100 a day",
-          text: "Resend's free plan allows 100 emails a day. The gateway splits them between the projects, and when the day's share is spent, mail goes out through Gmail instead of failing.",
-          facts: ["Gmail SMTP takes over when the quota runs out"],
+          text: "Resend's free plan allows 100 emails a day. The gateway splits them between the projects. When that is spent, a second Resend account takes over, and after that mail goes out through Gmail instead of failing.",
+          facts: ["A second sending lane was tested in October: its first domain was too young and landed in spam, an older domain reached the inbox", "Gmail SMTP takes over when both quotas run out"],
         },
       },
       {
@@ -610,7 +655,7 @@ export const SKILLS = [
   { group: "Front end", items: [["React", "Every project"], ["Three.js, react-three-fiber", "This site, Al-Haysoni, Erth"], ["Scroll-driven 3D animation", "This site"], ["Right-to-left layouts", "SQB, HR"]] },
   { group: "Back end", items: [["Node.js, Express", "SQB, HR"], ["FastAPI", "NeuroLink"], ["PostgreSQL", "SQB, HR, email gateway"], ["Redis", "HR"]] },
   { group: "Mobile and integrations", items: [["React Native, Expo", "SQB"], ["Moyasar payments", "SQB"], ["Resend, Nodemailer, Svix", "Email gateway"], ["MediaPipe", "NeuroLink"]] },
-  { group: "Operating", items: [["Git", "573 commits in SQB alone"], ["Vercel", "11 projects"], ["SEO and Search Console", "SQB: 5 to 468 indexed pages"], ["Automated tests", "Email gateway: 35"]] },
+  { group: "Operating", items: [["Git", "618 commits in SQB alone"], ["Vercel", "11 projects"], ["SEO and Search Console", "SQB: 5 to 468 indexed pages"], ["Automated tests", "Email gateway: 35"]] },
 ];
 
 export const ABOUT = {

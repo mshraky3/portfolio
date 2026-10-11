@@ -379,3 +379,43 @@
     grid-template-columns: repeat(2, minmax(0, auto));
   }
 }
+
+/* Readable screens under a system's scroll story (demo data for private systems) */
+.ch-gallery {
+  padding-block: var(--s6) var(--s2);
+}
+.ch-gallery h3 {
+  margin: 0 0 var(--s2);
+  font-family: var(--font-head);
+  font-size: var(--fs-2);
+}
+.ch-gallery-note {
+  margin: 0 0 var(--s4);
+  color: var(--muted);
+  font-size: var(--fs-0);
+}
+.ch-gallery-grid {
+  display: grid;
+  gap: var(--s4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ch-gallery figure {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+.ch-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.ch-gallery figcaption {
+  padding: var(--s3) var(--s4);
+  color: var(--text-2);
+  font-size: var(--fs-0);
+}

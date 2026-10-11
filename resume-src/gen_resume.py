@@ -47,7 +47,7 @@ SUMMARY_EXTRA = {
               "provider, and the EdTech platform prepares physicians for the SCFHS (Saudi Prometric) licensing "
               "exam &mdash; so clinical vocabulary, staff-credential expiry rules, and Arabic reporting are "
               "already familiar ground.",
-    "edu": " Education technology is the focus: a 7,000+ question bank with written explanations, adaptive mock "
+    "edu": " Education technology is the focus: a 13,000+ question bank, many with written explanations, adaptive mock "
            "exams, a weakness-analysis engine, and learner analytics &mdash; designed, built, and operated solo.",
     "gov": " Built for Saudi requirements from the start: Arabic-first RTL interfaces and reports, "
            "Hijri&ndash;Gregorian date handling, bilingual AR/EN service portals, JWT with role-based access "
@@ -247,7 +247,7 @@ story.append(Paragraph(
     "designs, builds, and deploys production systems used by real organizations. Full-stack across relational "
     "database design, REST API architecture, and React front-ends, grounded in data structures, algorithms, "
     "and software engineering. Shipped an enterprise HR platform serving <b>600+ employees across 25+ branches</b> "
-    "and an EdTech platform with a <b>7,000+ question</b> bank." + SUMMARY_EXTRA[VARIANT], body_style))
+    "and an EdTech platform with a <b>13,000+ question</b> bank." + SUMMARY_EXTRA[VARIANT], body_style))
 
 if VARIANT in TARGETS:
     story.append(Paragraph(TARGETS[VARIANT], body_style))
@@ -284,7 +284,7 @@ JOBS = {
         org="SMLE Question Bank - EdTech Platform (Personal)",
         dates="Feb 2025 - Present", loc="Qassim, SA", live="smle-question-bank.com",
         items=[
-            "Built a platform for the Saudi Prometric (SCFHS) exam: a <b>7,000+ question</b> bank, adaptive "
+            "Built a platform for the Saudi Prometric (SCFHS) exam: a <b>13,000+ question</b> bank, adaptive "
             "mock tests, and a weakness-analysis engine with real-time analytics.",
             "Designed the PostgreSQL schema and REST API. Prerendered the public content for search engines: pages "
             "indexed by Google rose from <b>5 to 468</b> (30 Aug to 16 Sep 2026), with <b>1,001 visitors</b> in "

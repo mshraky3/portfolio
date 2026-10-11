@@ -1,11 +1,24 @@
 import { PROJECTS } from "../../data/content";
 import AssemblyStage from "../Assembly/AssemblyStage";
 import TechDetails from "../Assembly/TechDetails";
-import { THUMBS } from "../../data/images";
+import { IMAGES, THUMBS } from "../../data/images";
 import "./Systems.css";
 
 const SYSTEMS = PROJECTS.filter((p) => p.group === "prod");
 const SITES = PROJECTS.filter((p) => p.group === "sites");
+// Two Android apps that have no public page of their own yet.
+const MOBILE = [
+  {
+    name: "SQB Android app",
+    glyph: "SQB",
+    text: "The whole student side of SQB as a native app on Expo SDK 57, in Arabic and English, rebuilt in October 2026 with 90 unit tests. Not yet run on a real phone.",
+  },
+  {
+    name: "Mahfazati",
+    glyph: "M",
+    text: "Turns bank SMS into a monthly money report. Everything is read and calculated on the phone and the messages never leave it. In closed testing on Google Play.",
+  },
+];
 const pad = (k) => String(k).padStart(2, "0");
 const hostOf = (href) => href.replace(/^https?:\/\/(www\.)?/, "");
 
@@ -69,6 +82,28 @@ function Strip({ project: p }) {
   );
 }
 
+// Readable screens of a system. The private systems show the same code running on invented data.
+function Gallery({ project: p }) {
+  return (
+    <section className="ch-gallery" aria-label={`${p.title} screens`}>
+      <div className="wrap">
+        <h3>{p.gallery.title}</h3>
+        <p className="ch-gallery-note">{p.gallery.note}</p>
+        <ul className="ch-gallery-grid">
+          {p.gallery.items.map((g) => (
+            <li key={g.image}>
+              <figure>
+                <img src={IMAGES[g.image]} alt={g.alt} loading="lazy" decoding="async" width="1512" height="806" />
+                <figcaption>{g.caption}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
 function Chapter({ project: p, index }) {
   return (
     <>
@@ -104,6 +139,7 @@ function Chapter({ project: p, index }) {
         }
       />
       <Strip project={p} />
+      {p.gallery ? <Gallery project={p} /> : null}
     </>
   );
 }
@@ -115,7 +151,7 @@ export default function Systems() {
         <div className="wrap">
           <div className="section-head">
             <h2 id="work-title">Everything I've built</h2>
-            <p>Four systems in production, the client sites I delivered, and what I am building next.</p>
+            <p>Four systems in production, the client sites I delivered, and two Android apps.</p>
           </div>
           <ol className="sys-index">
             {SYSTEMS.map((p, i) => (
@@ -146,16 +182,18 @@ export default function Systems() {
                 </a>
               </li>
             ))}
-            <li className="sys-next">
-              <div>
-                <span className="sys-thumb sys-thumb-empty" aria-hidden="true">
-                  <span>+</span>
-                </span>
-                <span className="sys-num">{pad(SYSTEMS.length + SITES.length + 1)} · In the works</span>
-                <span className="sys-name">The next one</span>
-                <span className="sys-sub">Being built right now. This slot fills when it ships.</span>
-              </div>
-            </li>
+            {MOBILE.map((m, i) => (
+              <li className="sys-next" key={m.name}>
+                <div>
+                  <span className="sys-thumb sys-thumb-empty" aria-hidden="true">
+                    <span>{m.glyph}</span>
+                  </span>
+                  <span className="sys-num">{pad(SYSTEMS.length + SITES.length + i + 1)} · Android app</span>
+                  <span className="sys-name">{m.name}</span>
+                  <span className="sys-sub">{m.text}</span>
+                </div>
+              </li>
+            ))}
           </ol>
         </div>
       </section>
