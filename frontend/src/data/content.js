@@ -245,9 +245,9 @@ export const PROJECTS = [
     facts: [
       "Document expiry alerts fire 30, 60 and 90 days ahead.",
       "JWT sessions, role-based access across branches, one-time codes for branch accounts.",
-      "Redis caching and composite indexes on the hot queries.",
+      "In-memory caching with short expiry and composite indexes on the hot queries.",
     ],
-    stack: ["React 19", "Node.js", "Express", "PostgreSQL", "JWT", "Redis"],
+    stack: ["React 19", "Node.js", "Express", "PostgreSQL", "JWT", "ExcelJS", "PDFKit"],
     extraTech: [
       {
         name: "Access",
@@ -345,7 +345,7 @@ export const PROJECTS = [
         image: "hrBranches",
         rows: [
           ["DB", "PostgreSQL with migrations"],
-          ["CACHE", "Redis, per-route expiry"],
+          ["CACHE", "In-memory cache with per-route expiry"],
           ["INDEX", "Composite indexes on hot queries"],
           ["REPORT", "PDF and Excel, Hijri dates"],
         ],
@@ -353,7 +353,7 @@ export const PROJECTS = [
         step: {
           title: "Reports people can print",
           text: "Branch statistics rank every branch by how complete and active its data is, and export to Excel. Payroll, absence and branch reports come out as PDF and Excel files, ready to print, sign or send on.",
-          facts: ["PDF and Excel, with Hijri dates", "Redis caching and composite indexes keep them fast"],
+          facts: ["PDF and Excel, with Hijri dates", "Caching and composite indexes keep them fast"],
         },
       },
     ],
@@ -653,7 +653,7 @@ export const EXPERIENCE = [
 export const SKILLS = [
   { group: "Languages", items: [["JavaScript", "Every project"], ["TypeScript", "Email gateway, NeuroLink"], ["Python", "NeuroLink engine (FastAPI)"], ["SQL", "PostgreSQL in SQB, HR and the email gateway"]] },
   { group: "Front end", items: [["React", "Every project"], ["Three.js, react-three-fiber", "This site, Al-Haysoni, Erth"], ["Scroll-driven 3D animation", "This site"], ["Right-to-left layouts", "SQB, HR"]] },
-  { group: "Back end", items: [["Node.js, Express", "SQB, HR"], ["FastAPI", "NeuroLink"], ["PostgreSQL", "SQB, HR, email gateway"], ["Redis", "HR"]] },
+  { group: "Back end", items: [["Node.js, Express", "SQB, HR"], ["FastAPI", "NeuroLink"], ["PostgreSQL", "SQB, HR, email gateway"], ["ExcelJS, PDFKit", "HR reports"]] },
   { group: "Mobile and integrations", items: [["React Native, Expo", "SQB"], ["Moyasar payments", "SQB"], ["Resend, Nodemailer, Svix", "Email gateway"], ["MediaPipe", "NeuroLink"]] },
   { group: "Operating", items: [["Git", "618 commits in SQB alone"], ["Vercel", "11 projects"], ["SEO and Search Console", "SQB: 5 to 468 indexed pages"], ["Automated tests", "Email gateway: 35"]] },
 ];

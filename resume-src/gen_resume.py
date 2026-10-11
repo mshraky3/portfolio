@@ -354,7 +354,7 @@ for label, val in [
     ("Languages", "JavaScript (ES2022+), TypeScript, Python, SQL, HTML, CSS"),
     ("Backend", "Node.js, Express, Next.js, REST API design, JWT / RBAC authentication, Nodemailer"),
     ("Frontend", "React 19, Vite, Framer Motion, Material-UI, Three.js / React Three Fiber"),
-    ("Databases", "PostgreSQL (schema design, indexing, query optimization), Supabase, Neon, Redis"),
+    ("Databases", "PostgreSQL (schema design, indexing, query optimization), Supabase, Neon"),
     ("Mobile &amp; Payments", "Expo, React Native, Moyasar (webhook-driven subscription billing, VAT invoicing)"),
     ("Tools &amp; Cloud", "Git, GitHub, GitHub Actions (CI / scheduled jobs), Vercel (serverless), AWS S3 / Cloudflare R2, Vercel Blob Storage, ESLint"),
     ("Spoken languages", "Arabic (native), English (fluent)"),
