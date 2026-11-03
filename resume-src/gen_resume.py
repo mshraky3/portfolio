@@ -333,7 +333,7 @@ story.append(Paragraph("PROJECTS", section_style))
 story.append(rule())
 story.append(bullets([
     "<b>Mahfazati (Android, TypeScript, Expo / React Native):</b> monthly money report built from bank SMS parsed "
-    "entirely on the phone; 205 automated tests (Vitest); in Google Play closed testing.",
+    "entirely on the phone; 205 automated tests (Vitest); live on Google Play.",
     "<b>Central email gateway (Next.js 14, TypeScript, PostgreSQL):</b> one email quota shared by three production "
     "projects, with origin gating, suppression lists and idempotency; 35 automated tests.",
 ]))

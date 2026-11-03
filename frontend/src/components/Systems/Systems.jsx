@@ -6,7 +6,8 @@ import "./Systems.css";
 
 const SYSTEMS = PROJECTS.filter((p) => p.group === "prod");
 const SITES = PROJECTS.filter((p) => p.group === "sites");
-// Two Android apps that have no public page of their own yet.
+// Two Android apps that have no page of their own on this site. Mahfazati is live on Google Play
+// (public store page answered 200 with an InStock offer on 2 Nov 2026; store version 1.5.0).
 const MOBILE = [
   {
     name: "SQB Android app",
@@ -16,7 +17,8 @@ const MOBILE = [
   {
     name: "Mahfazati",
     glyph: "M",
-    text: "Turns bank SMS into a monthly money report. Everything is read and calculated on the phone and the messages never leave it. In closed testing on Google Play.",
+    text: "Turns bank SMS into a monthly money report. Everything is read and calculated on the phone and the messages never leave it. Live on Google Play.",
+    href: "https://play.google.com/store/apps/details?id=com.m_alshraky3.mahfazati",
   },
 ];
 const pad = (k) => String(k).padStart(2, "0");
@@ -191,6 +193,11 @@ export default function Systems() {
                   <span className="sys-num">{pad(SYSTEMS.length + SITES.length + i + 1)} · Android app</span>
                   <span className="sys-name">{m.name}</span>
                   <span className="sys-sub">{m.text}</span>
+                  {m.href ? (
+                    <a className="sys-more" href={m.href} target="_blank" rel="noopener noreferrer">
+                      View on Google Play ↗
+                    </a>
+                  ) : null}
                 </div>
               </li>
             ))}
